@@ -1,30 +1,194 @@
-<!doctype html>
+<!--<!doctype html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+    <!--<title>Single page web app using Angularjs</title>-->
+    <!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>-->
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-route.min.js"></script>-->
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+    <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">-->
+    <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>-->
+    <!--<script src="script.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div>-->
+    <!--<div>-->
+        <!--<nav class="navbar navbar-inverse" role="navigation" style="padding-left:130px;">-->
+            <!--<ul class="nav navbar-nav">-->
+                <!--<li class="active"><a href="/">Home<span class="sr-only">(current)</span></a></li>-->
+                <!--<li><a href="/about">About us</a></li>-->
+                <!--<li><a href="/contact">Contact us</a></li>-->
+            <!--</ul>-->
+        <!--</nav>-->
+    <!--</div>-->
+    <!--<br/>-->
+    <!--<div class="jumbotron"> <p>-->
+        <!--This is place to put content. You can put slider, short description about your website and place some links for navigation.-->
+        <!--and michael did not write this-->
+    <!--</p></div>-->
+
+  <!--</div>-->
+<!--<form id="rendered-form">-->
+    <!--<div class="wrapper"><div class="fb-button form-group field-button-151812">-->
+        <!--<button  type="button" class="btn btn-info" name="button" style="" id="button">Search</button></div>-->
+
+        <!--<div class="fb-text form-group field-text-1518129514550">-->
+            <!--<label for="text-1518129514550" class="fb-text-label">Text Field</label>-->
+            <!--<input type="text" class="form-control" name="text-1518129514550" id="text-1518129514550">-->
+        <!--</div>-->
+    <!--</div>-->
+    <!---->
+
+<!--</form>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Single page web app using Angularjs</title>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-route.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <script src="script.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Business Frontpage - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/business-frontpage.css" rel="stylesheet">
+
 </head>
+
+
 <body>
-<div>
-    <div>
-        <nav class="navbar navbar-inverse" role="navigation" style="padding-left:130px;">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home<span class="sr-only">(current)</span></a></li>
-                <li><a href="/about">About us</a></li>
-                <li><a href="/contact">Contact us</a></li>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <!-- <a class="navbar-brand" href="#">Start Bootstrap</a> -->
+        <div class="collapse navbar-collapse" id="navbarResponsive1">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/Contact">Contact</a>
+                </li>
             </ul>
-        </nav>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+
+                <form class="navbar-form navbar-right" role="Login">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Login">
+                    </div>
+                    <button type="submit" class="btn btn-default">Login</button>
+                </form>
+
+                <form class="navbar-form navbar-right" role="Register">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Register">
+                    </div>
+                    <button type="submit" class="btn btn-default">Register</button>
+                </form>
+
+
+            </ul>
+        </div>
     </div>
-    <br/>
-    <div class="jumbotron"> <p>
-        This is place to put content. You can put slider, short description about your website and place some links for navigation.
-    </p></div>
+</nav>
+
+<!-- Header with Background Image -->
+<!-- <header class="business-header"> -->
+
+<br><br><br>
+<div class="col-md-3">
+    <form class="navbar-form" role="search">
+        <div class="input-group add-on">
+            <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
+            <button class="btn btn-default" type="submit">Search <i class="glyphicon glyphicon-search"></i></button>
+
+        </div>
+    </form>
 </div>
+
+<form class="navbar-form navbar-right" role="search">
+
+    <!-- <button type="submit" class="btn btn-default">Submit</button> -->
+</form>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="display-3 text-center text-white mt-4">Business Name or Tagline</h1>
+        </div>
+    </div>
+</div>
+<div class="list-group">
+    <a href="#" class="list-group-item active">
+        Word List
+    </a>
+    <a href="#" class="list-group-item list-group-item-action">Word 1</a>
+    <a href="#" class="list-group-item list-group-item-action">Word 2</a>
+    <a href="#" class="list-group-item list-group-item-action">Word 3</a>
+    <a href="#" class="list-group-item list-group-item-action">Word 4</a>
+</div>
+<!-- </header> -->
+
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-9">
+            <h2 class="mt-2">What We Do</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deserunt neque tempore recusandae animi soluta quasi? Asperiores rem dolore eaque vel, porro, soluta unde debitis aliquam laboriosam. Repellat explicabo, maiores!</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio neque consectetur consequatur magni in nisi, natus beatae quidem quam odit commodi ducimus totam eum, alias, adipisci nesciunt voluptate. Voluptatum.</p>
+            <p>
+                <a class="btn btn-primary btn-lg" href="#">Call to Action &raquo;</a>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <h2 class="mt-4">Contact Us</h2>
+            <address>
+                <!-- <strong>Start Expressionary</strong> -->
+                <br>3481 Melrose Place
+                <br>Beverly Hills, CA 90210
+                <br>
+            </address>
+            <address>
+                <abbr title="Phone">P:</abbr>
+                (123) 456-7890
+                <br>
+                <abbr title="Email">E:</abbr>
+                <a href="mailto:#">name@example.com</a>
+            </address>
+        </div>
+    </div>
+
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+        </div>
+        <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</div>
+
 </body>
+
 </html>
