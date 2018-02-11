@@ -10,7 +10,21 @@
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
                 <li class="active"><a href="/about">About us<span class="sr-only">(current)</span></a></li>
-                <li><a href="/contact">Contact us</a></li>
+                <!li><!a href="/contact">Contact us<!/a><!/li>
+                <li><a class="nav-link" href="javascript:void(0)" onclick="loadContact()">Contact us</a></li>
+                <script>
+                    function loadContact() {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function() {
+                            if (this.readyState == 4 && this.status == 200) {
+                                document.getElementById("test1").innerHTML =
+                                    this.responseText;
+                            }
+                        };
+                        xhttp.open("GET", "contact", true);
+                        xhttp.send("about");
+                    }
+                </script>
             </ul>
         </nav>
     </div>

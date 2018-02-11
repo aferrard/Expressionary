@@ -9,7 +9,20 @@
         <nav class="navbar navbar-inverse" role="navigation" style="padding-left:130px;">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
-                <li><a href="/about">About us</a></li>
+                <li><a class="nav-link" href="javascript:void(0)" onclick="loadAbout()">About us</a></li>
+                <script>
+                    function loadAbout() {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function() {
+                            if (this.readyState == 4 && this.status == 200) {
+                                document.getElementById("test1").innerHTML =
+                                    this.responseText;
+                            }
+                        };
+                        xhttp.open("GET", "about", true);
+                        xhttp.send("about");
+                    }
+                </script>
                 <li class="active"><a href="/contact">Contact us<span class="sr-only">(current)</span></a></li>
             </ul>
         </nav>
