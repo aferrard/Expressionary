@@ -27,7 +27,9 @@ router.get("/about",function(req,res){
 router.get("/contact",function(req,res){
     res.sendFile(path + "contact.html");
 });
-
+router.get("/word",function(req,res){
+    res.sendFile(path + "Word.html");
+});
 app.use("/",router);
 app.get("/contact", function(req, res) {
     var name = req.param('name');

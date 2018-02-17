@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div>
+    <div>
+        <nav class="navbar navbar-inverse" role="navigation" style="padding-left:20px;">
+            <ul class="nav navbar-nav">
+                <li><a class="nav-link" href="/">Home</a></li>
+                <li><a class="nav-link" href="javascript:void(0)" onclick="loadAbout()">About us</a></li>
+                <script>
+                    function loadAbout() {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function() {
+                            if (this.readyState == 4 && this.status == 200) {
+                                document.getElementById("test1").innerHTML =
+                                    this.responseText;
+                            }
+                        };
+                        xhttp.open("GET", "about", true);
+                        xhttp.send("about");
+                    }
+                </script>
+                <li><a class="nav-link" href="javascript:void(0)" onclick="loadContact()">Contact us</a></li>
+                <script>
+                    function loadContact() {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function() {
+                            if (this.readyState == 4 && this.status == 200) {
+                                document.getElementById("test1").innerHTML =
+                                    this.responseText;
+                            }
+                        };
+                        xhttp.open("GET", "contact", true);
+                        xhttp.send("contact");
+                    }
+                </script>
+            </ul>
+        </nav>
+    </div>
+    <br/>
+    <div class="row" id="WordID" style="padding-left:25px;">WordID</div>
+    <div class="jumbotron" id="Definition" style="padding-left:10px;">
+        <p>
+            Something has gone wrong.
+        </p>
+    </div>
+</div>
+</body>
+</html>
