@@ -3,6 +3,10 @@ var app = express();
 var router = express.Router();
 var path = __dirname + '/views/';
 var bodyParser = require('body-parser');
+
+const myModule = require('./Communicator');
+var val = myModule.hello();
+
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(express.static(path));
@@ -32,17 +36,21 @@ app.get("/contact", function(req, res) {
     //res.send(name + ' ' + email + ' ' + message);
 });
 app.post("/contact", function(req, res) {
-    var name = req.body.name;
-    var email = req.body.email;
-    var message = req.body.message;
+     var name = req.body.name;
+     var email = req.body.email;
+     var message = req.body.message;
+//    req.getEle
+//    var html = val
+    //res.write("")
     res.send(name + ' ' + email + ' ' + message);
+  //  res.send(html)
+
 })
 
 app.use("*",function(req,res){
     res.sendFile(path + "404.html");
 });
-const myModule = require('./Communicator');
-var val = myModule.hello();
+
 
 
 
