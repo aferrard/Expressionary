@@ -49,5 +49,24 @@
         </p>
     </div>
 </div>
+<p>Current Score: <span id="wordScore">0</span></p>
+<input type="button" value="+" id="increment" />
+<script>
+    var button = document.getElementById("increment");
+    var num = document.getElementById("wordScore");
+    button.onclick = function(){
+        var score = parseInt(num.innerHTML);
+        num.innerHTML = toString(score+1);
+    }
+</script>
+<input type="button" value="-" id="decrement" />
+<script>
+    var button = document.getElementById("decrement");
+    var num = document.getElementById("wordScore");
+    button.onclick = function(){
+        var score = parseInt(num.innerHTML);
+        num.innerHTML = toString(score-1);
+    }
+</script>
 </body>
 </html>
