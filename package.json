@@ -5,6 +5,7 @@
     "start": "node Server.js"
   },
   "dependencies": {
-    "express": "latest"
+    "express": "latest",
+    "jsdom": "^11.6.2"
   }
 }
