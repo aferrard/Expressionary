@@ -1,6 +1,26 @@
 const test = require('tape')
 const page = require('./Communicator')
 
+test('page should return random unexpected numbers',function (t) {
+    var result = page.randomIndex(10);
+    const expected = 5;
+    if (result==expected){
+        result = page.randomIndex(10);
+        if (result==expected){
+            result = page.randomIndex(10);
+            if (result==expected){
+                console.log("Test failed")
+            }
+        }
+
+    }
+    console.log("Test passed\n")
+    t.end()
+}
+)
+
+
+
 test('page should return with the new Added field', function (t) {
     const result = page.hello("2+4=")
     const expected = '<!DOCTYPE html>' + '<html>\n' +

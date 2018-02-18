@@ -1,4 +1,14 @@
+var randomInt = require('random-int')
+
 module.exports = {
+
+
+
+    randomIndex: function (ran) {
+
+            return randomInt(ran)
+    },
+
 
 
     hello: function (question)
