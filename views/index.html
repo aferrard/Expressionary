@@ -139,19 +139,6 @@
 <!-- Header with Background Image -->
 <!-- <header class="business-header"> -->
 
-<br><br><br>
-<div class="col-md-3">
-    <form class="navbar-form" role="search">
-        <div class="input-group add-on">
-            <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-            <button class="btn btn-default" type="submit">Search <i class="glyphicon glyphicon-search"></i></button>
-
-        </div>
-    </form>
-</div>
-
-<form class="navbar-form navbar-right" role="search">
-
     <!-- <button type="submit" class="btn btn-default">Submit</button> -->
 </form>
 <div class="container">
@@ -161,53 +148,60 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <button class="btn btn-default" type="submit">Random Word</button>
-</div>
+<h2>Expressionary</h2>
+<br><br>
 <div class="list-group">
-    <a href="#" class="list-group-item active">
-        Word List
-    </a>
+    <h2 class="mt-2">Latest Words</h2>
     <a class="list-group-item list-group-item-action" id="1" href="/Word.html">Word 1</a>
     <a class="list-group-item list-group-item-action" id="2" href="/Word.html">Word 2</a>
     <a class="list-group-item list-group-item-action" id="3" href="/Word.html">Word 3</a>
     <a class="list-group-item list-group-item-action" id="4" href="/Word.html">Word 4</a>
 </div>
+<br>
+<button class="btn btn-default" type="submit">Random Word</button>
+<br><br>
 <!-- </header> -->
+<div class="col-md-3">
+    <form class="navbar-form" role="search">
+        <div class="input-group add-on">
+            <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
+            <button class="btn btn-default" type="submit">Search <i class="glyphicon glyphicon-search"></i></button>
 
-<!-- Page Content -->
-<div class="container">
-
-    <div class="row">
-        <div class="col-sm-9">
-            <h2 class="mt-2">What We Do</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deserunt neque tempore recusandae animi soluta quasi? Asperiores rem dolore eaque vel, porro, soluta unde debitis aliquam laboriosam. Repellat explicabo, maiores!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio neque consectetur consequatur magni in nisi, natus beatae quidem quam odit commodi ducimus totam eum, alias, adipisci nesciunt voluptate. Voluptatum.</p>
-            <p>
-                <a class="btn btn-primary btn-lg" href="#">Call to Action &raquo;</a>
-            </p>
         </div>
-        <div class="col-sm-3">
-            <h2 class="mt-4">Contact Us</h2>
-            <address>
-                <!-- <strong>Start Expressionary</strong> -->
-                <br>3481 Melrose Place
-                <br>Beverly Hills, CA 90210
-                <br>
-            </address>
-            <address>
-                <abbr title="Phone">P:</abbr>
-                (123) 456-7890
-                <br>
-                <abbr title="Email">E:</abbr>
-                <a href="mailto:#">name@example.com</a>
-            </address>
+    </form>
+</div>
+<div class="col-md-3">
+    <input type="radio" id="searchUser" name="search" value="User">
+    <laber for="searchUser">User</laber>
+    <input type="radio" id="searchWord" name="search" value="Word">
+    <laber for="searchWord">Word</laber>
+</div>
+<form class="navbar-form navbar-right" role="search">
+<!-- Page Content -->
+    <br><hr>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-7">
+            <h2 class="mt-2">Recent Updates:</h2>
+            <p>vSprint1 released: Getting started with Expressionary. Though it looks bad, the essentials are there.</p>
+        </div>
+        <div class="col-sm-5">
+            <h2 class="mt-2">Join our Newsletter</h2>
+            <div class="form-group">
+                <label for="email" class="col-sm-1 control-label">Email:</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com" value="">
+                </div>
+            </div>
+            <p>
+                <a class="btn btn-primary btn-lg" href="#">Sign up &raquo;</a>
+            </p>
         </div>
     </div>
 
     <footer class="py-5 bg-dark">
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+            <p class="m-0 text-center text-white">Expressionary: A Linguist's Worst Nightmare</p>
         </div>
         <!-- /.container -->
     </footer>
