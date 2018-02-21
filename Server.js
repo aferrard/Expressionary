@@ -19,6 +19,7 @@ router.use(function (req,res,next) {
 
 router.get("/",function(req,res){
     res.sendFile(path + "index.html");
+
 });
 
 router.get("/about",function(req,res){
@@ -27,7 +28,11 @@ router.get("/about",function(req,res){
 
 router.get("/contact",function(req,res){
     res.sendFile(path + "contact.html");
+
 });
+
+
+
 router.get("/word",function(req,res){
     res.sendFile(path + "Word.html");
 });
@@ -35,14 +40,35 @@ router.get("/word",function(req,res){
 
 
 app.use("/",router);
+
 app.get("/contact", function(req, res) {
-    var name = req.param('name');
-    var email = req.param('email');
-    var message = req.param('message');
+   var name = req.param('name');
+   var email = req.param('email');
+   var message = req.param('message');
     //res.send(name + ' ' + email + ' ' + message);
 });
 
+app.get("/word", function(req,res) {
+   var Def = req.param('Def');
+
+
+});
+
+
+
+app.post("/word",function (req,res) {
+    var Def = req.body.mes;
+
+    res.send(Def)
+
+})
+
+
+
+
 app.post("/contact", function(req, res) {
+    var name = req.body.name
+
      var name = req.body.name;
      var email = req.body.email;
      var message = req.body.message;
@@ -52,6 +78,7 @@ app.post("/contact", function(req, res) {
      var html = myModule.hello(question); // communicator
 
      res.send(html)
+    console.log (name + ' ' + email + ' ' + message)
   // res.send(name + ' ' + email + ' ' + message);
 
 })

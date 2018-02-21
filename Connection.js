@@ -16,7 +16,7 @@ con.connect(function (err) {
       //  console.log("Result: " + result);
     });
 
-    sql = "SELECT word  from wordpage WHERE wp_id = 4"
+    sql = "select word from wordpage where wp_id=4 group by wp_id"
 
     con.query(sql, function (err, result) {
         if (err) throw err;
