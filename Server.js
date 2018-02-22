@@ -1,14 +1,7 @@
 // load the things we need
 var express = require('express');
 
-var post = {
-    post_id: undefined,
-    date: undefined,
-    points: undefined,
-    definition: undefined,
-    users_user_id: undefined,
-    wordPage_wp_id: undefined
-};
+
 
 var app = express();
 var Mail = require(__dirname + "/Controllers/Mail.js");
@@ -16,7 +9,7 @@ var Word = require(__dirname + "/Controllers/Word.js");
 var Connection = require(__dirname + "/Controllers/Connection.js");
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
-var word = "pizza";
+//var word = "pizza";
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 var con = mysql.createConnection({
@@ -55,37 +48,82 @@ app.get('/contact', function(req, res) {
 	res.render('pages/contact');
 });
 app.get('/random', function(req, res) {
-	//go through words
-	//temporary to test below
-	var word = "pizza";
-	var definitions = ["hi", "sloot", "pizzaman"];
-	res.render('pages/word', {word: word, definitions: definitions});
-});
-app.get('/word', function(req, res) {
-    // var p;
-    Connection.getwpFromWord(word, function(wpid) {
-        if (wpid === undefined) {
-            console.log("ERROR");
-        }
-        else {
-            console.log(wpid);
-            Connection.getPostsFromWordId(wpid, function(posts) {
-                if (posts === undefined) {
+	// go through words
+	// temporary to test below
+    var users = [];
+	Connection.getWordPages(function(wordPages) {
+	    var i = Math.floor(Math.random() * wordPages.length);
+	    // wordPage(wordPages[i].word); // maybe need cb
+        var word = wordPages[i].word;
+        //word = "pizza";
+            // var p;
+            Connection.getwpFromWord(word, function (wpid) {
+                if (wpid === undefined) {
                     console.log("ERROR");
                 }
                 else {
-                    // p = posts;
-                    console.log(posts);
-                    posts[0].username = "billy";
-                    res.render('pages/word', {word: word, posts: posts});
+                    console.log(wpid);
+                    Connection.getPostsFromWordId(wpid, function (posts) {
+                        if (posts === undefined) {
+                            console.log("ERROR");
+                        }
+                        else {
+                            // p = posts;
+                            console.log(posts);
+                            for (var i = 0; i < posts.length; i++) {
+                                Connection.getUsernameByPost(posts[i], function(username) {
+                                    console.log("USERNAME AGAIN: " + username);
+                                    users[0] = username;
+                                    console.log(users[0]);
+                                    // posts[i].username = "barryuser";
+                                })
+                            }
+
+                            res.render('pages/word', {word: word, posts: posts, users: users});
+                        }
+
+                    })
                 }
+            });
 
-            })
-        }
-    });
 
-    //res.render('pages/word', {word: word, posts: p});
-})
+
+    })
+    //wordPage("pizza");
+});
+/*function wordPage(word) {
+    app.get('/word', function (req, res) {
+        // var p;
+        Connection.getwpFromWord(word, function (wpid) {
+            if (wpid === undefined) {
+                console.log("ERROR");
+            }
+            else {
+                console.log(wpid);
+                Connection.getPostsFromWordId(wpid, function (posts) {
+                    if (posts === undefined) {
+                        console.log("ERROR");
+                    }
+                    else {
+                        // p = posts;
+                        console.log(posts);
+                        for (var i = 0; i < posts.length; i++) {
+                            Connection.getUsernameByPost(post[i], function(username) {
+                                //console.log("USERNAME AGAIN" + username);
+                                posts[i].username = username;
+                            })
+                        }
+                        //posts[0].username = "billy";
+                        res.render('pages/word', {word: word, posts: posts});
+                    }
+
+                })
+            }
+        });
+
+        //res.render('pages/word', {word: word, posts: p});
+    })
+}*/
 app.get('/developer', function(req, res) {
 	res.render('pages/developer');
 })

@@ -18,6 +18,8 @@ exports.getwpFromWord = getwpFromWord;
 function getwpFromWord(word, cb) {
     con.query("SELECT wp_id FROM wordpage WHERE word = '" + word + "'", function(err, result) {
         //var z = JSON.parse(z);
+        //console.log("WORD: " + word);
+        //console.log("RESULT: " + result);
         var z = JSON.parse(JSON.stringify(result[0]));
 
         cb(z.wp_id);
@@ -65,9 +67,29 @@ function getPostsFromWordId(wp_id, cb) {
         }
     });
 }
-
+exports.getWordPages = getWordPages;
+function getWordPages(cb) {
+    con.query("SELECT word FROM wordPage", function(err, result) {
+        var z = JSON.parse(JSON.stringify(result));
+        //console.log(z);
+        cb(z);
+    });
+}
+exports.getUsernameByPost = getUsernameByPost;
+function getUsernameByPost(post, cb) {
+    userById(post.users_user_id, function(username) {
+        cb(username);
+    })
+}
 function findUserByEmail(email) {
 
+}
+function userById(id, cb) {
+    con.query("SELECT username FROM users WHERE user_id = " + id + "", function(err, result) {
+        var z = JSON.parse(JSON.stringify(result[0].username));
+        console.log("USERNAME: " + z);
+        cb(z);
+    })
 }
 
 function findUserByUsername(username) {

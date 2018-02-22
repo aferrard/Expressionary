@@ -13,8 +13,9 @@
 
     <li>
         <% var i = 0; %>
+        <%= users %>
         <%while (i < posts.length) { %>
-        User: <%= posts[i].username %><br>
+        User: <%= users[i] %><br>
         Definition: <%= posts[i].definition %><br>
         Points: <%= posts[i].points %>
         <% i++ }%>
