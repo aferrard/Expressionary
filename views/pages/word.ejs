@@ -10,11 +10,13 @@
 </header>
 <p><%= word %></p>
 <ol>
-    <% var len = definitions.length;%>
-    <%for (var i = 0; i < len; i++) {%>
-    <li><%= i%> <%= definitions[i]%></li>
-    <%}%>
+
+    <li> <%= posts[0].definition%></li>
+
 
 </ol>
 </body>
+<footer>
+    <% include ../partials/footer %>
+</footer>
 </html>
