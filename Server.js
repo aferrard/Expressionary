@@ -59,8 +59,6 @@ app.post("/word", function(req, res) {
 app.use("*",function(req,res){
     res.sendFile(path + "404.html");
 });
-const myModule = require('./Communicator');
-var val = myModule.hello();
 
 
 
