@@ -1,69 +1,56 @@
-var express = require("express");
+// load the things we need
+var express = require('express');
 var app = express();
-var router = express.Router();
-var path = __dirname + '/views/';
+var Mail = require(__dirname + "/Controllers/Mail.js");
 var bodyParser = require('body-parser');
+var mysql = require('mysql');
 
-const myModule = require('./Communicator');
-var val = myModule.hello();
+var con = mysql.createConnection({
+    host: "databases.000webhost.com",
+    user: "id4830013_exp",
+    password: "shittyreddit"
+});
 
-
+con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+});
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-app.use(express.static(path));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-router.use(function (req,res,next) {
-    console.log("/" + req.method);
-    next();
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
+// use res.render to load up an ejs view file
+
+// index page 
+app.get('/', function(req, res) {
+	res.render('pages/index');
+
 });
 
-router.get("/",function(req,res){
-    res.sendFile(path + "index.html");
+// about page 
+app.get('/contact', function(req, res) {
+	res.render('pages/contact');
 });
-
-router.get("/about",function(req,res){
-    res.sendFile(path + "about.html");
+app.get('/random', function(req, res) {
+	//go through words
+	//temporary to test below
+	var word = "pizza";
+	var definitions = ["hi", "sloot", "pizzaman"];
+	res.render('pages/word', {word: word, definitions: definitions});
 });
-
-router.get("/contact",function(req,res){
-    res.sendFile(path + "contact.html");
-});
-router.get("/word",function(req,res){
-    res.sendFile(path + "Word.html");
-});
-
-
-
-app.use("/",router);
-app.get("/contact", function(req, res) {
-    var name = req.param('name');
-    var email = req.param('email');
-    var message = req.param('message');
-    //res.send(name + ' ' + email + ' ' + message);
-});
-
-app.post("/contact", function(req, res) {
-     var name = req.body.name;
+app.get('/developer', function(req, res) {
+	res.render('pages/developer');
+})
+app.post('/contact', function(req, res) {
+    var name = req.body.name;
      var email = req.body.email;
      var message = req.body.message;
-
-     //shitty way to update the page dynamically but it works
-     question = "2+3 = ?"
-     var html = myModule.hello(question); // communicator
-
-     res.send(html)
-  // res.send(name + ' ' + email + ' ' + message);
-
+    Mail.sendEmail(email, message);
+     console.log(name + email + message);
+     res.render('pages/index');
 })
 
-app.use("*",function(req,res){
-    res.sendFile(path + "404.html");
-});
-
-
-
-
-app.listen(3000,function(){
-    console.log("Live at Port 3000");
-    val;
-});
+app.listen(8080);
+console.log('8080 is the magic port');
