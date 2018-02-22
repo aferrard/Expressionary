@@ -1,6 +1,15 @@
 // load the things we need
 var express = require('express');
 
+var post = {
+    post_id: undefined,
+    date: undefined,
+    points: undefined,
+    definition: undefined,
+    users_user_id: undefined,
+    wordPage_wp_id: undefined
+};
+
 var app = express();
 var Mail = require(__dirname + "/Controllers/Mail.js");
 var Word = require(__dirname + "/Controllers/Word.js");
@@ -53,7 +62,7 @@ app.get('/random', function(req, res) {
 	res.render('pages/word', {word: word, definitions: definitions});
 });
 app.get('/word', function(req, res) {
-    var p;
+    // var p;
     Connection.getwpFromWord(word, function(wpid) {
         if (wpid === undefined) {
             console.log("ERROR");
@@ -65,14 +74,17 @@ app.get('/word', function(req, res) {
                     console.log("ERROR");
                 }
                 else {
-                    p = posts;
+                    // p = posts;
                     console.log(posts);
+                    posts[0].username = "billy";
+                    res.render('pages/word', {word: word, posts: posts});
                 }
 
             })
         }
     });
-    res.render('pages/word', {word: word, posts: p});
+
+    //res.render('pages/word', {word: word, posts: p});
 })
 app.get('/developer', function(req, res) {
 	res.render('pages/developer');

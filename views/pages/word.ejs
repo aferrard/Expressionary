@@ -8,10 +8,18 @@
 <header>
     <% include ../partials/header %>
 </header>
-<p><%= word %></p>
+<h2><%= word %></h2>
 <ol>
 
-    <li> <%= posts[0].definition%></li>
+    <li>
+        <% var i = 0; %>
+        <%while (i < posts.length) { %>
+        User: <%= posts[i].username %><br>
+        Definition: <%= posts[i].definition %><br>
+        Points: <%= posts[i].points %>
+        <% i++ }%>
+
+    </li>
 
 
 </ol>
