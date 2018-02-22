@@ -36,6 +36,7 @@ function getwpFromWord(word) {
         //    wordPageData.push(i);
         //}
         //format: [RowDataPacket { wp_id: int, totalPoints: int}]
+        console.log(result);
         return(result);
     });
 }
@@ -45,9 +46,34 @@ function getPostsFromWordId(wp_id) {
     con.query(request, function(err, results) {
         if(err) return "notFound";
         else {
-            //format: [RowDataPacket { date: datetime variable, points: 0, definition: text, username: text}]
+            //format: [RowDataPacket { date: datetime variable, points: 0, definition: text, username: text}, RowDataPacket ...]
+            console.log(results);
             return(results);
         }
+    });
+}
+
+function registerUser(email, username, password, firstName, lastName) {
+    //firstName, LastName can = "NULL" [optional]
+    var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username +"', '"+password+"', '"+ firstName+ "', '"+lastName+"')";
+    //console.log(request);
+    con.query(request, function(err, result) {
+        if(err) return "error while registering user";
+        //console.log(result);
+        return result;
+    });
+}
+
+function checkLogin(username) {
+    //given username, check password
+    var request = "SELECT password FROM users WHERE username = '" + username + "'";
+    //console.log(request);
+    //format: [ RowDataPacket {password: text}]
+    con.query(request, function(err,  result) {
+        if(err) return "error in checkLogin";
+        //console.log(result.length);
+        //empty array if not found
+        return(result);
     });
 }
 
@@ -59,6 +85,7 @@ function findUserByUsername(username) {
 
 }
 
-function getPassword(username) {
-
-}
+//getwpFromWord("Human");
+//getPostsFromWordId(1);
+//registerUser("thatguy@email.com", "thatguy", "thatguypass", "NULL", "NULL");
+//checkLogin("ayushuser");
