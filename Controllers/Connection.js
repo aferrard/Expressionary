@@ -81,6 +81,26 @@ function getUsernameByPost(post, cb) {
         cb(username);
     })
 }
+exports.registerUser = registerUser;
+//maybe need cb
+function registerUser(email, username, password, firstName, lastName) {
+    //firstName, LastName can = "NULL" [optional]
+    var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username +"', '"+password+"', '"+ firstName+ "', '"+lastName+"')";
+    //console.log(request);
+    con.query(request, function(err, result) {
+        if(err) return "error while registering user";
+        //console.log(result);
+        return result;
+    });
+}
+
+function addWord(word, points, posts) {
+    var request = "INSERT INTO wordPages VALUE(NULL, '" + word + "', '" + points + "'";
+    con.query(request, function(err, result) {
+        if(err) return "ERROR";
+        return NULL;
+    })
+}
 function findUserByEmail(email) {
 
 }
