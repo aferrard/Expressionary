@@ -20,6 +20,7 @@ function getwpFromWord(word, cb) {
         //var z = JSON.parse(z);
         //console.log("WORD: " + word);
         //console.log("RESULT: " + result);
+        if (err) cb("fail1");
         var z = JSON.parse(JSON.stringify(result[0]));
 
         cb(z.wp_id);
@@ -58,7 +59,7 @@ function getPostsFromWordId(wp_id, cb) {
     //var request = "SELECT posts.date, posts.points, posts.definition, users.username FROM posts, users WHERE posts. wordPage_wp_id = " + wp_id + "&& posts.users_user_id = users.user_id";
     var request = "SELECT * FROM posts WHERE wordPage_wp_id = " + wp_id + "";
     con.query(request, function(err, result) {
-        if(err) return "notFound";
+        if(err) cb("fail1");
         else {
             //format: [RowDataPacket { date: datetime variable, points: 0, definition: text, username: text}]
 
@@ -70,6 +71,7 @@ function getPostsFromWordId(wp_id, cb) {
 exports.getWordPages = getWordPages;
 function getWordPages(cb) {
     con.query("SELECT word FROM wordPage", function(err, result) {
+        if (err) cb("fail1");
         var z = JSON.parse(JSON.stringify(result));
         //console.log(z);
         cb(z);
@@ -88,7 +90,7 @@ function registerUser(email, username, password, firstName, lastName) {
     var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username +"', '"+password+"', '"+ firstName+ "', '"+lastName+"')";
     //console.log(request);
     con.query(request, function(err, result) {
-        if(err) return "error while registering user";
+        if(err) return "failure registering user";
         //console.log(result);
         return result;
     });
@@ -97,7 +99,7 @@ exports.addWord = addWord;
 function addWord(word, cb) {
     var request = "INSERT INTO wordPages VALUES(NULL, '" + word + "', '" + 0 + "'";
     con.query(request, function(err, result) {
-        if(err) return "ERROR";
+        if(err) cb("fail1");
         cb("success");
     })
 }
@@ -106,6 +108,7 @@ function findUserByEmail(email) {
 }
 function userById(id, cb) {
     con.query("SELECT username FROM users WHERE user_id = " + id + "", function(err, result) {
+        if (err) cb("fail1")
         var z = JSON.parse(JSON.stringify(result[0].username));
         console.log("USERNAME: " + z);
         cb(z);
@@ -114,6 +117,7 @@ function userById(id, cb) {
 exports.findUserByUsername = findUserByUsername;
 function findUserByUsername(username, cb) {
     con.query("SELECT * FROM users WHERE username = '" + username + "'", function(err, result) {
+        if (err) cb("fail1");
         var z = JSON.parse(JSON.stringify(result[0]));
         cb(z);
     })
@@ -128,18 +132,18 @@ function addMailingList(email, cb) {
 }
 exports.addPointToPost = addPointToPost;
 function addPointToPost(definition, points, cb) {
-    var pt = points + 1;
+    var pt = parseInt(points) + 1;
     con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
         if (err) throw err;
-        console.log("point added");
+        cb();
     })
 }
 exports.subPointToPost = subPointToPost;
 function subPointToPost(definition, points, cb) {
-    var pt = points - 1;
+    var pt = parseInt(points) - 1;
     con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
         if (err) throw err;
-        console.log("point added");
+        cb();
     })
 }
 
