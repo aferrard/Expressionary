@@ -42,6 +42,74 @@ app.get('/', function(req, res) {
 	res.render('pages/index');
 
 });
+app.get('/search', function(req,res) {
+    res.render('pages/search');
+})
+app.post('/', function(req, res) {
+    var email = req.body.email;
+    console.log(email);
+    console.log("hi");
+    res.render('pages/index');
+})
+app.get('/wordlist', function(req,res) {
+    Connection.getWordPages(function(wordPages) {
+        res.render('pages/wordlist', {wordPages: wordPages});
+    })
+})
+app.post('/search', function(req,res) {
+    var term = req.body.search;
+    var type = req.body.searchType;
+    if (type == "Word") {
+        //search database for words
+        con.query("SELECT * FROM wordPage WHERE word = '" + term + "'", function(err, result) {
+            if (err) throw err;
+            var word = JSON.parse(JSON.stringify(result[0].word));
+            Connection.getwpFromWord(term, function (wpid) {
+                if (wpid === undefined) {
+                    console.log("ERROR");
+                }
+                else {
+                    console.log(wpid);
+                    Connection.getPostsFromWordId(wpid, function (posts) {
+                        if (posts === undefined) {
+                            console.log("ERROR");
+                        }
+                        else {
+                            // p = posts;
+                            console.log(posts);
+                            for (var i = 0; i < posts.length; i++) {
+                                Connection.getUsernameByPost(posts[i], function(username) {
+                                    //console.log("USERNAME AGAIN: " + username);
+                                    //userz[i] = username;
+                                    //console.log(userz[0]);
+                                    // posts[i].username = "barryuser";
+                                })
+                            }
+
+                            res.render('pages/word', {word: word, posts: posts});
+                        }
+
+                    })
+                }
+            });
+        })
+    }
+    else if (type == "User") {
+        Connection.findUserByUsername(term, function(user) {
+            res.render('pages/profile', {username: user.username, points: user.points,
+            first_name: user.first_name, last_name: user.last_name});
+        })
+        //search database for users
+    }
+    else {
+        //should 404 but for now home page
+        res.render('/pages/index');
+    }
+    console.log(term);
+    console.log(type);
+    //console.log("help");
+    //res.render('pages/search');
+})
 
 // about page 
 app.get('/contact', function(req, res) {
@@ -54,7 +122,7 @@ app.get('/random', function(req, res) {
 	Connection.getWordPages(function(wordPages) {
 	    var i = Math.floor(Math.random() * wordPages.length);
 	    // wordPage(wordPages[i].word); // maybe need cb
-        //var word = wordPages[i].word;
+        var word = wordPages[i].word;
         //word = "pizza";
             // var p;
             Connection.getwpFromWord(word, function (wpid) {
@@ -72,7 +140,7 @@ app.get('/random', function(req, res) {
                             console.log(posts);
                             for (var i = 0; i < posts.length; i++) {
                                 Connection.getUsernameByPost(posts[i], function(username) {
-                                    console.log("USERNAME AGAIN: " + username);
+                                    //console.log("USERNAME AGAIN: " + username);
                                     //userz[i] = username;
                                     //console.log(userz[0]);
                                     // posts[i].username = "barryuser";
