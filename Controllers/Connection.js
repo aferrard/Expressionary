@@ -93,9 +93,9 @@ function registerUser(email, username, password, firstName, lastName) {
         return result;
     });
 }
-
-function addWord(word, points, posts) {
-    var request = "INSERT INTO wordPages VALUE(NULL, '" + word + "', '" + points + "'";
+exports.addWord = addWord;
+function addWord(word) {
+    var request = "INSERT INTO wordPages VALUE(NULL, '" + word + "', '" + 0 + "'";
     con.query(request, function(err, result) {
         if(err) return "ERROR";
         return NULL;
