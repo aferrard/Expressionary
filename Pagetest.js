@@ -24,16 +24,7 @@ const connection = require('./Controllers/Connection')
 
 
 test('test if words are found', function (t) {
-    var word = "Lifea";
-    var addword =connection.addWord(word)
-    console.log(addword)
-    //var getword = getwp;
-
-    if (addword == undefined) {
-        console.log("Test failed: Could not add word");
-        t.end()
-        return
-    }
+    var word = "Artificial Intelligence";
 
     if (connection.getwpFromWord(word,function(wpid){
             if (wpid<1){
@@ -48,32 +39,44 @@ test('test if words are found', function (t) {
     t.end()
 })
 
-// test('test if user is found', function (t) {
-//     var username ="barryuser";
-//     var expecteduser="";
-//     //var adduser =connection.
-//     //console.log(addword)
-//     //var getword = getwp;
-//     //
-//     // if (adduser == undefined) {
-//     //     console.log("Test failed: Could not add word");
-//     //     t.end()
-//     //     return
-//     // }
-//
-//     if (connection.findUserByUsername(user,function (user) {
-//             if (user == undefined){
-//                 console.log("Test failed: Retrieved no user")
-//             }else if (user.toString() == expecteduser.toString()) {
-//                 console.log("Test passed\n")
-//                 //t.end();
-//             }
-//             t.end()
-//
-//
-//         }))
-//         t.end()
-// })
-//
+
+
+
+test('test if user is found', function (t) {
+    var username ="barryuser";
+    var userid = 4
+
+    if (connection.findUserByUsername(username,function (user) {
+            //console.log(user["user_id"])
+            if (user == undefined){
+                console.log("Test failed: Retrieved no user")
+            }else if (user["user_id"] == userid ) {
+                console.log("Test passed: User found correctly\n")
+                //t.end();
+            }
+            t.end()
+        }))
+        t.end()
+})
+
+
+test('test to check if email can be added', function (t) {
+    var email = "a@email.com"
+    try {
+        // connection.addMailingList(email,function(){
+        if (t.error() != connection.addMailingList(email, function () {
+            })) {
+            console.log("Test passed : Added to the mailing list")
+            t.end();
+        } else {
+            console.log("Test failed : Unable to the add to the mailing list")
+            t.end();
+        }
+
+        //})}
+    }catch (e){
+        console.log("Test failed : Unable to the add to the mailing list")
+    }
+})
 //
 // console.log("rn")
