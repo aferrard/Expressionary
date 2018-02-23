@@ -47,15 +47,31 @@ app.get('/search', function(req,res) {
 })
 app.post('/', function(req, res) {
     var email = req.body.email;
-    console.log(email);
-    console.log("hi");
-    res.render('pages/index');
+    Connection.addMailingList(email, function() {
+        res.render('pages/index');
+    });
+
+    //add to mailing list table
 })
 app.get('/wordlist', function(req,res) {
     Connection.getWordPages(function(wordPages) {
         res.render('pages/wordlist', {wordPages: wordPages});
     })
 })
+app.post('/word', function(req, res) {
+    var definition = req.body.newDef;
+    //'1000-01-01'
+    Connection.getwpFromWord(req.body.theWord, function(wpid) {
+        con.query("INSERT INTO posts (date, points, definition, users_user_id, wordPage_wp_id) VALUES ('1000-01-01', '0', '" + definition + "', 0, '" + wpid + "')", function(err, result) {
+            if (err) throw err;
+            console.log(result);
+            Connection.getPostsFromWordId(wpid, function(posts) {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        })
+    })
+
+});
 app.post('/search', function(req,res) {
     var term = req.body.search;
     var type = req.body.searchType;
@@ -103,7 +119,7 @@ app.post('/search', function(req,res) {
     }
     else {
         //should 404 but for now home page
-        res.render('/pages/index');
+        res.render('/pages/search');
     }
     console.log(term);
     console.log(type);
@@ -199,7 +215,8 @@ app.post('/contact', function(req, res) {
     var name = req.body.name;
      var email = req.body.email;
      var message = req.body.message;
-    Mail.sendEmail(email, message);
+     message = "NAME: " + name + "\nEMAIL: " + email + "\nMESSAGE: " + message;
+    Mail.sendEmail("expressionaryproject@gmail.com", message);
      console.log(name + email + message);
      res.render('pages/index');
 })

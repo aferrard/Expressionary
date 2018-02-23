@@ -95,7 +95,7 @@ function registerUser(email, username, password, firstName, lastName) {
 }
 exports.addWord = addWord;
 function addWord(word) {
-    var request = "INSERT INTO wordPages VALUE(NULL, '" + word + "', '" + 0 + "'";
+    var request = "INSERT INTO wordPages VALUES(NULL, '" + word + "', '" + 0 + "'";
     con.query(request, function(err, result) {
         if(err) return "ERROR";
         return NULL;
@@ -116,6 +116,14 @@ function findUserByUsername(username, cb) {
     con.query("SELECT * FROM users WHERE username = '" + username + "'", function(err, result) {
         var z = JSON.parse(JSON.stringify(result[0]));
         cb(z);
+    })
+}
+exports.addMailingList = addMailingList;
+function addMailingList(email, cb) {
+    con.query("INSERT INTO mailinglist VALUES('" + email + "')", function(err, result) {
+        if (err) throw err;
+        console.log("SUCCESS");
+        cb();
     })
 }
 

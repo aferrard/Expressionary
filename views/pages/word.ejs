@@ -8,12 +8,13 @@
 <header>
     <% include ../partials/header %>
 </header>
-<h2><%= word %></h2>
+<h2 id="theWord" name="theWord"><%= word %></h2>
 <div>Post your own definition:</div>
 <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/word" method="post">
     <div class="form-group">
+        <input hidden id="theWord" name="theWord" value="<%= word %>"></input>
         <label for="newDef" class="col-sm-2 control-label">Definition:</label>
-        <div class="col-sm-10">
+        <div class="col-sm-12">
             <textarea class="form-control" rows="3" id="newDef" name="newDef"></textarea>
         </div>
     </div>
@@ -25,15 +26,17 @@
 </form>
 <ol>
 
-    <li>
+
         <% var i = 0; %>
         <%while (i < posts.length) { %>
+    <li>
         User: <%= posts[i].users_user_id %><br>
         Definition: <%= posts[i].definition %><br>
         Points: <%= posts[i].points %>
+    </li>
         <% i++ }%>
 
-    </li>
+
 
 
 </ol>
