@@ -50,11 +50,11 @@ app.get('/contact', function(req, res) {
 app.get('/random', function(req, res) {
 	// go through words
 	// temporary to test below
-    var users = [];
+    var userz = [];
 	Connection.getWordPages(function(wordPages) {
 	    var i = Math.floor(Math.random() * wordPages.length);
 	    // wordPage(wordPages[i].word); // maybe need cb
-        var word = wordPages[i].word;
+        //var word = wordPages[i].word;
         //word = "pizza";
             // var p;
             Connection.getwpFromWord(word, function (wpid) {
@@ -73,13 +73,13 @@ app.get('/random', function(req, res) {
                             for (var i = 0; i < posts.length; i++) {
                                 Connection.getUsernameByPost(posts[i], function(username) {
                                     console.log("USERNAME AGAIN: " + username);
-                                    users[0] = username;
-                                    console.log(users[0]);
+                                    //userz[i] = username;
+                                    //console.log(userz[0]);
                                     // posts[i].username = "barryuser";
                                 })
                             }
 
-                            res.render('pages/word', {word: word, posts: posts, users: users});
+                            res.render('pages/word', {word: word, posts: posts});
                         }
 
                     })
