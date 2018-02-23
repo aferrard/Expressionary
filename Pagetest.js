@@ -28,9 +28,9 @@ test('test if words are found', function (t) {
 
     if (connection.getwpFromWord(word,function(wpid){
             if (wpid<1){
-                console.log("Test failed: Retrieved the wrong word")
+                console.log("Test failed: Retrieved the wrong word\n\n")
             }else {
-                console.log("Test passed\n")
+                console.log("Test passed\n\n")
                 //t.end();
             }
             t.end()
@@ -49,9 +49,9 @@ test('test if user is found', function (t) {
     if (connection.findUserByUsername(username,function (user) {
             //console.log(user["user_id"])
             if (user == undefined){
-                console.log("Test failed: Retrieved no user")
+                console.log("Test failed: Retrieved no user\n\n")
             }else if (user["user_id"] == userid ) {
-                console.log("Test passed: User found correctly\n")
+                console.log("Test passed: User found correctly\n\n")
                 //t.end();
             }
             t.end()
@@ -60,23 +60,24 @@ test('test if user is found', function (t) {
 })
 
 
+
+
 test('test to check if email can be added', function (t) {
     var email = "a@email.com"
-    try {
-        // connection.addMailingList(email,function(){
-        if (t.error() != connection.addMailingList(email, function () {
-            })) {
-            console.log("Test passed : Added to the mailing list")
-            t.end();
-        } else {
-            console.log("Test failed : Unable to the add to the mailing list")
-            t.end();
-        }
 
-        //})}
-    }catch (e){
-        console.log("Test failed : Unable to the add to the mailing list")
-    }
+    console.log("user_id")
+     connection.addMailingList(email,function (cb) {
+        //    console.log("user_id")
+     if (cb.toString() == "failure"){
+         console.log("Test failed : Unable to the add to the mailing list")
+
+     }else {
+         console.log("Test passed : Added to the mailing list\n\n")
+                //t.end();
+     }
+           // t.end()
+     })
+    t.end()
 })
 //
 // console.log("rn")
