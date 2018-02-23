@@ -48,6 +48,7 @@ app.get('/search', function(req,res) {
 app.post('/', function(req, res) {
     var email = req.body.email;
     Connection.addMailingList(email, function() {
+        Mail.sendEmail(email, "You have subscribed to the Expressionary Newsletter");
         res.render('pages/index');
     });
 
@@ -57,6 +58,47 @@ app.get('/wordlist', function(req,res) {
     Connection.getWordPages(function(wordPages) {
         res.render('pages/wordlist', {wordPages: wordPages});
     })
+})
+app.post('/word2', function(req, res) {
+    if (!(req.body.vote0 === undefined)) {
+        console.log("0!!!!");
+        var i = 0;
+        var vote = req.body.vote0;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        console.log(vote);
+        console.log(points);
+        console.log(post);
+        if (vote == '+') {
+            points++;
+            //Connection.
+        }
+        else if (vote == '-') {
+
+        }
+    }
+    if (!(req.body.vote1 === undefined)) {
+
+    }if (!(req.body.vote2 === undefined)) {
+
+    }if (!(req.body.vote3 === undefined)) {
+
+    }if (!(req.body.vote4 === undefined)) {
+
+    }if (!(req.body.vote5 === undefined)) {
+
+    }if (!(req.body.vote6 === undefined)) {
+
+    }if (!(req.body.vote7 === undefined)) {
+
+    }if (!(req.body.vote8 === undefined)) {
+
+    }if (!(req.body.vote9 === undefined)) {
+
+    }if (!(req.body.vote10 === undefined)) {
+
+    }
+
 })
 app.post('/word', function(req, res) {
     var definition = req.body.newDef;
@@ -70,6 +112,10 @@ app.post('/word', function(req, res) {
             })
         })
     })
+    // var upvote = req.body.upvote;
+    // var downvote = req.body.downvote;
+    // console.log(upvote);
+    // console.log(downvote);
 
 });
 app.post('/search', function(req,res) {

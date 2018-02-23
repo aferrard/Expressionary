@@ -27,15 +27,27 @@
 <ol>
 
 
+    <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/word2" method="post">
         <% var i = 0; %>
+
         <%while (i < posts.length) { %>
     <li>
         User: <%= posts[i].users_user_id %><br>
         Definition: <%= posts[i].definition %><br>
+
         Points: <%= posts[i].points %>
+        <div class="form-group">
+            <input hidden id="thePost" name="thePost" value="<%= posts[i].definition %>"></input>
+            <input hidden id="points" name="points" value="<%= posts[i].points %>"></input>
+            <input id="vote<%= i %>" name="vote<%= i %>" type="submit" value="+" class="btn btn-primary">
+            <input id="vote<%= i %>" name="vote<%= i %>" type="submit" value="-" class="btn btn-primary">
+        </div>
+
+
+
     </li>
         <% i++ }%>
-
+    </form>
 
 
 

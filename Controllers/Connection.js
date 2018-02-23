@@ -94,11 +94,11 @@ function registerUser(email, username, password, firstName, lastName) {
     });
 }
 exports.addWord = addWord;
-function addWord(word) {
+function addWord(word, cb) {
     var request = "INSERT INTO wordPages VALUES(NULL, '" + word + "', '" + 0 + "'";
     con.query(request, function(err, result) {
         if(err) return "ERROR";
-        return NULL;
+        cb("success");
     })
 }
 function findUserByEmail(email) {
@@ -121,9 +121,25 @@ function findUserByUsername(username, cb) {
 exports.addMailingList = addMailingList;
 function addMailingList(email, cb) {
     con.query("INSERT INTO mailinglist VALUES('" + email + "')", function(err, result) {
-        if (err) throw err;
+        if (err) cb("failure");
         console.log("SUCCESS");
-        cb();
+        cb("success");
+    })
+}
+exports.addPointToPost = addPointToPost;
+function addPointToPost(definition, points, cb) {
+    var pt = points + 1;
+    con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
+        if (err) throw err;
+        console.log("point added");
+    })
+}
+exports.subPointToPost = subPointToPost;
+function subPointToPost(definition, points, cb) {
+    var pt = points - 1;
+    con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
+        if (err) throw err;
+        console.log("point added");
     })
 }
 

@@ -6,6 +6,7 @@
     "express": "^4.6.1",
     "express-ejs-layouts": "^1.1.0",
     "mysql": "^2.15.0",
-    "nodemailer": "^4.5.0"
+    "nodemailer": "^4.5.0",
+    "tape": "^4.9.0"
   }
 }
