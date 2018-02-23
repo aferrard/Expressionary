@@ -111,9 +111,12 @@ function userById(id, cb) {
         cb(z);
     })
 }
-
-function findUserByUsername(username) {
-
+exports.findUserByUsername = findUserByUsername;
+function findUserByUsername(username, cb) {
+    con.query("SELECT * FROM users WHERE username = '" + username + "'", function(err, result) {
+        var z = JSON.parse(JSON.stringify(result[0]));
+        cb(z);
+    })
 }
 
 function getPassword(username) {
