@@ -106,6 +106,7 @@ function addWord(word, cb) {
 function findUserByEmail(email) {
 
 }
+
 function userById(id, cb) {
     con.query("SELECT username FROM users WHERE user_id = " + id + "", function(err, result) {
         if (err) cb("fail1")
@@ -122,6 +123,7 @@ function findUserByUsername(username, cb) {
         cb(z);
     })
 }
+
 exports.addMailingList = addMailingList;
 function addMailingList(email, cb) {
     con.query("INSERT INTO mailinglist VALUES('" + email + "')", function(err, result) {
@@ -147,6 +149,11 @@ function subPointToPost(definition, points, cb) {
     })
 }
 
+exports.getPassword = getPassword;
 function getPassword(username) {
-
+    con.query("SELECT password FROM users WHERE username = '" + username + "'", function(err, result) {
+        if(err) cb("user not found");
+        var z = JSON.parse(JSON.stringify(result[0]));
+        cb(z);
+    });
 }
