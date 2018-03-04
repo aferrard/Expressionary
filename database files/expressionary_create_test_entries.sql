@@ -106,4 +106,25 @@ insert into posts value(
     1,
     1);
     
+insert into posts value(
+	NULL,
+    NOW(),
+    0,
+    "Intelligent animal",
+    4,
+    1);
+    
+delete from posts where wordPage_wp_id = 3;
+    
 select * from posts;
+
+
+insert into users value(
+	#shuold fail due to duplicate username
+	NULL,
+    0,
+    "uniqueusertest@email.com",
+    "thatguy",
+    "thatguyotherpass",
+    NULL,
+    NULL);
