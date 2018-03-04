@@ -349,6 +349,9 @@ app.post('/search', function(req,res) {
 app.get('/contact', function(req, res) {
 	res.render('pages/contact');
 });
+app.get('/register', function(req, res) {
+    res.render('pages/register');
+})
 app.get('/random', function(req, res) {
 	// go through words
 	// temporary to test below
