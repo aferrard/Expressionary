@@ -58,7 +58,7 @@ function registerUser(email, username, password, firstName, lastName) {
     var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username +"', '"+password+"', '"+ firstName+ "', '"+lastName+"')";
     //console.log(request);
     con.query(request, function(err, result) {
-        if(err) return "error while registering user";
+        if(err) return("error while registering user");
         //console.log(result);
         return result;
     });
@@ -89,3 +89,4 @@ function findUserByUsername(username) {
 //getPostsFromWordId(1);
 //registerUser("thatguy@email.com", "thatguy", "thatguypass", "NULL", "NULL");
 //checkLogin("ayushuser");
+//registerUser("uniquetest@email.com", "thatguy", "thatguyotherpass", "NULL", "NULL"); should return error due to violation fo unique username
