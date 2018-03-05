@@ -15,7 +15,7 @@ test('test if words are found', function (t) {
             t.end()
         })
     )
-    t.end()
+        t.end()
 });
 
 
@@ -23,17 +23,17 @@ test('test if user is found', function (t) {
     var username ="barryuser";
     var userid = 4;
 
-    // if (connection.findUserByUsername(username,function (user) {
-    //         //console.log(user["user_id"])
-    //         if (user == undefined){
-    //             console.log("Test failed: Retrieved no user\n\n")
-    //         }else if (user["user_id"] == userid ) {
-    //             console.log("Test passed: User found correctly\n\n")
-    //             //t.end();
-    //         }
-    //         t.end()
-    //     }))
-        t.end()
+    if (connection.findUserByUsername(username,function (user) {
+            //console.log(user["user_id"])
+            if (user == undefined){
+                console.log("Test failed: Retrieved no user\n\n")
+            }else if (user["user_id"] == userid ) {
+                console.log("Test passed: User found correctly\n\n")
+                //t.end();
+            }
+            t.end()
+        }))
+    t.end()
 });
 
 
@@ -67,3 +67,4 @@ test('test to check if users can be registered ', function (t){
 //onexit(1);
 //
 // console.log("rn")
+
