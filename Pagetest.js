@@ -2,26 +2,6 @@ const test = require('tape');
 //const page = require('./Communicator')
 const connection = require('./Controllers/Connection');
 
-
-// test('page should return random unexpected numbers',function (t) {
-//         var result = page.randomIndex(10);
-//         const expected = 5;
-//         if (result==expected){
-//             result = page.randomIndex(10);
-//             if (result==expected){
-//                 result = page.randomIndex(10);
-//                 if (result==expected){
-//                     console.log("Test failed")
-//                 }
-//             }
-//
-//         }
-//         console.log("Test passed\n")
-//         t.end()
-//     }
-// )
-
-
 test('test if words are found', function (t) {
     var word = "Artificial Intelligence";
 
@@ -39,22 +19,20 @@ test('test if words are found', function (t) {
 });
 
 
-
-
 test('test if user is found', function (t) {
     var username ="barryuser";
-    var userid = 4
+    var userid = 4;
 
-    if (connection.findUserByUsername(username,function (user) {
-            //console.log(user["user_id"])
-            if (user == undefined){
-                console.log("Test failed: Retrieved no user\n\n")
-            }else if (user["user_id"] == userid ) {
-                console.log("Test passed: User found correctly\n\n")
-                //t.end();
-            }
-            t.end()
-        }))
+    // if (connection.findUserByUsername(username,function (user) {
+    //         //console.log(user["user_id"])
+    //         if (user == undefined){
+    //             console.log("Test failed: Retrieved no user\n\n")
+    //         }else if (user["user_id"] == userid ) {
+    //             console.log("Test passed: User found correctly\n\n")
+    //             //t.end();
+    //         }
+    //         t.end()
+    //     }))
         t.end()
 });
 
@@ -63,10 +41,9 @@ test('test to check if email can be added', function (t) {
     var email = "a@email.com";
     var em = "a";
 
-//    console.log("user_id")
-    t.notEquals(connection.addMailingList(email,function (cb) {cb.toString()}),"failure","Able to register emails");
+    t.notEquals(connection.addMailingList(email, function (cb) {cb.toString()}) , "failure" , "Able to register emails");
     t.equals(connection.addMailingList(email,function (cb) {cb.toString()}),undefined,"Wrong emails do not work");
-    console.log("\n\n")
+    console.log("\n\n");
     t.end()
 });
 
@@ -78,12 +55,12 @@ test('test to check if users can be registered ', function (t){
     var password = "pass";
     var firstnamenull= null;
     var lastnamenull = null;
-    var firstname = "firstname"
-    var lastname = "lastname"
+    var firstname = "firstname";
+    var lastname = "lastname";
 
     t.notEquals(connection.registerUser(email,username,password,firstname,lastname),"error while registering user","Able to register user without null")
     t.notEquals(connection.registerUser(email,username,password,null,null),"error while registering user","Able to register user with null")
-    console.log("\n\n")
+    console.log("\n\n");
     t.end();
 });
 
