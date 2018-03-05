@@ -1,7 +1,6 @@
-const test = require('tape')
+const test = require('tape');
 //const page = require('./Communicator')
-const connection = require('./Controllers/Connection')
-
+const connection = require('./Controllers/Connection');
 
 
 // test('page should return random unexpected numbers',function (t) {
@@ -37,7 +36,7 @@ test('test if words are found', function (t) {
         })
     )
     t.end()
-})
+});
 
 
 
@@ -57,27 +56,37 @@ test('test if user is found', function (t) {
             t.end()
         }))
         t.end()
-})
-
-
+});
 
 
 test('test to check if email can be added', function (t) {
-    var email = "a@email.com"
+    var email = "a@email.com";
+    var em = "a";
 
-    console.log("user_id")
-     connection.addMailingList(email,function (cb) {
-        //    console.log("user_id")
-     if (cb.toString() == "failure"){
-         console.log("Test failed : Unable to the add to the mailing list")
-
-     }else {
-         console.log("Test passed : Added to the mailing list\n\n")
-                //t.end();
-     }
-           // t.end()
-     })
+//    console.log("user_id")
+    t.notEquals(connection.addMailingList(email,function (cb) {cb.toString()}),"failure","Able to register emails");
+    t.equals(connection.addMailingList(email,function (cb) {cb.toString()}),undefined,"Wrong emails do not work");
+    console.log("\n\n")
     t.end()
-})
+});
+
+
+
+test('test to check if users can be registered ', function (t){
+    var email = "newemail";
+    var username = "newuser";
+    var password = "pass";
+    var firstnamenull= null;
+    var lastnamenull = null;
+    var firstname = "firstname"
+    var lastname = "lastname"
+
+    t.notEquals(connection.registerUser(email,username,password,firstname,lastname),"error while registering user","Able to register user without null")
+    t.notEquals(connection.registerUser(email,username,password,null,null),"error while registering user","Able to register user with null")
+    console.log("\n\n")
+    t.end();
+});
+
+//onexit(1);
 //
 // console.log("rn")
