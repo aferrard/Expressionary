@@ -28,6 +28,8 @@
 
 
     <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/word2" method="post">
+        <input hidden id="theWord" name="theWord" value="<%= word %>"></input>
+        <input hidden id="posts" name="posts" value = "<%= posts %>"></input>
         <% var i = 0; %>
 
         <%while (i < posts.length) { %>

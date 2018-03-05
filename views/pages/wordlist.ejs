@@ -11,12 +11,15 @@
 
 <main>
     <div class ="container-fluid">
+        <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/wordlist" method="post">
         <ul>
             <% var i = 0; %>
             <%while (i < wordPages.length) { %>
-                <%= wordPages[i].word %><br>
+            <input id="word" name="word" type="submit" value="<%= wordPages[i].word %>" class="btn btn-primary">
+            <br>
             <% i++ }%>
         </ul>
+        </form>
     </div>
 </main>
 

@@ -38,10 +38,15 @@ app.set('view engine', 'ejs');
 // use res.render to load up an ejs view file
 
 // index page 
+// exports.ifError = ifError;
+// function ifError(message) {
+//     app.render('pages/404', {message: message});
+// }
 app.get('/', function(req, res) {
 	res.render('pages/index');
 
 });
+
 app.get('/search', function(req,res) {
     res.render('pages/search');
 })
@@ -59,7 +64,22 @@ app.get('/wordlist', function(req,res) {
         res.render('pages/wordlist', {wordPages: wordPages});
     })
 })
+app.post('/wordlist', function(req,res) {
+    var word = req.body.word;
+    Connection.getwpFromWord(word, function(wpid) {
+        Connection.getPostsFromWordId(wpid, function(posts) {
+            res.render('pages/word', {word: word, posts: posts});
+        })
+    })
+})
 app.post('/word2', function(req, res) {
+    var word = req.body.theWord;
+    Connection.getwpFromWord(word, function(wpid) {
+        Connection.getPostsFromWordId(wpid, function(posts) {
+
+
+    console.log("WORD: " + word);
+    console.log("POSTS: " + posts[0]);
     if (!(req.body.vote0 === undefined)) {
         console.log("0!!!!");
         var i = 0;
@@ -70,34 +90,186 @@ app.post('/word2', function(req, res) {
         console.log(points);
         console.log(post);
         if (vote == '+') {
-            points++;
-            //Connection.
+
+            Connection.addPointToPost(post, points, function() {
+                console.log("hello");
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
         }
         else if (vote == '-') {
-
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
         }
     }
-    if (!(req.body.vote1 === undefined)) {
+    else if (!(req.body.vote1 === undefined)) {
+        var i = 1;
+        var vote = req.body.vote1;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
-    }if (!(req.body.vote2 === undefined)) {
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+    }else if (!(req.body.vote2 === undefined)) {
+        var i = 2;
+        var vote = req.body.vote2;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
-    }if (!(req.body.vote3 === undefined)) {
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+    }else if (!(req.body.vote3 === undefined)) {
+        var i = 3;
+        var vote = req.body.vote3;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
-    }if (!(req.body.vote4 === undefined)) {
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+    }else if (!(req.body.vote4 === undefined)) {
+        var i = 4;
+        var vote = req.body.vote4;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
-    }if (!(req.body.vote5 === undefined)) {
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+    }else if (!(req.body.vote5 === undefined)) {
+        var i = 5;
+        var vote = req.body.vote5;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
-    }if (!(req.body.vote6 === undefined)) {
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+    }else if (!(req.body.vote6 === undefined)) {
+        var i = 6;
+        var vote = req.body.vote6;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
-    }if (!(req.body.vote7 === undefined)) {
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+    }else if (!(req.body.vote7 === undefined)) {
+        var i = 7;
+        var vote = req.body.vote7;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
-    }if (!(req.body.vote8 === undefined)) {
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+    }else if (!(req.body.vote8 === undefined)) {
+        var i = 8;
+        var vote = req.body.vote8;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
-    }if (!(req.body.vote9 === undefined)) {
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+    }else if (!(req.body.vote9 === undefined)) {
+        var i = 9;
+        var vote = req.body.vote9;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
-    }if (!(req.body.vote10 === undefined)) {
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+    }else if (!(req.body.vote10 === undefined)) {
+        var i = 10;
+        var vote = req.body.vote10;
+        var post = req.body.thePost[i];
+        var points = req.body.points[i];
+        if (vote == '+') {
 
+            Connection.addPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
+        else if (vote == '-') {
+            Connection.subPointToPost(post, points, function() {
+                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            })
+        }
     }
+    else {
+        console.log("hi");
+    }
+        //res.render('pages/word', {word: word, posts: posts});
+        })
+    })
+
 
 })
 app.post('/word', function(req, res) {
@@ -177,6 +349,9 @@ app.post('/search', function(req,res) {
 app.get('/contact', function(req, res) {
 	res.render('pages/contact');
 });
+app.get('/register', function(req, res) {
+    res.render('pages/register');
+})
 app.get('/random', function(req, res) {
 	// go through words
 	// temporary to test below
