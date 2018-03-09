@@ -350,7 +350,7 @@ app.get('/contact', function(req, res) {
 	res.render('pages/contact');
 });
 app.get('/register', function(req, res) {
-    res.render('pages/register');
+    res.render('pages/registration');
 })
 app.get('/random', function(req, res) {
 	// go through words
