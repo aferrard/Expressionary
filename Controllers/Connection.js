@@ -8,7 +8,9 @@ var con = mysql.createConnection({
 });
 con.connect(function(err) {
     if (err) throw err;
-    console.log("Connected!");
+    else {
+        console.log("Connected!");
+    }
 
 });
 
@@ -21,7 +23,9 @@ function getwpFromWord(word, cb) {
         //console.log("WORD: " + word);
         //console.log("RESULT: " + result);
         if (err) cb("fail1");
-        var z = JSON.parse(JSON.stringify(result[0]));
+        else {
+            var z = JSON.parse(JSON.stringify(result[0]));
+        }
 
         cb(z.wp_id);
     })
@@ -72,9 +76,11 @@ exports.getWordPages = getWordPages;
 function getWordPages(cb) {
     con.query("SELECT word FROM wordPage", function(err, result) {
         if (err) cb("fail1");
-        var z = JSON.parse(JSON.stringify(result));
-        //console.log(z);
-        cb(z);
+        else {
+            var z = JSON.parse(JSON.stringify(result));
+            //console.log(z);
+            cb(z);
+        }
     });
 }
 exports.getUsernameByPost = getUsernameByPost;
@@ -85,14 +91,18 @@ function getUsernameByPost(post, cb) {
 }
 exports.registerUser = registerUser;
 //maybe need cb
-function registerUser(email, username, password, firstName, lastName,cb) {
+
+function registerUser(email, username, password, firstName, lastName, cb) {
+
     //firstName, LastName can = "NULL" [optional]
     var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username +"', '"+password+"', '"+ firstName+ "', '"+lastName+"')";
     //console.log(request);
     con.query(request, function(err, result) {
+
         if(err) {
             cb("failure registering user")
         }else {
+
             cb(result);
         }
     });
@@ -102,7 +112,9 @@ function addWord(word, cb) {
     var request = "INSERT INTO wordPages VALUES(NULL, '" + word + "', '" + 0 + "'";
     con.query(request, function(err, result) {
         if(err) cb("fail1");
-        cb("success");
+        else {
+            cb("success");
+        }
     })
 }
 function findUserByEmail(email) {
@@ -112,17 +124,21 @@ function findUserByEmail(email) {
 function userById(id, cb) {
     con.query("SELECT username FROM users WHERE user_id = " + id + "", function(err, result) {
         if (err) cb("fail1")
-        var z = JSON.parse(JSON.stringify(result[0].username));
-        console.log("USERNAME: " + z);
-        cb(z);
+        else {
+            var z = JSON.parse(JSON.stringify(result[0].username));
+            console.log("USERNAME: " + z);
+            cb(z);
+        }
     })
 }
 exports.findUserByUsername = findUserByUsername;
 function findUserByUsername(username, cb) {
     con.query("SELECT * FROM users WHERE username = '" + username + "'", function(err, result) {
         if (err) cb("fail1");
-        var z = JSON.parse(JSON.stringify(result[0]));
-        cb(z);
+        else {
+            var z = JSON.parse(JSON.stringify(result[0]));
+            cb(z);
+        }
     })
 }
 
@@ -130,8 +146,10 @@ exports.addMailingList = addMailingList;
 function addMailingList(email, cb) {
     con.query("INSERT INTO mailinglist VALUES('" + email + "')", function(err, result) {
         if (err) cb("failure");
-        console.log("SUCCESS");
-        cb("success");
+        else {
+            console.log("SUCCESS");
+            cb("success");
+        }
     })
 }
 exports.addPointToPost = addPointToPost;
@@ -155,7 +173,24 @@ exports.getPassword = getPassword;
 function getPassword(username) {
     con.query("SELECT password FROM users WHERE username = '" + username + "'", function(err, result) {
         if(err) cb("user not found");
-        var z = JSON.parse(JSON.stringify(result[0]));
-        cb(z);
+        else{
+            var z = JSON.parse(JSON.stringify(result[0]));
+            cb(z);
+        }
     });
 }
+
+//delete for users
+exports.deleteUser = deleteUser;
+function deleteUser(username, cb) {
+    con.query("DELETE FROM users WHERE username = '" + username + "'", function(err, result) {
+        if(err) cb("error deleting user");
+        else {
+            var z = JSON.parse(JSON.stringify(result[0])); 
+            cb(z);
+        }
+    });
+}
+//delete for posts
+
+//delete for wp
