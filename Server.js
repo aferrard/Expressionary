@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "shittyreddit",
+    password: "sql123",
     database: "expressionary_data"
 });
 
@@ -50,20 +50,22 @@ app.get('/', function(req, res) {
 app.get('/search', function(req,res) {
     res.render('pages/search');
 })
+
 app.post('/', function(req, res) {
     var email = req.body.email;
     Connection.addMailingList(email, function() {
         Mail.sendEmail(email, "You have subscribed to the Expressionary Newsletter");
         res.render('pages/index');
     });
-
     //add to mailing list table
 })
+
 app.get('/wordlist', function(req,res) {
     Connection.getWordPages(function(wordPages) {
         res.render('pages/wordlist', {wordPages: wordPages});
     })
 })
+
 app.post('/wordlist', function(req,res) {
     var word = req.body.word;
     Connection.getwpFromWord(word, function(wpid) {
@@ -72,6 +74,7 @@ app.post('/wordlist', function(req,res) {
         })
     })
 })
+
 app.post('/word2', function(req, res) {
     var word = req.body.theWord;
     Connection.getwpFromWord(word, function(wpid) {
@@ -352,6 +355,30 @@ app.get('/contact', function(req, res) {
 app.get('/register', function(req, res) {
     res.render('pages/registration');
 })
+
+
+
+app.post('/register', function (req,res) {
+    var name = req.body.name;
+    var username = req.body.username;
+    var email = req.body.email;
+    var password = req.body.password;
+    Connection.registerUser(email,username,password,name,name,function (result){
+        if (result=="failure registering user"){
+          //  res.send("Able to Register");
+            console.log(result)
+        }
+        if (result!="failure registering user"){
+                //  res.send("Able to Register");
+            console.log(result)
+        }
+    }
+    );
+    // console.log("OK");
+    //console.log(nam);
+    res.render('pages/registration')
+})
+
 app.get('/random', function(req, res) {
 	// go through words
 	// temporary to test below

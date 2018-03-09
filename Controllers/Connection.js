@@ -3,7 +3,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "shittyreddit",
+    password: "sql123",
     database: "expressionary_data"
 });
 con.connect(function(err) {
@@ -85,14 +85,16 @@ function getUsernameByPost(post, cb) {
 }
 exports.registerUser = registerUser;
 //maybe need cb
-function registerUser(email, username, password, firstName, lastName) {
+function registerUser(email, username, password, firstName, lastName,cb) {
     //firstName, LastName can = "NULL" [optional]
     var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username +"', '"+password+"', '"+ firstName+ "', '"+lastName+"')";
     //console.log(request);
     con.query(request, function(err, result) {
-        if(err) return "failure registering user";
-        //console.log(result);
-        return result;
+        if(err) {
+            cb("failure registering user")
+        }else {
+            cb(result);
+        }
     });
 }
 exports.addWord = addWord;
