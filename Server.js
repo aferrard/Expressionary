@@ -359,16 +359,17 @@ app.get('/register', function(req, res) {
 
 
 app.post('/register', function (req,res) {
-    var name = req.body.name;
+    var firstname = req.body.firstname;
+    var lastname = req.body.lastname;
     var username = req.body.username;
     var email = req.body.email;
     var password = req.body.password;
-    Connection.registerUser(email,username,password,name,name,function (result){
-        if (result=="failure registering user"){
+    Connection.registerUser(email,username,password,firstname,lastname,function (result){
+        if (result=="failure registering user\n"){
           //  res.send("Able to Register");
             console.log(result)
         }
-        if (result!="failure registering user"){
+        if (result!="failure registering user\n"){
                 //  res.send("Able to Register");
             console.log(result)
         }
