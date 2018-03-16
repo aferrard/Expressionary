@@ -182,15 +182,38 @@ function getPassword(username) {
 
 //delete for users
 exports.deleteUser = deleteUser;
-function deleteUser(username, cb) {
-    con.query("DELETE FROM users WHERE username = '" + username + "'", function(err, result) {
-        if(err) cb("error deleting user");
+function deleteUser(uid, cb) {
+    con.query("SELECT user_id FROM users WHERE user_id = " + uid, function(err, result) {
+        if(result.length == 0) cb("user does not exist");
         else {
-            var z = JSON.parse(JSON.stringify(result[0])); 
-            cb(z);
+            con.query("DELETE FROM users WHERE user_id = " + uid, function(err, result) {
+                if(err) cb("error deleting user");
+                else {
+                    //var z = JSON.parse(JSON.stringify(result[0]));
+                    //cb(z);
+                    //delete all posts created by the user who is being deleted
+                    con.query("DELETE FROM posts WHERE users_user_id = " + uid, function(err, result) {
+                        if(err) cb("error deleting posts associated with this user");
+                        else  {
+                            cb("deletion successful");
+                        }
+                    })
+                }
+            });
         }
     });
 }
 //delete for posts
+exports.deletePost = deletePost;
+function deletePost(pid, cb) {
 
+}
 //delete for wp
+exports.deleteWord = deleteWord;
+function deleteWord() {
+
+}
+
+deleteUser(17, function(result) {
+    console.log(result);
+});
