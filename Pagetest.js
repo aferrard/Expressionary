@@ -50,21 +50,28 @@ test('test to check if email can be added', function (t) {
 
 
 test('test to check if users can be registered ', function (t){
+
     var email = "newemail";
     var username = "newuser";
-    var password = "pass";
+    var username2 = "newuser2"
+    var password = "pass1";
     var firstnamenull= null;
     var lastnamenull = null;
     var firstname = "firstname";
     var lastname = "lastname";
 
-    t.notEquals(connection.registerUser(email,username,password,firstname,lastname),"error while registering user","Able to register user without null")
-    t.notEquals(connection.registerUser(email,username,password,null,null),"error while registering user","Able to register user with null")
-    console.log("\n\n");
+    t.notEquals(connection.registerUser(email,username,password,firstname,lastname,function (cb){cb.toString()}),"failure registering user\n","Able to register user without null")
+    t.equals(connection.registerUser(email,username,password,firstname,lastname,function (cb){cb.toString()}),undefined,"Users with same user name don't register")
+    t.notEquals(connection.registerUser(email,username2,password,null,null,function (cb){cb.toString()}),"failure registering user\n","Able to register user with null")
+
+    t.equals(connection.deleteUser(username,function (cb) {cb.toString()}),"deletion successful","works");
+    t.equals(connection.deleteUser(username,function (cb) {cb.toString()}),"deletion successful","works");
+
     t.end();
+
 });
 
 //onexit(1);
 //
-// console.log("rn")
+ console.log("rn")
 
