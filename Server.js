@@ -1,8 +1,6 @@
 // load the things we need
 var express = require('express');
 
-
-
 var app = express();
 var Mail = require(__dirname + "/Controllers/Mail.js");
 var Word = require(__dirname + "/Controllers/Word.js");
@@ -73,7 +71,7 @@ app.post('/wordlist', function(req,res) {
             res.render('pages/word', {word: word, posts: posts});
         })
     })
-})
+});
 
 app.post('/word2', function(req, res) {
     var word = req.body.theWord;
@@ -356,6 +354,14 @@ app.get('/register', function(req, res) {
     res.render('pages/registration');
 })
 
+app.get('/action_page.php', function (req,res){
+   // console.log(req);
+    console.log(req.query.uname);
+    console.log(req.query.psw);
+
+    res.render("pages/registration");
+
+});
 
 
 app.post('/register', function (req,res) {
@@ -375,10 +381,8 @@ app.post('/register', function (req,res) {
         }
     }
     );
-    // console.log("OK");
-    //console.log(nam);
     res.render('pages/registration')
-})
+});
 
 app.get('/random', function(req, res) {
 	// go through words
