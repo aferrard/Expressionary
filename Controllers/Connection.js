@@ -131,6 +131,8 @@ function userById(id, cb) {
         }
     })
 }
+
+//user for getting information for user page as well
 exports.findUserByUsername = findUserByUsername;
 function findUserByUsername(username, cb) {
     con.query("SELECT * FROM users WHERE username = '" + username + "'", function(err, result) {
@@ -140,6 +142,29 @@ function findUserByUsername(username, cb) {
             cb(z);
         }
     })
+}
+
+//get user contributions for profile page
+exports.getPostsByUsername = getPostsByUsername;
+function getPostsByUsername(username, cb) {
+    con.query("SELECT user_id FROM users WHERE username = '" + username +"'", function(err, uid) {
+        if(err) {
+            cb("error finding this user");
+        } else if(uid.length == 0) {
+            cb("user does not exist");
+        } else {
+            con.query("SELECT * FROM posts WHERE users_user_id = " + uid, function(err, result) {
+                if(err) {
+                    cb("error in finding posts associated with this user");
+                } else if(result.length == 0) {
+                    cb("this user has no contributions yet");
+                } else {
+                    var z = JSON.parse(JSON.stringify(result));
+                    cb(z);
+                }
+            });
+        }
+    });
 }
 
 exports.addMailingList = addMailingList;
