@@ -351,7 +351,7 @@ app.get('/contact', function(req, res) {
 	res.render('pages/contact');
 });
 app.get('/register', function(req, res) {
-    res.render('pages/registration');
+    res.render('pages/registration',{regError: ""});
 })
 
 app.get('/action_page.php', function (req,res){
@@ -359,8 +359,7 @@ app.get('/action_page.php', function (req,res){
     console.log(req.query.uname);
     console.log(req.query.psw);
 
-    res.render("pages/registration");
-
+    res.render("pages/registration",{regError: "Login Successful"});
 });
 
 
@@ -371,17 +370,18 @@ app.post('/register', function (req,res) {
     var email = req.body.email;
     var password = req.body.password;
     Connection.registerUser(email,username,password,firstname,lastname,function (result){
-        if (result=="failure registering user\n"){
+        if (result=="failure registering user"){
+            res.render('pages/registration',{regError: "Username already exists.Please try again"});
           //  res.send("Able to Register");
-            console.log(result)
+         //   console.log(result+"works")
         }
-        if (result!="failure registering user\n"){
+        if (result!="failure registering user"){
                 //  res.send("Able to Register");
-            console.log(result)
+            res.render('pages/registration',{regError: "Successfully registered user"})
+            //console.log(result)
         }
     }
     );
-    res.render('pages/registration')
 });
 
 app.get('/random', function(req, res) {
