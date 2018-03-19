@@ -1,6 +1,8 @@
 // load the things we need
 var express = require('express');
 
+
+
 var app = express();
 var Mail = require(__dirname + "/Controllers/Mail.js");
 var Word = require(__dirname + "/Controllers/Word.js");
@@ -42,7 +44,6 @@ app.set('view engine', 'ejs');
 // }
 app.get('/', function(req, res) {
 	res.render('pages/index');
-
 });
 
 app.get('/search', function(req,res) {
@@ -71,7 +72,7 @@ app.post('/wordlist', function(req,res) {
             res.render('pages/word', {word: word, posts: posts});
         })
     })
-});
+})
 
 app.post('/word2', function(req, res) {
     var word = req.body.theWord;
@@ -91,7 +92,6 @@ app.post('/word2', function(req, res) {
         console.log(points);
         console.log(post);
         if (vote == '+') {
-
             Connection.addPointToPost(post, points, function() {
                 console.log("hello");
                 res.render('pages/word', {word: req.body.theWord, posts: posts});
@@ -102,6 +102,8 @@ app.post('/word2', function(req, res) {
                 res.render('pages/word', {word: req.body.theWord, posts: posts});
             })
         }
+        //console.log("test");
+        //res.redirect('/word2');
     }
     else if (!(req.body.vote1 === undefined)) {
         var i = 1;
@@ -117,6 +119,7 @@ app.post('/word2', function(req, res) {
         else if (vote == '-') {
             Connection.subPointToPost(post, points, function() {
                 res.render('pages/word', {word: req.body.theWord, posts: posts});
+                //document.getElementById("vote1").disabled = true;
             })
         }
     }else if (!(req.body.vote2 === undefined)) {
@@ -271,7 +274,6 @@ app.post('/word2', function(req, res) {
         })
     })
 
-
 })
 app.post('/word', function(req, res) {
     var definition = req.body.newDef;
@@ -351,16 +353,9 @@ app.get('/contact', function(req, res) {
 	res.render('pages/contact');
 });
 app.get('/register', function(req, res) {
-    res.render('pages/registration',{regError: ""});
+    res.render('pages/registration');
 })
 
-app.get('/action_page.php', function (req,res){
-   // console.log(req);
-    console.log(req.query.uname);
-    console.log(req.query.psw);
-
-    res.render("pages/registration",{regError: "Login Successful"});
-});
 
 
 app.post('/register', function (req,res) {
@@ -370,20 +365,23 @@ app.post('/register', function (req,res) {
     var email = req.body.email;
     var password = req.body.password;
     Connection.registerUser(email,username,password,firstname,lastname,function (result){
-        if (result=="failure registering user"){
-            res.render('pages/registration',{regError: "Username already exists.Please try again"});
+        if (result=="failure registering user\n"){
           //  res.send("Able to Register");
-         //   console.log(result+"works")
+            console.log(result)
         }
-        if (result!="failure registering user"){
+        if (result!="failure registering user\n"){
                 //  res.send("Able to Register");
-            res.render('pages/registration',{regError: "Successfully registered user"})
-            //console.log(result)
+            console.log(result)
         }
     }
     );
+    // console.log("OK");
+    //console.log(nam);
+    res.render('pages/registration')
+})
+app.get('/user', function(req, res) {
+    res.render('pages/user');
 });
-
 app.get('/random', function(req, res) {
 	// go through words
 	// temporary to test below
