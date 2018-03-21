@@ -25,9 +25,10 @@ function getwpFromWord(word, cb) {
         if (err) cb("fail1");
         else {
             var z = JSON.parse(JSON.stringify(result[0]));
+
+            cb(z.wp_id);
         }
 
-        cb(z.wp_id);
     })
     // /*var request = "SELECT posts.date, posts.definition, posts.points, user.username, wordpage.totalPoints FROM wordpage, posts, users WHERE wordpage.word = " + word + "," +
     //     "posts.wordpage_wp_id = wordpage.wp_id, users.user_id = posts.users_user_id";
@@ -61,7 +62,7 @@ function getwpFromWord(word, cb) {
 exports.getPostsFromWordId = getPostsFromWordId;
 function getPostsFromWordId(wp_id, cb) {
     //var request = "SELECT posts.date, posts.points, posts.definition, users.username FROM posts, users WHERE posts. wordPage_wp_id = " + wp_id + "&& posts.users_user_id = users.user_id";
-    var request = "SELECT * FROM posts WHERE wordPage_wp_id = " + wp_id + "";
+    var request = "SELECT * FROM posts WHERE wordpage_wp_id = " + wp_id + "";
     con.query(request, function(err, result) {
         if(err) cb("fail1");
         else {
@@ -74,7 +75,7 @@ function getPostsFromWordId(wp_id, cb) {
 }
 exports.getWordPages = getWordPages;
 function getWordPages(cb) {
-    con.query("SELECT word FROM wordPage", function(err, result) {
+    con.query("SELECT word FROM wordpage", function(err, result) {
         if (err) cb("fail1");
         else {
             var z = JSON.parse(JSON.stringify(result));
@@ -109,7 +110,7 @@ function registerUser(email, username, password, firstName, lastName, cb) {
 }
 exports.addWord = addWord;
 function addWord(word, cb) {
-    var request = "INSERT INTO wordPages VALUES(NULL, '" + word + "', '" + 0 + "'";
+    var request = "INSERT INTO wordpage VALUES(NULL, '" + word + "', '" + 0 + "'";
     con.query(request, function(err, result) {
         if(err) cb("fail1");
         else {
@@ -195,12 +196,17 @@ function subPointToPost(definition, points, cb) {
 }
 
 exports.getPassword = getPassword;
-function getPassword(username) {
+function getPassword(username,cb) {
     con.query("SELECT password FROM users WHERE username = '" + username + "'", function(err, result) {
         if(err) cb("user not found");
         else{
-            var z = JSON.parse(JSON.stringify(result[0]));
-            cb(z);
+            if(result.length == 0) {
+                cb("user does not exist");
+            }
+            else {
+                var z = JSON.parse(JSON.stringify(result[0]));
+                cb(z);
+            }
         }
     });
 }
