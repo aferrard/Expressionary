@@ -51,17 +51,17 @@ CREATE TABLE IF NOT EXISTS `expressionary_data`.`posts` (
   `points` INT NOT NULL,
   `definition` TEXT NOT NULL,
   `users_user_id` INT UNSIGNED NOT NULL,
-  `wordPage_wp_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`post_id`, `users_user_id`, `wordPage_wp_id`),
+  `wordpage_wp_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`post_id`, `users_user_id`, `wordpage_wp_id`),
   INDEX `fk_posts_users_idx` (`users_user_id` ASC),
-  INDEX `fk_posts_wordPage1_idx` (`wordPage_wp_id` ASC),
+  INDEX `fk_posts_wordPage1_idx` (`wordpage_wp_id` ASC),
   CONSTRAINT `fk_posts_users`
     FOREIGN KEY (`users_user_id`)
     REFERENCES `expressionary_data`.`users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_posts_wordPage1`
-    FOREIGN KEY (`wordPage_wp_id`)
+    FOREIGN KEY (`wordpage_wp_id`)
     REFERENCES `expressionary_data`.`wordpage` (`wp_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -74,4 +74,3 @@ GRANT ALL ON `expressionary_data`.* TO 'expressServer';
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
