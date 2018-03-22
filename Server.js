@@ -9,9 +9,16 @@ var Word = require(__dirname + "/Controllers/Word.js");
 var Connection = require(__dirname + "/Controllers/Connection.js");
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+//var cookie = require('cookieparser')
 //var word = "pizza";
+
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(cookie);
+
+
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -26,12 +33,7 @@ con.connect(function(err) {
 
 });
 
-
 //con.query("INSERT INTO wordpage (word, totalPoints) VALUES ('pizza', 0)");
-
-
-// var z = Connection.getwpFromWord("pizza");
-// console.log(z);
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -44,7 +46,15 @@ app.set('view engine', 'ejs');
 //     app.render('pages/404', {message: message});
 // }
 app.get('/', function(req, res) {
-	res.render('pages/index');
+   // console.log(req.cookies)
+   // if (req.cookies==undefined) {
+    //    res.cookie('user', 'username', {maxAge: 10800});
+     //   console.log("cookie set")
+   // }
+ //   console.log(req.cookies.user)
+  //  console.log(req.cookies.password)
+    res.render('pages/index');
+
 });
 
 app.get('/search', function(req,res) {
@@ -359,11 +369,20 @@ app.get('/register', function(req, res) {
 
 
 app.get('/action_page.php', function (req,res){
-   // console.log(req);
-    console.log(req.query.uname);
-    console.log(req.query.psw);
 
-    res.render("pages/registration",{regError: "Login Successful"});
+    Connection.getPassword(req.query.uname,function (result){
+        if (result=='user not found'){
+            res.render("pages/registration",{regError: "User Doesn't Exist"});
+        }else {
+            res.cookie('user', req.query.uname , {maxAge: 90000});
+            res.cookie('password', req.query.psw, {maxAge: 90000});
+            res.render("pages/registration",{regError: "Login Successful"});
+        }
+    });
+
+
+
+
 });
 
 

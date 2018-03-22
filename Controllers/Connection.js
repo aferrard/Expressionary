@@ -197,7 +197,9 @@ function subPointToPost(definition, points, cb) {
 
 exports.getPassword = getPassword;
 function getPassword(username,cb) {
+    console.log(username)
     con.query("SELECT password FROM users WHERE username = '" + username + "'", function(err, result) {
+        //console.log(result);
         if(err) cb("user not found");
         else{
             if(result.length == 0) {
