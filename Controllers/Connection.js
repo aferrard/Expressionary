@@ -183,7 +183,7 @@ function addPointToPost(definition, points, cb) {
     var pt = parseInt(points) + 1;
     con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
         if (err) throw err;
-        cb();
+        cb("success");
     })
 }
 exports.subPointToPost = subPointToPost;
@@ -191,7 +191,7 @@ function subPointToPost(definition, points, cb) {
     var pt = parseInt(points) - 1;
     con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
         if (err) throw err;
-        cb();
+        cb("success");
     })
 }
 
