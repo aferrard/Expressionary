@@ -1,6 +1,6 @@
 // load the things we need
 var express = require('express');
-
+var array = [];
 
 
 var app = express();
@@ -59,7 +59,7 @@ app.get('/', function(req, res) {
 
 app.get('/search', function(req,res) {
     res.render('pages/search');
-})
+});
 
 app.post('/', function(req, res) {
     var email = req.body.email;
@@ -68,13 +68,13 @@ app.post('/', function(req, res) {
         res.render('pages/index');
     });
     //add to mailing list table
-})
+});
 
 app.get('/wordlist', function(req,res) {
     Connection.getWordPages(function(wordPages) {
         res.render('pages/wordlist', {wordPages: wordPages});
     })
-})
+});
 
 app.post('/wordlist', function(req,res) {
     var word = req.body.word;
@@ -83,7 +83,7 @@ app.post('/wordlist', function(req,res) {
             res.render('pages/word', {word: word, posts: posts});
         })
     })
-})
+});
 
 app.post('/word2', function(req, res) {
     var word = req.body.theWord;
@@ -285,7 +285,7 @@ app.post('/word2', function(req, res) {
         })
     })
 
-})
+});
 app.post('/word', function(req, res) {
     var definition = req.body.newDef;
     //'1000-01-01'
@@ -357,7 +357,7 @@ app.post('/search', function(req,res) {
     console.log(type);
     //console.log("help");
     //res.render('pages/search');
-})
+});
 
 // about page 
 app.get('/contact', function(req, res) {
@@ -365,27 +365,28 @@ app.get('/contact', function(req, res) {
 });
 app.get('/register', function(req, res) {
     res.render('pages/registration',{regError: ""});
-})
+});
 
 
 app.get('/action_page.php', function (req,res){
 
+    if (req.cookies.user != undefined || array.indexOf(req.query.uname) != -1){
+        res.render("pages/registration",{regError: "User Already Logged In"});
+        return;
+    }
     Connection.getPassword(req.query.uname,function (result){
-        if (result=='user not found'){
+        if (result == 'user not found'){
             res.render("pages/registration",{regError: "User Doesn't Exist"});
         }else {
-            res.cookie('user', req.query.uname , {maxAge: 90000});
-            res.cookie('password', req.query.psw, {maxAge: 90000});
+            array.push(req.query.uname);
+            res.cookie('user', req.query.uname , {maxAge: 60000});
+            res.cookie('password', req.query.psw, {maxAge: 60000});
+            //app.post(res.render("pages/registration",{regError: "Login Successful"}))
             res.render("pages/registration",{regError: "Login Successful"});
         }
     });
 
-
-
-
 });
-
-
 
 app.post('/register', function (req,res) {
     var firstname = req.body.firstname;
@@ -491,7 +492,7 @@ app.get('/random', function(req, res) {
 }*/
 app.get('/developer', function(req, res) {
 	res.render('pages/developer');
-})
+});
 app.post('/contact', function(req, res) {
     var name = req.body.name;
      var email = req.body.email;
@@ -500,7 +501,7 @@ app.post('/contact', function(req, res) {
     Mail.sendEmail("expressionaryproject@gmail.com", message);
      console.log(name + email + message);
      res.render('pages/index');
-})
+});
 
 app.listen(8080);
 console.log('8080 is the magic port');
