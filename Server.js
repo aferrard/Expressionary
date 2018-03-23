@@ -3,20 +3,20 @@ var express = require('express');
 var array = [];
 
 
-
 var app = express();
 var Mail = require(__dirname + "/Controllers/Mail.js");
 var Word = require(__dirname + "/Controllers/Word.js");
 var Connection = require(__dirname + "/Controllers/Connection.js");
 var bodyParser = require('body-parser');
+var mysql = require('mysql');
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
-//var cookie = require('cookieparser')
-var mysql = require('mysql');
-//var word = "pizza";
+
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
-//con.use(cookie);
+//app.use(cookie);
+
+
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -31,12 +31,7 @@ con.connect(function(err) {
 
 });
 
-
 //con.query("INSERT INTO wordpage (word, totalPoints) VALUES ('pizza', 0)");
-
-
-// var z = Connection.getwpFromWord("pizza");
-// console.log(z);
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -49,15 +44,15 @@ app.set('view engine', 'ejs');
 //     app.render('pages/404', {message: message});
 // }
 app.get('/', function(req, res) {
-    // console.log(req.cookies)
-    // if (req.cookies==undefined) {
+   // console.log(req.cookies)
+   // if (req.cookies==undefined) {
     //    res.cookie('user', 'username', {maxAge: 10800});
-    //   console.log("cookie set")
-    // }
-    //   console.log(req.cookies.user)
-    //  console.log(req.cookies.password)
+     //   console.log("cookie set")
+   // }
+ //   console.log(req.cookies.user)
+  //  console.log(req.cookies.password)
+    res.render('pages/index');
 
-	res.render('pages/index');
 });
 
 app.get('/search', function(req,res) {
@@ -97,24 +92,39 @@ app.post('/word2', function(req, res) {
     console.log("WORD: " + word);
     console.log("POSTS: " + posts[0]);
     if (!(req.body.vote0 === undefined)) {
-        console.log("0!!!!");
+        //console.log("0!!!!");
         var i = 0;
         var vote = req.body.vote0;
         var post = req.body.thePost[i];
         var points = req.body.points[i];
-        console.log(vote);
+        //console.log(vote);
         console.log(points);
         console.log(post);
         if (vote == '+') {
-            Connection.addPointToPost(post, points, function() {
-                console.log("hello");
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        console.log("hello+");
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
+            //console.log("hello1");
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        console.log("hello+");
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
+
         }
         //console.log("test");
         //res.redirect('/word2');
@@ -125,15 +135,26 @@ app.post('/word2', function(req, res) {
         var post = req.body.thePost[i];
         var points = req.body.points[i];
         if (vote == '+') {
-
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
+            
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
-                //document.getElementById("vote1").disabled = true;
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }else if (!(req.body.vote2 === undefined)) {
@@ -142,14 +163,25 @@ app.post('/word2', function(req, res) {
         var post = req.body.thePost[i];
         var points = req.body.points[i];
         if (vote == '+') {
-
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }else if (!(req.body.vote3 === undefined)) {
@@ -159,13 +191,25 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }else if (!(req.body.vote4 === undefined)) {
@@ -175,13 +219,25 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }else if (!(req.body.vote5 === undefined)) {
@@ -191,13 +247,25 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }else if (!(req.body.vote6 === undefined)) {
@@ -207,13 +275,25 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }else if (!(req.body.vote7 === undefined)) {
@@ -223,13 +303,25 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }else if (!(req.body.vote8 === undefined)) {
@@ -239,13 +331,25 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }else if (!(req.body.vote9 === undefined)) {
@@ -255,13 +359,25 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }else if (!(req.body.vote10 === undefined)) {
@@ -271,13 +387,25 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.addPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function() {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
+            Connection.subPointToPost(post, points, function(result) {
+                if(result == "success"){
+                    Connection.getPostsFromWordId(wpid, function(post) {
+                        res.render('pages/word', {word: req.body.theWord, posts: post});
+                    });
+                }else{
+                    console.log("failure to vote")
+                }
             })
         }
     }
@@ -289,24 +417,6 @@ app.post('/word2', function(req, res) {
     })
 
 });
-/*app.post('/word', function(req, res) {
-    var definition = req.body.newDef;
-    //'1000-01-01'
-    Connection.getwpFromWord(req.body.theWord, function(wpid) {
-        con.query("INSERT INTO posts (date, points, definition, users_user_id, wordPage_wp_id) VALUES ('1000-01-01', '0', '" + definition + "', 0, '" + wpid + "')", function(err, result) {
-            if (err) throw err;
-            console.log(result);
-            Connection.getPostsFromWordId(wpid, function(posts) {
-                res.render('pages/word', {word: req.body.theWord, posts: posts});
-            })
-        })
-    })
-    // var upvote = req.body.upvote;
-    // var downvote = req.body.downvote;
-    // console.log(upvote);
-    // console.log(downvote);
-
-});*/
 app.post('/word', function(req, res) {
     var definition = req.body.newDef;
     //'1000-01-01'
@@ -332,7 +442,7 @@ app.post('/search', function(req,res) {
     var type = req.body.searchType;
     if (type == "Word") {
         //search database for words
-        con.query("SELECT * FROM wordpage WHERE word = '" + term + "'", function(err, result) {
+        con.query("SELECT * FROM wordPage WHERE word = '" + term + "'", function(err, result) {
             if (err) throw err;
             var word = JSON.parse(JSON.stringify(result[0].word));
             Connection.getwpFromWord(term, function (wpid) {
@@ -392,11 +502,7 @@ app.get('/register', function(req, res) {
 
 
 app.get('/action_page.php', function (req,res){
-   /*// console.log(req);
-    console.log(req.query.uname);
-    console.log(req.query.psw);
 
-    res.render("pages/registration",{regError: "Login Successful"});*/
     if (req.cookies.user != undefined || array.indexOf(req.query.uname) != -1){
         res.render("pages/registration",{regError: "User Already Logged In"});
         return;
@@ -414,8 +520,6 @@ app.get('/action_page.php', function (req,res){
     });
 
 });
-
-
 
 app.post('/register', function (req,res) {
     var firstname = req.body.firstname;
@@ -448,8 +552,6 @@ app.get('/random', function(req, res) {
     var userz = [];
 	Connection.getWordPages(function(wordPages) {
 	    var i = Math.floor(Math.random() * wordPages.length);
-	    console.log(i);
-	    console.log(wordPages);
 	    // wordPage(wordPages[i].word); // maybe need cb
         var word = wordPages[i].word;
         //word = "pizza";
