@@ -197,7 +197,7 @@ function subPointToPost(definition, points, cb) {
 
 exports.getPassword = getPassword;
 function getPassword(username,cb) {
-    console.log(username)
+//    console.log(username)
     con.query("SELECT password FROM users WHERE username = '" + username + "'", function(err, result) {
         //console.log(result);
         if(err) cb("user not found");
@@ -217,18 +217,18 @@ function getPassword(username,cb) {
 exports.deleteUser = deleteUser;
 function deleteUser(username, cb) {
     con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, uid) {
-        console.log(uid[0]);
+       // console.log(uid[0]);
         if(uid.length == 0) {cb("user does not exist");}
         else {
             con.query("DELETE FROM posts WHERE users_user_id = " + uid[0].user_id, function(err, result) {
-                console.log(err);
+              //  console.log(err);
                 if(err) cb("error deleting posts associated with this user");
                 /*else  {
                     cb("deletion successful");
                 }*/
             });
             con.query("DELETE FROM users WHERE username = '" + username + "'", function(err, result) {
-                console.log(err);
+            //    console.log(err);
                 if(err) cb("error deleting user");
                 else {
                     //var z = JSON.parse(JSON.stringify(result[0]));

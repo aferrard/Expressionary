@@ -38,21 +38,9 @@ app.set('view engine', 'ejs');
 
 // use res.render to load up an ejs view file
 
-// index page 
-// exports.ifError = ifError;
-// function ifError(message) {
-//     app.render('pages/404', {message: message});
-// }
-app.get('/', function(req, res) {
-   // console.log(req.cookies)
-   // if (req.cookies==undefined) {
-    //    res.cookie('user', 'username', {maxAge: 10800});
-     //   console.log("cookie set")
-   // }
- //   console.log(req.cookies.user)
-  //  console.log(req.cookies.password)
-    res.render('pages/index');
 
+app.get('/', function(req, res) {
+    res.render('pages/index');
 });
 
 app.get('/search', function(req,res) {
@@ -88,15 +76,15 @@ app.post('/word2', function(req, res) {
     Connection.getwpFromWord(word, function(wpid) {
         Connection.getPostsFromWordId(wpid, function(posts) {
 
-
-    console.log("WORD: " + word);
-    console.log("POSTS: " + posts[0]);
+   // console.log("WORD: " + word);
+   // console.log("POSTS: " + posts[0]);
     if (!(req.body.vote0 === undefined)) {
         //console.log("0!!!!");
         var i = 0;
         var vote = req.body.vote0;
         var post = req.body.thePost[i];
         var points = req.body.points[i];
+
         //console.log(vote);
         console.log(points);
         console.log(post);
@@ -112,6 +100,7 @@ app.post('/word2', function(req, res) {
                 }
             })
             //console.log("hello1");
+
         }
         else if (vote == '-') {
             Connection.subPointToPost(post, points, function(result) {
