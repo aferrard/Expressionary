@@ -60,6 +60,7 @@ if (tvar == 0) {
     });
 
 }
+//array[i].points
 
 if (tvar == 1 ) {
     test('REGISTERATION AND UNIQUE USER TESTS\n10 TESTS', function (t) {

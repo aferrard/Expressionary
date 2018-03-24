@@ -78,6 +78,7 @@ app.post('/wordlist', function(req,res) {
 });
 
 app.post('/word2', function(req, res) {
+    if (req.cookies.user != undefined){
     var word = req.body.theWord;
     Connection.getwpFromWord(word, function(wpid) {
         Connection.getPostsFromWordId(wpid, function(posts) {
@@ -406,6 +407,9 @@ app.post('/word2', function(req, res) {
         //res.render('pages/word', {word: word, posts: posts});
         })
     })
+    }else {
+        res.render("pages/registration",{regError: "Please Register or Log In"});
+    }
 });
 
 app.post('/word', function(req, res) {
