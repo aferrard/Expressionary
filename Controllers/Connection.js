@@ -96,17 +96,23 @@ exports.registerUser = registerUser;
 function registerUser(email, username, password, firstName, lastName, cb) {
 
     //firstName, LastName can = "NULL" [optional]
-    var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username +"', '"+password+"', '"+ firstName+ "', '"+lastName+"')";
-    //console.log(request);
-    con.query(request, function(err, result) {
+    if(username.length == 0) {
+        cb("username field cannot be empty");
+    } else if(username.length > 45) {
+        cb("username is too long");
+    } else {
+        var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', '" + firstName + "', '" + lastName + "')";
+        //console.log(request);
+        con.query(request, function (err, result) {
 
-        if(err) {
-            cb("failure registering user")
-        }else {
+            if (err) {
+                cb("failure registering user")
+            } else {
 
-            cb(result);
-        }
-    });
+                cb(result);
+            }
+        });
+    }
 }
 exports.addWord = addWord;
 function addWord(word, cb) {

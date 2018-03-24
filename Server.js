@@ -519,10 +519,18 @@ app.post('/register', function (req,res) {
     Connection.registerUser(email,username,password,firstname,lastname,function (result){
         if (result=="failure registering user"){
             res.render('pages/registration',{regError: "Username already exists.Please try again"});
-        }
-        if (result!="failure registering user"){
+        } else
+        if (result=="username field cannot be empty") {
+            res.render('pages/registration',{regError: "username field cannot be empty"})
+        } else
+        if (result=="username is too long") {
+            res.render('pages/registration',{regError: "username is too long"})
+        } else
+        /*if (result!="failure registering user")*/{
             res.render('pages/registration',{regError: "Successfully registered user"})
         }
+
+
     })
 });
 app.get('/user', function(req, res) {
