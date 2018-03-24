@@ -25,19 +25,25 @@ var con = mysql.createConnection({
 });
 
 
+exports.logcheck = logcheck;
+function logcheck(user,cb){
+    if (array.indexof(user) > -1){
+        cb(true);
+    }else {
+        cb(false);
+    }
+}
+
 con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
 
 });
 
-//con.query("INSERT INTO wordpage (word, totalPoints) VALUES ('pizza', 0)");
-
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
 // use res.render to load up an ejs view file
-
 
 app.get('/', function(req, res) {
     res.render('pages/index');
@@ -76,10 +82,7 @@ app.post('/word2', function(req, res) {
     Connection.getwpFromWord(word, function(wpid) {
         Connection.getPostsFromWordId(wpid, function(posts) {
 
-   // console.log("WORD: " + word);
-   // console.log("POSTS: " + posts[0]);
     if (!(req.body.vote0 === undefined)) {
-        //console.log("0!!!!");
         var i = 0;
         var vote = req.body.vote0;
         var post = req.body.thePost[i];
@@ -113,7 +116,6 @@ app.post('/word2', function(req, res) {
                     console.log("failure to vote")
                 }
             })
-
         }
         //console.log("test");
         //res.redirect('/word2');
@@ -404,8 +406,8 @@ app.post('/word2', function(req, res) {
         //res.render('pages/word', {word: word, posts: posts});
         })
     })
-
 });
+
 app.post('/word', function(req, res) {
     var definition = req.body.newDef;
     //'1000-01-01'
@@ -420,12 +422,8 @@ app.post('/word', function(req, res) {
             }
         })
     })
-    // var upvote = req.body.upvote;
-    // var downvote = req.body.downvote;
-    // console.log(upvote);
-    // console.log(downvote);
-
 });
+
 app.post('/search', function(req,res) {
     var term = req.body.search;
     var type = req.body.searchType;
@@ -469,22 +467,20 @@ app.post('/search', function(req,res) {
             res.render('pages/profile', {username: user.username, points: user.points,
             first_name: user.first_name, last_name: user.last_name});
         })
-        //search database for users
     }
     else {
-        //should 404 but for now home page
         res.render('/pages/search');
     }
     console.log(term);
     console.log(type);
-    //console.log("help");
-    //res.render('pages/search');
+
 });
 
 // about page 
 app.get('/contact', function(req, res) {
 	res.render('pages/contact');
 });
+
 app.get('/register', function(req, res) {
     res.render('pages/registration',{regError: ""});
 });
@@ -519,32 +515,21 @@ app.post('/register', function (req,res) {
     Connection.registerUser(email,username,password,firstname,lastname,function (result){
         if (result=="failure registering user"){
             res.render('pages/registration',{regError: "Username already exists.Please try again"});
-          //  res.send("Able to Register");
-         //   console.log(result+"works")
         }
         if (result!="failure registering user"){
-                //  res.send("Able to Register");
             res.render('pages/registration',{regError: "Successfully registered user"})
-            //console.log(result)
         }
-    }
-    )
-
-        //res.render('pages/registration')
+    })
 });
 app.get('/user', function(req, res) {
     res.render('pages/user')
 });
 app.get('/random', function(req, res) {
-	// go through words
-	// temporary to test below
     var userz = [];
 	Connection.getWordPages(function(wordPages) {
 	    var i = Math.floor(Math.random() * wordPages.length);
 	    // wordPage(wordPages[i].word); // maybe need cb
         var word = wordPages[i].word;
-        //word = "pizza";
-            // var p;
             Connection.getwpFromWord(word, function (wpid) {
                 if (wpid === undefined) {
                     console.log("ERROR");
@@ -560,13 +545,8 @@ app.get('/random', function(req, res) {
                             console.log(posts);
                             for (var i = 0; i < posts.length; i++) {
                                 Connection.getUsernameByPost(posts[i], function(username) {
-                                    //console.log("USERNAME AGAIN: " + username);
-                                    //userz[i] = username;
-                                    //console.log(userz[0]);
-                                    // posts[i].username = "barryuser";
                                 })
                             }
-
                             res.render('pages/word', {word: word, posts: posts});
                         }
 
@@ -579,39 +559,7 @@ app.get('/random', function(req, res) {
     })
     //wordPage("pizza");
 });
-/*function wordPage(word) {
-    app.get('/word', function (req, res) {
-        // var p;
-        Connection.getwpFromWord(word, function (wpid) {
-            if (wpid === undefined) {
-                console.log("ERROR");
-            }
-            else {
-                console.log(wpid);
-                Connection.getPostsFromWordId(wpid, function (posts) {
-                    if (posts === undefined) {
-                        console.log("ERROR");
-                    }
-                    else {
-                        // p = posts;
-                        console.log(posts);
-                        for (var i = 0; i < posts.length; i++) {
-                            Connection.getUsernameByPost(post[i], function(username) {
-                                //console.log("USERNAME AGAIN" + username);
-                                posts[i].username = username;
-                            })
-                        }
-                        //posts[0].username = "billy";
-                        res.render('pages/word', {word: word, posts: posts});
-                    }
 
-                })
-            }
-        });
-
-        //res.render('pages/word', {word: word, posts: p});
-    })
-}*/
 app.get('/developer', function(req, res) {
 	res.render('pages/developer');
 });

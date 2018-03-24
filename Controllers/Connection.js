@@ -213,6 +213,8 @@ function getPassword(username,cb) {
     });
 }
 
+
+
 //delete for users
 exports.deleteUser = deleteUser;
 function deleteUser(username, cb) {
