@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Expressionary.iml" filepath="$PROJECT_DIR$/.idea/Expressionary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/node-ejs.iml" filepath="$PROJECT_DIR$/.idea/node-ejs.iml" />
     </modules>
   </component>
 </project>
