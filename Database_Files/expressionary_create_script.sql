@@ -67,6 +67,23 @@ CREATE TABLE IF NOT EXISTS `expressionary_data`.`posts` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `expressionary_data`.`posts_voted`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `expressionary_data`.`posts_voted` (
+  `posts_post_id` INT UNSIGNED NOT NULL,
+  `posts_users_user_id` INT UNSIGNED NOT NULL,
+  `direction` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`posts_post_id`, `posts_users_user_id`),
+  INDEX `fk_posts_voted_posts1_idx` (`posts_post_id` ASC, `posts_users_user_id` ASC),
+  CONSTRAINT `fk_posts_voted_posts1`
+    FOREIGN KEY (`posts_post_id` , `posts_users_user_id`)
+    REFERENCES `expressionary_data`.`posts` (`post_id` , `users_user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 CREATE USER 'expressServer' IDENTIFIED BY 'ExpressionaryAdminPass';
 
 GRANT ALL ON `expressionary_data`.* TO 'expressServer';
@@ -74,3 +91,4 @@ GRANT ALL ON `expressionary_data`.* TO 'expressServer';
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
