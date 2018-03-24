@@ -1,101 +1,152 @@
-const test = require('tape')
-const page = require('./Communicator')
+const test = require('tape');
+//const page = require('./Communicator')
+const connection = require('./Controllers/Connection');
+var tvar = 0;
 
-test('page should return random unexpected numbers',function (t) {
-    var result = page.randomIndex(10);
-    const expected = 5;
-    if (result==expected){
-        result = page.randomIndex(10);
-        if (result==expected){
-            result = page.randomIndex(10);
-            if (result==expected){
-                console.log("Test failed")
-            }
-        }
-
-    }
-    console.log("Test passed\n")
-    t.end()
+if (process.argv[2] == "reg_test") {
+    tvar = 1;
+}else if (process.argv[2] == "log_test"){
+    tvar = 2;
 }
-)
 
 
+if (tvar == 0) {
+    test('test if words are found', function (t) {
+        var word = "Artificial Intelligence";
 
-test('page should return with the new Added field', function (t) {
-    const result = page.hello("2+4=")
-    const expected = '<!DOCTYPE html>' + '<html>\n' +
-        '<head>\n' +
-        '    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">\n' +
-        '    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>\n' +
-        '</head>\n' +
-        '<body>\n' +
-        '<div>\n' +
-        '    <div>\n' +
-        '        <nav class="navbar navbar-inverse" role="navigation" style="padding-left:20px;">\n' +
-        '            <ul class="nav navbar-nav">\n' +
-        '                <li><a class="nav-link" href="/">Home</a></li>\n' +
-        '                <li><a class="nav-link" href="javascript:void(0)" onclick="loadAbout()">About us</a></li>\n' +
-        '                <script>\n' +
-        '                    function loadAbout() {\n' +
-        '                        var xhttp = new XMLHttpRequest();\n' +
-        '                        xhttp.onreadystatechange = function() {\n' +
-        '                            if (this.readyState == 4 && this.status == 200) {\n' +
-        '                                document.getElementById("test1").innerHTML =\n' +
-        '                                    this.responseText;\n' +
-        '                            }\n' +
-        '                        };\n' +
-        '                        xhttp.open("GET", "about", true);\n' +
-        '                        xhttp.send("about");\n' +
-        '                    }\n' +
-        '                </script>\n' +
-        '                <li class="active"><a href="#">Contact us<span class="sr-only">(current)</span></a></li>\n' +
-        '            </ul>\n' +
-        '        </nav>\n' +
-        '    </div>\n' +
-        '    <br/>\n' +
-        '    <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:3000/contact" method="post">\n' +
-        '        <div class="form-group">\n' +
-        '            <label for="name" class="col-sm-2 control-label">Name</label>\n' +
-        '            <div class="col-sm-10">\n' +
-        '                <input type="text" class="form-control" id="name" name="name" placeholder="First & Last Name" value="">\n' +
-        '            </div>\n' +
-        '        </div>\n' +
-        '        <div class="form-group">\n' +
-        '            <label for="email" class="col-sm-2 control-label">Email</label>\n' +
-        '            <div class="col-sm-10">\n' +
-        '                <input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com" value="">\n' +
-        '            </div>\n' +
-        '        </div>\n' +
-        '        <div class="form-group">\n' +
-        '            <label for="message" class="col-sm-2 control-label">Message</label>\n' +
-        '            <div class="col-sm-10">\n' +
-        '                <textarea class="form-control" rows="4" name="message"></textarea>\n' +
-        '            </div>\n' +
-        '        </div>\n' +
-        '        <div class="form-group">\n' +
-        '            <label for="human" class="col-sm-2 control-label" id="tempMath">2+4=</label>\n' +
-        '            <div class="col-sm-10">\n' +
-        '                <input type="text" class="form-control" id="human" name="human" placeholder="Your Answer">\n' +
-        '            </div>\n' +
-        '        </div>\n' +
-        '        <div class="form-group">\n' +
-        '            <div class="col-sm-10 col-sm-offset-2">\n' +
-        '                <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">\n' +
-        '            </div>\n' +
-        '        </div>\n' +
-        '        <div class="form-group">\n' +
-        '            <div class="col-sm-10 col-sm-offset-2">\n' +
-        '                <! Will be used to display an alert to the users>\n' +
-        '            </div>\n' +
-        '        </div>\n' +
-        '    </form>\n' +
-        '</div>\n' +
-        '</body>\n' +
-        '</html>'
+        if (connection.getwpFromWord(word, function (wpid) {
+                if (wpid < 1) {
+                    console.log("Test failed: Retrieved the wrong word\n\n")
+                } else {
+                    console.log("Test passed\n\n")
+                    //t.end();
+                }
+                t.end()
+            })
+        )
+            t.end()
+    });
 
-    t.ok(result)
-    t.equal(result,expected)
+    test('test if user is found', function (t) {
+        var username = "barryuser";
+        var userid = 4;
 
-    t.end()
-    
-})
+        if (connection.findUserByUsername(username, function (user) {
+                //console.log(user["user_id"])
+                if (user == undefined) {
+                    console.log("Test failed: Retrieved no user\n\n")
+                } else if (user["user_id"] == userid) {
+                    console.log("Test passed: User found correctly\n\n")
+                    //t.end();
+                }
+                t.end()
+            }))
+            t.end()
+    });
+
+
+    test('test to check if email can be added', function (t) {
+        var email = "a@email.com";
+        var em = "a";
+
+        t.notEquals(connection.addMailingList(email, function (cb) {
+            cb.toString()
+        }), "failure", "Able to register emails");
+        t.equals(connection.addMailingList(email, function (cb) {
+            cb.toString()
+        }), undefined, "Wrong emails do not work");
+        console.log("\n\n");
+        t.end()
+    });
+
+}
+
+if (tvar == 1 ) {
+    test('REGISTERATION AND UNIQUE USER TESTS\n10 TESTS', function (t) {
+
+
+        var email = "tempemail";
+        var username = "tempuser";
+        var username2 = "tempuser2";
+        var username3 = "tempuser3";
+        var password = "temppass1";
+        var firstname = "firstname";
+        var lastname = "lastname";
+        var existinguser = "";
+
+
+        connection.registerUser(email, username, password, firstname, lastname, function (cb) {
+            t.notEquals(cb, "failure registering user", "Able to register user without null first and last name");
+        });
+
+        connection.registerUser(email, username, password, firstname, lastname, function (cb) {
+            t.equals(cb, "failure registering user", "New users cannot register twice");
+        });
+
+        connection.registerUser(email, username, password, firstname, lastname, function (cb) {
+            t.equals(cb, "failure registering user", "Robustness to check if same users register on multiple tries");
+        });
+
+        connection.registerUser(email, existinguser, password, firstname, lastname, function (cb) {
+            t.equals(cb, "failure registering user", "Already Existing Usernames cannot be used to register");
+        });
+
+        connection.registerUser(email, username2, password, firstname, lastname, function (cb) {
+            t.notEquals(cb, "failure registering user", "multiple users can register");
+        });
+
+        connection.registerUser(email,username3,password,firstname,lastname,function (cb) {
+            t.notEquals(cb, "failure registering user", "Users can register with null first and last name");
+        });
+        // test for max length
+        // test for 0 length
+
+        connection.deleteUser(username, function (cb) {
+            t.equals(cb, "deletion successful", "Deletion works/Cleanup");
+        });
+
+
+        // connection.deleteUser(username,function (cb) {
+        //     t.notEquals(cb,"deletion successful","Deletion works")
+        // });
+
+        connection.deleteUser(username2, function (cb) {
+            t.equals(cb, "deletion successful", "Deletion works/Cleanup");
+        });
+
+        connection.deleteUser(username3, function (cb) {
+            t.equals(cb, "deletion successful", "Deletion works/Cleanup");
+        });
+        //tvar = 1;
+        t.end();
+
+    });
+}
+if (tvar == 2) {
+
+    test('LOGIN TESTS\n10 TESTS', function (t) {
+        var username = 'a';
+        var username2 = 'bpq';
+
+        connection.getPassword(username2, function (cb) {
+            t.equals(cb, "user does not exist", "Non Existent User cannot be pulled")
+        });
+
+        connection.getPassword(username,function (cb) {
+            t.notEquals(cb, "user does not exist", "Existing Users can be pulled")
+        });
+
+        //MAX LENGTH
+        //0 LENGTH
+
+        //8 MANUAL TESTS
+
+
+        t.end();
+    });
+
+}
+//onexit(1);
+//
+
+
