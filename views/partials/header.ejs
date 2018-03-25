@@ -1,6 +1,6 @@
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container-fluid">
-
+		<!--%var Server = require(__dirname + "/Server.js");%-->
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">Expressionary</a>
 		</div>
@@ -12,11 +12,16 @@
 			<li><a href="/random">Random Word</a></li>
 			<li><a href="/search">Search</a></li>
 			<li><a href="/wordlist">Word List</a></li>
+			<%if(true){%>
 			<li><a href="/register">Register</a></li>
 			<li><button onclick="document.getElementById('id1').style.display='block'"
 						style="width:auto;">Login
 				</button>
 			</li>
+			<%}else{%>
+			<li><a href="/user">TEMP<!--%=username%--></a></li>
+			<li><a action="/logout" style="width:auto;">Logout</a></li>
+			<%}%>
 		</ul>
 		<div id="id1" class="modal">
 			<form class="modal-content animate" action="/action_page.php">
