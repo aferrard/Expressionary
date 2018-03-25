@@ -78,6 +78,7 @@ app.post('/wordlist', function(req,res) {
 });
 
 app.post('/word2', function(req, res) {
+    //console.log(req.cookies.user)
     if (req.cookies.user != undefined){
     var word = req.body.theWord;
     Connection.getwpFromWord(word, function(wpid) {
@@ -492,19 +493,21 @@ app.get('/register', function(req, res) {
 
 app.get('/action_page.php', function (req,res){
 
-    if (req.cookies.user != undefined || array.indexOf(req.query.uname) != -1){
-        res.render("pages/registration",{regError: "User Already Logged In"});
-        return;
-    }
+
     Connection.getPassword(req.query.uname,function (result){
-        if (result == 'user not found'){
+        console.log(result.password)
+        if (result == 'user not found' || result == 'user does not exist'){
             res.render("pages/registration",{regError: "User Doesn't Exist"});
-        }else {
+        }else if (req.cookies.user != undefined || array.indexOf(req.query.uname) != -1){
+            res.render("pages/registration",{regError: "User Already Logged In"});
+            return;
+        }else if (req.query.psw == result.password ) {
             array.push(req.query.uname);
-            res.cookie('user', req.query.uname , {maxAge: 60000});
-            res.cookie('password', req.query.psw, {maxAge: 60000});
-            //app.post(res.render("pages/registration",{regError: "Login Successful"}))
+            res.cookie('user', req.query.uname , {maxAge: 45000});
+            res.cookie('password', req.query.psw, {maxAge: 45000});
             res.render("pages/registration",{regError: "Login Successful"});
+        }else {
+            res.render("pages/registration",{regError: "Invalid Credentials, Please try again"});
         }
     });
 
