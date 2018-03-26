@@ -19,7 +19,7 @@ USE `expressionary_data` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `expressionary_data`.`users` (
   `user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `points` INT ZEROFILL NOT NULL,
+  `points` INT NOT NULL,
   `email` VARCHAR(85) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
@@ -75,7 +75,6 @@ CREATE TABLE IF NOT EXISTS `expressionary_data`.`posts_voted` (
   `posts_post_id` INT UNSIGNED NOT NULL,
   `posts_users_user_id` INT UNSIGNED NOT NULL,
   `direction` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`posts_post_id`, `posts_users_user_id`),
   INDEX `fk_posts_voted_posts1_idx` (`posts_post_id` ASC, `posts_users_user_id` ASC),
   CONSTRAINT `fk_posts_voted_posts1`
     FOREIGN KEY (`posts_post_id` , `posts_users_user_id`)
