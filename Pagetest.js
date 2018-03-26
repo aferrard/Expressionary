@@ -11,7 +11,6 @@ if (process.argv[2] == "reg_test") {
     tvar = 3;
 }
 
-
 if (tvar == 0) {
     test('test if words are found', function (t) {
         var word = "Artificial Intelligence";
@@ -62,7 +61,6 @@ if (tvar == 0) {
     });
 
 }
-
 
 if (tvar == 1 ) {
 
@@ -135,7 +133,6 @@ if (tvar == 1 ) {
     });
 }
 
-
 if (tvar == 2) {
     test('LOGIN TESTS\n5 UNIT TESTS 6 MANUAL TESTS', function (t) {
         var username = 'a';
@@ -207,6 +204,8 @@ if (tvar == 3){
         t.end();
     });
 }
+
+
 //onexit(1);
 //
 
