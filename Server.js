@@ -46,7 +46,14 @@ app.set('view engine', 'ejs');
 // use res.render to load up an ejs view file
 
 app.get('/', function(req, res) {
-    res.render('pages/index');
+    Connection.getUsers(function(topUsers){
+        Connection.getWords(function(topWords) {
+            //console.log(topUsers);
+            //console.log(topWords);
+          res.render('pages/index', {topUsers: topUsers, topWords: topWords});
+        })
+    })
+    //res.render('pages/index');
 });
 
 app.get('/search', function(req,res) {
