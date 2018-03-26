@@ -90,6 +90,7 @@ function getUsernameByPost(post, cb) {
         cb(username);
     })
 }
+
 exports.registerUser = registerUser;
 //maybe need cb
 
@@ -201,16 +202,96 @@ exports.addPointToPost = addPointToPost;
 function addPointToPost(definition, points, cb) {
     var pt = parseInt(points) + 1;
     con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
-        if (err) throw err;
-        cb("success");
+        if (err) throw err; else {
+            con.query("SELECT post_id, users_user_id, wordpage_wp_id FROM posts WHERE definition = '" + definition + "'", function(err, postinfo) {
+                if(err) {
+                    cb(err);
+                } else {
+                    if(postinfo.length == 0) {
+                        cb("this post does not exist");
+                    } else {
+                        con.query("INSERT INTO posts_voted VALUE(" + postinfo[0].post_id + ", " + postinfo[0].users_user_id +", 1)", function(err, result) {
+                            if(err) {
+                                cb(err);
+                            }
+                        });
+                        con.query("SELECT points FROM users WHERE user_id = " + postinfo[0].users_user_id, function(err, result) {
+                            if(err) {
+                                cb(err);
+                            } else {
+                                con.query("UPDATE users SET points = " + (result[0].points + 1) + " WHERE user_id = " + postinfo[0].users_user_id, function(err, result) {
+                                    if(err) {
+                                        cb(err);
+                                    }
+                                });
+                                con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + postinfo[0].wordpage_wp_id, function(err, totalpoints) {
+                                    if(err) {
+                                        cb(err);
+                                    } else {
+                                        con.query("UPDATE wordpage SET totalPoints = " + (totalpoints[0].totalPoints + 1)+ " WHERE wp_id = " + postinfo[0].wordpage_wp_id, function(err, result) {
+                                            if(err) {
+                                                cb(err);
+                                            } else {
+                                                cb("reached all queries: add");
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+            cb("success");
+        }
     })
 }
 exports.subPointToPost = subPointToPost;
 function subPointToPost(definition, points, cb) {
     var pt = parseInt(points) - 1;
     con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
-        if (err) throw err;
-        cb("success");
+        if (err) throw err; else {
+            con.query("SELECT post_id, users_user_id, wordpage_wp_id FROM posts WHERE definition = '" + definition + "'", function(err, postinfo) {
+                if(err) {
+                    cb(err);
+                } else {
+                    if(postinfo.length == 0) {
+                        cb("this post does not exist");
+                    } else {
+                        con.query("INSERT INTO posts_voted VALUE(" + postinfo[0].post_id + ", " + postinfo[0].users_user_id +", 0)", function(err, result) {
+                            if(err) {
+                                cb(err);
+                            }
+                        });
+                        con.query("SELECT points FROM users WHERE user_id = " + postinfo[0].users_user_id, function(err, result) {
+                            if(err) {
+                                cb(err);
+                            } else {
+                                con.query("UPDATE users SET points = " + (result[0].points - 1) + " WHERE user_id = " + postinfo[0].users_user_id, function(err, result) {
+                                    if(err) {
+                                        cb(err);
+                                    }
+                                });
+                                con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + postinfo[0].wordpage_wp_id, function(err, totalpoints) {
+                                    if(err) {
+                                        cb(err);
+                                    } else {
+                                        con.query("UPDATE wordpage SET totalPoints = " + (totalpoints[0].totalPoints - 1)+ " WHERE wp_id = " + postinfo[0].wordpage_wp_id, function(err, result) {
+                                            if(err) {
+                                                cb(err);
+                                            } else {
+                                                cb("reached all queries: add");
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+            cb("success");
+        }
     })
 }
 
@@ -416,4 +497,3 @@ function updateLastName(username, newLastName, cb) {
         });
     }
 }
-
