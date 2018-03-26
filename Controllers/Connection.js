@@ -180,7 +180,7 @@ function getUsers(cb) {
 
 exports.getWords = getWords;
 function getWords(cb) {
-    con.query("SELECT * FROM users", function(err, result) {
+    con.query("SELECT * FROM wordpage", function(err, result) {
         if(err) {
             cb(err);
         } else {
