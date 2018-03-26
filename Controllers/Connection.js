@@ -94,13 +94,26 @@ exports.registerUser = registerUser;
 //maybe need cb
 
 function registerUser(email, username, password, firstName, lastName, cb) {
-
+    var execute = true;
     //firstName, LastName can = "NULL" [optional]
+    //check username
     if(username.length == 0) {
         cb("username field cannot be empty");
+        execute = false;
     } else if(username.length > 45) {
         cb("username is too long");
-    } else {
+        execute = false;
+    }
+
+    //check password
+    if(password.length == 0) {
+        cb("password field cannot be empty");
+        execute = false;
+    } else if(password.length > 45) {
+        cb("password is too long");
+        execute = false;
+    }
+    if(execute){
         var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', '" + firstName + "', '" + lastName + "')";
         //console.log(request);
         con.query(request, function (err, result) {
@@ -263,4 +276,127 @@ function deletePost(pid, cb) {
 exports.deleteWord = deleteWord;
 function deleteWord() {
 
+}
+
+
+//update user info functions
+exports.updateUsername = updateUsername;
+function updateUsername(oldUsername, newUsername,  cb) {
+    if(newUsername.length == 0) {
+        cb("new username invalid: cannot have length 0");
+    } else if(newUsername.length > 45) {
+        cb("new username invalid: too long");
+    } else {
+        con.query("SELECT user_id FROM users WHERE username = '" + oldUsername + "'", function (err, result) {
+            if (err) {
+                cb(err);
+            } else {
+                if (result.length == 0) {
+                    cb("old username not valid"); // should never occur
+                } else {
+                    userid = result[0].user_id;
+                    //console.log(userid);
+                    con.query("UPDATE users SET username = '" + newUsername + "' WHERE user_id = " + userid, function (err, result) {
+                        //console.log(result);
+                        if (result.affectedRows == 1) {
+                            cb("update successful: username");
+                        } else if(result.affectedRows == 0){
+                            cb("update failed: username");
+                        } else {
+                            cb("catastrophic internal corruption: username");
+                        }
+                    });
+                }
+            }
+        });
+    }
+}
+
+exports.updatePassword = updatePassword;
+function updatePassword(username, newPassword, cb) {
+    //will be modified later to validate old password first
+    if(newPassword.length == 0) {
+        cb("new password invalid: cannot have length 0");
+    } else if(newPassword.length > 45) {
+        cb("new password invalid: too long");
+    } else {
+        con.query("UPDATE users SET password = '" + newPassword + "' WHERE username = '" + username + "'", function(err, result) {
+            if(err) {
+                cb(err);
+            } else {
+                if (result.affectedRows == 1) {
+                    cb("update successful: password");
+                } else if(result.affectedRows == 0) {
+                    cb("update failed: password");
+                } else {
+                    cb("catastrophic internal corruption: password");
+                }
+            }
+        });
+    }
+}
+
+exports.updateEmail = updateEmail;
+function updateEmail(username, newEmail, cb) {
+    if(newEmail.includes("@")) {
+        con.query("UPDATE users SET email = '" + newEmail + "' WHERE username = '" + username + "'", function(err, result) {
+            if(err) {
+                cb(err);
+            } else {
+                if(result.affectedRows == 1) {
+                    cb("update successful: email");
+                } else if(result.affectedRows == 0){
+                    cb("update failed: email");
+                } else {
+                    cb("catastrophic internal corruption: email");
+                }
+            }
+        });
+    } else {
+        cb("new email invalid");
+    }
+}
+
+exports.updateFirstName = updateFirstName;
+function updateFirstName(username, newFirstName, cb) {
+    if(newFirstName.length > 45) {
+        cb("invalid first name: too long.");
+    } else {
+        con.query("UPDATE users SET first_name = '" + newFirstName + "' WHERE username = '" + username + "'", function(err, result){
+            if(err) {
+                cb(err);
+            } else {
+                if(result.affectedRows == 1) {
+                    cb("update successful: first name");
+                } else if(result.affectedRows == 0) {
+                    cb("update failed: first name");
+                } else {
+                    cb("catastrophic internal corruption: first name");
+                }
+            }
+
+        });
+    }
+}
+
+exports.updateLastName = updateLastName;
+function updateLastName(username, newLastName, cb) {
+    if(newLastName.length > 45) {
+        cb("invalid last name: too long.");
+    } else {
+        con.query("UPDATE users SET last_name = '" + newLastName + "' WHERE username = '" + username + "'", function(err, result){
+            if(err) {
+                cb(err);
+            } else {
+                if(result.affectedRows == 1) {
+                    cb("update successful: last name");
+                } else if(result.affectedRows == 0) {
+                    cb("update failed: last name");
+                } else {
+                    cb("catastrophic internal corruption: last name");
+                }
+            }
+
+        });
+    }
 }
