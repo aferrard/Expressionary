@@ -507,6 +507,11 @@ app.get('/register', function(req, res) {
     res.render('pages/registration',{regError: ""});
 });
 
+app.get('/useredit', function(req, res){
+    Connection.getUserByUsername(req.cookies.user,function(user) {
+        res.render('pages/useredit', {user: user});
+    })
+});
 
 app.get('/action_page.php', function (req,res){
     Connection.getPassword(req.query.uname,function (result){
