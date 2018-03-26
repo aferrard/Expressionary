@@ -284,7 +284,7 @@ function addPointToPost(definition, points, cb) {
                     }
                 }
             });
-            cb("success");
+            //cb("success");
         }
     })
 }
@@ -332,7 +332,7 @@ function subPointToPost(definition, points, cb) {
                     }
                 }
             });
-            cb("success");
+            //cb("success");
         }
     })
 }
