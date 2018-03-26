@@ -166,6 +166,30 @@ function findUserByUsername(username, cb) {
     })
 }
 
+exports.getUsers = getUsers;
+function getUsers(cb) {
+    con.query("SELECT * FROM users", function(err, result) {
+        if(err) {
+            cb(err);
+        } else {
+            var z = JSON.parse(JSON.stringify(result));
+            cb(z);
+        }
+    });
+}
+
+exports.getWords = getWord;
+function getWords(cb) {
+    con.query("SELECT * FROM users", function(err, result) {
+        if(err) {
+            cb(err);
+        } else {
+            var z = JSON.parse(JSON.stringify(result));
+            cb(z);
+        }
+    });
+}
+
 exports.getUserByUsername = getUserByUsername;
 function getUserByUsername(username, cb) {
     con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, result) {
@@ -191,7 +215,6 @@ function getPostsByUsername(username, cb) {
         } else {
             //console.log(uid);
             con.query("SELECT posts.*, wordpage.word FROM posts, wordpage WHERE posts.users_user_id = "+uid[0].user_id+" && posts.wordpage_wp_id = wordpage.wp_id", function(err, result) {
-                console.log(result);
                 if(err) {
                     //cb("error in finding posts associated with this user");
                     cb(err);
@@ -321,6 +344,17 @@ function deleteVote(postid, userid, cb) {
             cb(err);
         } else {
             cb("deleted");
+        }
+    });
+}
+
+exports.getVotes = getVotes;
+function getVotes(postid, userid, cb) {
+    con.query("SELECT * FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user-id = " + userid, function(err, result) {
+        if(err) {
+            cb(err);
+        } else {
+            var z = JSON.parse(JSON.stringify(result));
         }
     });
 }
