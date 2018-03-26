@@ -62,7 +62,7 @@ function getwpFromWord(word, cb) {
 exports.getPostsFromWordId = getPostsFromWordId;
 function getPostsFromWordId(wp_id, cb) {
     //var request = "SELECT posts.date, posts.points, posts.definition, users.username FROM posts, users WHERE posts. wordPage_wp_id = " + wp_id + "&& posts.users_user_id = users.user_id";
-    var request = "SELECT * FROM posts WHERE wordpage_wp_id = " + wp_id;
+    var request = "SELECT posts.*, users.username FROM posts, users WHERE posts.wordpage_wp_id = " + wp_id + " && posts.users_user_id = users.user_id";
     con.query(request, function(err, result) {
         if(err) cb("fail1");
         else {
@@ -313,10 +313,12 @@ function subPointToPost(definition, points, cb) {
     })
 }
 
-/*exports.deleteVote = deleteVote;
+exports.deleteVote = deleteVote;
 function deleteVote(postid, userid, cb) {
-    con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && posts_user")
-}*/
+    con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid + "'", function(err, result) {
+
+    });
+}
 
 exports.getPassword = getPassword;
 function getPassword(username,cb) {
