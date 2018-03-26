@@ -15,9 +15,10 @@
 <p>
 <% var i = 0; %>
     <%console.log(posts.length);%>
+    <%if(posts[i] == undefined){%>
     <%posts.sort(function(a, b){%>
     <%return b.points - a.points;%>
-    <%});%>
+    <%});}%>
 <%while (i < posts.length) { %>
     <%if(posts[i].definition == undefined){%>
     None. Try clicking on Random Word to get started!

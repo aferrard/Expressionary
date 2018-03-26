@@ -46,7 +46,14 @@ app.set('view engine', 'ejs');
 // use res.render to load up an ejs view file
 
 app.get('/', function(req, res) {
-    res.render('pages/index');
+    Connection.getUsers(function(topUsers){
+        Connection.getWords(function(topWords) {
+            //console.log(topUsers);
+            //console.log(topWords);
+          res.render('pages/index', {topUsers: topUsers, topWords: topWords});
+        })
+    })
+    //res.render('pages/index');
 });
 
 app.get('/search', function(req,res) {
@@ -444,7 +451,7 @@ app.post('/search', function(req,res) {
     var type = req.body.searchType;
     if (type == "Word") {
         //search database for words
-        con.query("SELECT * FROM wordpage WHERE word = '" + term + "'", function(err, result) {
+        con.query("SELECT * FROM wordPage WHERE word = '" + term + "'", function(err, result) {
             if (err) throw err;
             var word = JSON.parse(JSON.stringify(result[0].word));
             Connection.getwpFromWord(term, function (wpid) {
@@ -479,7 +486,7 @@ app.post('/search', function(req,res) {
     }
     else if (type == "User") {
         Connection.findUserByUsername(term, function(user) {
-            res.render('pages/profile', {username: user.username, points: user.points,
+            res.render('pages/user', {username: user.username, points: user.points,
             first_name: user.first_name, last_name: user.last_name});
         })
     }
@@ -604,3 +611,4 @@ app.post('/contact', function(req, res) {
 
 app.listen(8080);
 console.log('8080 is the magic port');
+
