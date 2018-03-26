@@ -416,13 +416,20 @@ function deleteUser(username, cb) {
 //delete for posts
 exports.deletePost = deletePost;
 function deletePost(pid, cb) {
-    con.query("DELETE FROM posts WHERE post_id = "+ pid, function(err, result) {
-        if(err) cb("error deleting post");
-        else {
-            var z = JSON.parse(JSON.stringify(result[0]));
-            cb(z);
-        }
+    con.query("DELETE FROM posts_voted WHERE posts_post_id = " + pid, function(err, result) {
+       if(err) {
+           cb(err);
+       } else {
+           con.query("DELETE FROM posts WHERE post_id = "+ pid, function(err, result) {
+               if(err) cb("error deleting post");
+               else {
+                   var z = JSON.parse(JSON.stringify(result[0]));
+                   cb(z);
+               }
+           });
+       }
     });
+
 }
 //delete for wp
 exports.deleteWord = deleteWord;
