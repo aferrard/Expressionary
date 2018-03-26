@@ -30,9 +30,15 @@
 						<!--input hidden id="users" name="users" value = "</%= users %/>"-->
 
                         <%var i = 1; %>
-
+                        <%topUsers.sort(function(a, b){%>
+                        <%return b.points - a.points;%>
+                        <%});%>
+                        <%topWords.sort(function(a, b){%>
+                        <%return b.points - a.points;%>
+                        <%});%>
                         <%while (i <= 10) { %>
-                        <%= i%>: TEMP<br>&emsp;Total Points: 0<br>
+						<%if(topUsers[i-1] == undefined) break;%>
+                        <%= i%>: <%=topUsers[i-1].username%><br>&emsp;Total Points: <%=topUsers[i-1].points%><br>
                         <% i++ }%>
 					</form>
 				</div>
@@ -44,7 +50,8 @@
                         <%var i = 1; %>
 
                         <%while (i <= 10) { %>
-                        <%= i%>: TEMP<br>&emsp;Total Points: 0<br>
+                        <%if(topWords[i-1] == undefined) break;%>
+                        <%= i%>: <%=topWords[i-1].word%><br>&emsp;Total Points: <%=topWords[i-1].totalPoints%><br>
                         <% i++ }%>
 					</form>
 				</div>
