@@ -8,10 +8,10 @@
 		<ul class="nav navbar-nav">
 			<li><a href="/">Home</a></li>
 			<li><a href="/contact">Contact</a></li>
-			<li><a href="/developer">Developer's Updates</a></li>
-			<li><a href="/random">Random Word</a></li>
-			<li><a href="/search">Search</a></li>
+			<li><a href="/developer">Updates</a></li>
 			<li><a href="/wordlist">Word List</a></li>
+            <li><a href="/search">Search</a></li>
+            <li><a href="/random">Random Word</a></li>
 			<%if(true){%>
 			<li><a href="/register">Register</a></li>
 			<li><button onclick="document.getElementById('id1').style.display='block'"
@@ -19,7 +19,7 @@
 				</button>
 			</li>
 			<%}else{%>
-			<li><a href="/user">TEMP<!--%=username%--></a></li>
+            <li><a href="/user">TEMP username</a></li>
 			<li><a action="/logout" style="width:auto;">Logout</a></li>
 			<%}%>
 		</ul>

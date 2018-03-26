@@ -23,16 +23,16 @@
 					<input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
 				</p>
 			</form>
-			<div class="container">
+			<div class="row">
 				<div class="col-sm-7">
 					<h2 class="mt-1">Top Users</h2>
-					<form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/" method="post">
+					<form class="form-horizontal" role="form" style="width: 40%;" action="http://localhost:8080/" method="post">
 						<!--input hidden id="users" name="users" value = "</%= users %/>"-->
 
                         <%var i = 1; %>
 
                         <%while (i <= 10) { %>
-                        <%= i%>: TEMP<br>&emsp;&emsp;Total Points: 0<br>
+                        <%= i%>: TEMP<br>&emsp;Total Points: 0<br>
                         <% i++ }%>
 					</form>
 				</div>
@@ -44,7 +44,7 @@
                         <%var i = 1; %>
 
                         <%while (i <= 10) { %>
-                        <%= i%>: TEMP<br>&emsp;&emsp;Total Points: 0<br>
+                        <%= i%>: TEMP<br>&emsp;Total Points: 0<br>
                         <% i++ }%>
 					</form>
 				</div>

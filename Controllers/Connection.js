@@ -191,6 +191,7 @@ function getPostsByUsername(username, cb) {
         } else {
             //console.log(uid);
             con.query("SELECT posts.*, wordpage.word FROM posts, wordpage WHERE posts.users_user_id = "+uid[0].user_id+" && posts.wordpage_wp_id = wordpage.wp_id", function(err, result) {
+                console.log(result);
                 if(err) {
                     //cb("error in finding posts associated with this user");
                     cb(err);
@@ -316,7 +317,11 @@ function subPointToPost(definition, points, cb) {
 exports.deleteVote = deleteVote;
 function deleteVote(postid, userid, cb) {
     con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid + "'", function(err, result) {
-
+        if(err) {
+            cb(err);
+        } else {
+            cb("deleted");
+        }
     });
 }
 

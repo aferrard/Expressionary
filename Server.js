@@ -502,8 +502,6 @@ app.get('/register', function(req, res) {
 
 
 app.get('/action_page.php', function (req,res){
-
-
     Connection.getPassword(req.query.uname,function (result){
         console.log(result.password)
         if (result == 'user not found' || result == 'user does not exist'){
@@ -547,7 +545,13 @@ app.post('/register', function (req,res) {
     })
 });
 app.get('/user', function(req, res) {
-    res.render('pages/user')
+    var username = req.cookies.user;
+    Connection.findUserByUsername(username, function(result){
+        Connection.getPostsByUsername(username, function(posts){
+            res.render('pages/user',{username: username, points: result.points, posts: posts});
+        })
+    })
+    //res.render('pages/registration',{regError: ""});
 });
 app.get('/random', function(req, res) {
     var userz = [];
