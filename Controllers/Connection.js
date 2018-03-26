@@ -355,6 +355,7 @@ function getVotes(postid, userid, cb) {
             cb(err);
         } else {
             var z = JSON.parse(JSON.stringify(result));
+            cb(z);
         }
     });
 }
