@@ -12,7 +12,8 @@
 			<li><a href="/wordlist">Word List</a></li>
             <li><a href="/search">Search</a></li>
             <li><a href="/random">Random Word</a></li>
-			<%if(true){%>
+			<%var loggedin = false;%>
+			<%if(!loggedin){%>
 			<li><a href="/register">Register</a></li>
 			<li><button onclick="document.getElementById('id1').style.display='block'"
 						style="width:auto;">Login
