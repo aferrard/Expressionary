@@ -417,15 +417,25 @@ app.post('/word', function(req, res) {
     var definition = req.body.newDef;
     //'1000-01-01'
     Connection.getwpFromWord(req.body.theWord, function(wpid) {
-        con.query("INSERT INTO posts VALUE (NULL, NOW(), 0, '" + definition + "', 1, " + wpid + ");", function(err, result) {
-            if (err) throw err;
-            else {
-                console.log(result);
-                Connection.getPostsFromWordId(wpid, function (posts) {
-                    res.render('pages/word', {word: req.body.theWord, posts: posts});
-                })
-            }
-        })
+        if (req.cookies.user == undefined){
+            res.render("pages/registration",{regError: "Please Register or Log In"});
+        }else {
+            var user = req.cookies.user;
+            Connection.getUserByUsername(user,function(result){
+
+                if (result == "User Does not exist"){
+                    console.error("SEVERE PROBLEM. SOMEONE IS TRYING TO HACK")
+                }
+                con.query("INSERT INTO posts VALUE (NULL, NOW(), 0, '" + definition + "', "+ result +", " + wpid + ");", function(err, result) {
+                if (err) throw err;
+                else {
+                    console.log(result);
+                    Connection.getPostsFromWordId(wpid, function (posts) {
+                        res.render('pages/word', {word: req.body.theWord, posts: posts});
+                      })
+                }})
+            })
+        }
     })
 });
 

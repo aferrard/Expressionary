@@ -9,6 +9,8 @@ if (process.argv[2] == "reg_test") {
     tvar = 2;
 }else if (process.argv[2] == "point_test"){
     tvar = 3;
+}else if (process.argv[2]== "edit_test"){
+    tvar = 4;
 }
 
 if (tvar == 0) {
@@ -205,7 +207,43 @@ if (tvar == 3){
     });
 }
 
+if (tvar == 4){
+    test('USER STORY #8, Edit Information Test\n 6 TESTS',function (t) {
 
+        var oldusername = "old-username";
+        var newusername = "new-username";
+        var oldemail = "old@yahoo.com";
+        var newemail = "new@yahoo.com";
+        var oldpassword = "oldpass";
+        var newpassword = "newpass";
+        var oldfirstname = "old-firstname";
+        var newfistname = "new-firstname";
+        var oldlastname = "old-lastname";
+        var newlastname = "new-lastname";
+
+   //     connection.updateUsername(oldusername,newusername,function(result){
+     //       t.equals(result,"update successful: username","User Name Updated Successfully")
+      //  });
+        connection.registerUser(oldemail,oldusername,oldpassword,oldfirstname,oldlastname,function (result) {
+           t.notEquals("failure registering user",result,"Registred user successfully");
+        });
+        connection.updateEmail(oldusername,newemail,function (result) {
+            t.equals(result,"update successful: email","Email updated successfully")
+        });
+        connection.updateFirstName(oldusername,newfistname,function(result){
+            t.equals(result,"update successful: first name","First Name updated Successfully")
+        });
+
+        connection.updateLastName(oldusername,newlastname,function(result){
+            t.equals(result,"update successful: last name","Last Name updated Successfully")
+        });
+
+        connection.deleteUser(oldusername,function(result){
+            t.equals(result,"deletion successful","Deletion/Clean up")
+        })
+
+    });
+}
 //onexit(1);
 //
 
