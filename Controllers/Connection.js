@@ -313,27 +313,37 @@ function updateUsername(oldUsername, newUsername,  cb) {
 }
 
 exports.updatePassword = updatePassword;
-function updatePassword(username, newPassword, cb) {
+function updatePassword(username, oldPassword, newPassword, cb) {
     //will be modified later to validate old password first
-    if(newPassword.length == 0) {
-        cb("new password invalid: cannot have length 0");
-    } else if(newPassword.length > 45) {
-        cb("new password invalid: too long");
-    } else {
-        con.query("UPDATE users SET password = '" + newPassword + "' WHERE username = '" + username + "'", function(err, result) {
-            if(err) {
-                cb(err);
+    con.query("SELECT password FROM users WHERE username = '" + username + "'", function(err, oldPasswordreturn) {
+        console.log(oldPasswordreturn);
+        if(err) {
+            cb(err);
+        } else if(oldPasswordreturn[0].password != oldPassword){
+            cb("old password is incorrect");
+        } else if(oldPasswordreturn[0].password == oldPassword) {
+            if(newPassword.length == 0) {
+                cb("new password invalid: cannot have length 0");
+            } else if(newPassword.length > 45) {
+                cb("new password invalid: too long");
             } else {
-                if (result.affectedRows == 1) {
-                    cb("update successful: password");
-                } else if(result.affectedRows == 0) {
-                    cb("update failed: password");
-                } else {
-                    cb("catastrophic internal corruption: password");
-                }
+                con.query("UPDATE users SET password = '" + newPassword + "' WHERE username = '" + username + "'", function(err, result) {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        if (result.affectedRows == 1) {
+                            cb("update successful: password");
+                        } else if(result.affectedRows == 0) {
+                            cb("update failed: password");
+                        } else {
+                            cb("catastrophic internal corruption: password");
+                        }
+                    }
+                });
             }
-        });
-    }
+        }
+    });
+
 }
 
 exports.updateEmail = updateEmail;
@@ -400,3 +410,4 @@ function updateLastName(username, newLastName, cb) {
         });
     }
 }
+
