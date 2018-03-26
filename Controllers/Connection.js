@@ -217,19 +217,25 @@ function subPointToPost(definition, points, cb) {
 exports.getPassword = getPassword;
 function getPassword(username,cb) {
 //    console.log(username)
-    con.query("SELECT password FROM users WHERE username = '" + username + "'", function(err, result) {
-        //console.log(result);
-        if(err) cb("user not found");
-        else{
-            if(result.length == 0) {
-                cb("user does not exist");
+    if(username.length == 0) {
+        cb("username field cannot be empty");
+    } else if(username.length > 45) {
+        cb("username is too long");
+    } else {
+        con.query("SELECT password FROM users WHERE username = '" + username + "'", function(err, result) {
+            //console.log(result);
+            if(err) cb("user not found");
+            else{
+                if(result.length == 0) {
+                    cb("user does not exist");
+                }
+                else {
+                    var z = JSON.parse(JSON.stringify(result[0]));
+                    cb(z);
+                 }
             }
-            else {
-                var z = JSON.parse(JSON.stringify(result[0]));
-                cb(z);
-            }
-        }
-    });
+        });
+    }
 }
 
 
