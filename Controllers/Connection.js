@@ -166,6 +166,20 @@ function findUserByUsername(username, cb) {
     })
 }
 
+exports.getUserByUsername = getUserByUsername;
+function getUserByUsername(username, cb) {
+    con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, result) {
+        if(err) {
+            cb(err);
+        } else if(result.length == 0) {
+            cb("user does not exist");
+        } else {
+            var z = JSON.parse(JSON.stringify(result[0].user_id));
+            cb(z);
+        }
+    })
+}
+
 //get user contributions for profile page
 exports.getPostsByUsername = getPostsByUsername;
 function getPostsByUsername(username, cb) {
@@ -299,10 +313,10 @@ function subPointToPost(definition, points, cb) {
     })
 }
 
-exports.deleteVote = deleteVote;
+/*exports.deleteVote = deleteVote;
 function deleteVote(postid, userid, cb) {
-    con.query("DELETE FROM posts_voted WHERE ")
-}
+    con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && posts_user")
+}*/
 
 exports.getPassword = getPassword;
 function getPassword(username,cb) {
@@ -369,10 +383,10 @@ function deletePost(pid, cb) {
     });
 }
 //delete for wp
-/*exports.deleteWord = deleteWord;
+exports.deleteWord = deleteWord;
 function deleteWord() {
 
-}*/
+}
 
 
 //update user info functions
