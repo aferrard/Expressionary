@@ -316,7 +316,11 @@ function subPointToPost(definition, points, cb) {
 exports.deleteVote = deleteVote;
 function deleteVote(postid, userid, cb) {
     con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid + "'", function(err, result) {
-
+        if(err) {
+            cb(err);
+        } else {
+            cb("deleted");
+        }
     });
 }
 
