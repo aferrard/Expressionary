@@ -178,7 +178,7 @@ function getUsers(cb) {
     });
 }
 
-exports.getWords = getWord;
+exports.getWords = getWords;
 function getWords(cb) {
     con.query("SELECT * FROM users", function(err, result) {
         if(err) {
