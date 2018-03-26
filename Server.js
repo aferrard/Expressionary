@@ -444,7 +444,7 @@ app.post('/search', function(req,res) {
     var type = req.body.searchType;
     if (type == "Word") {
         //search database for words
-        con.query("SELECT * FROM wordPage WHERE word = '" + term + "'", function(err, result) {
+        con.query("SELECT * FROM wordpage WHERE word = '" + term + "'", function(err, result) {
             if (err) throw err;
             var word = JSON.parse(JSON.stringify(result[0].word));
             Connection.getwpFromWord(term, function (wpid) {
