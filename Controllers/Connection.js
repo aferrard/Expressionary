@@ -62,7 +62,7 @@ function getwpFromWord(word, cb) {
 exports.getPostsFromWordId = getPostsFromWordId;
 function getPostsFromWordId(wp_id, cb) {
     //var request = "SELECT posts.date, posts.points, posts.definition, users.username FROM posts, users WHERE posts. wordPage_wp_id = " + wp_id + "&& posts.users_user_id = users.user_id";
-    var request = "SELECT * FROM posts WHERE wordpage_wp_id = " + wp_id + "";
+    var request = "SELECT * FROM posts WHERE wordpage_wp_id = " + wp_id;
     con.query(request, function(err, result) {
         if(err) cb("fail1");
         else {
@@ -73,6 +73,7 @@ function getPostsFromWordId(wp_id, cb) {
         }
     });
 }
+
 exports.getWordPages = getWordPages;
 function getWordPages(cb) {
     con.query("SELECT word FROM wordpage", function(err, result) {
@@ -174,12 +175,15 @@ function getPostsByUsername(username, cb) {
         } else if(uid.length == 0) {
             cb("user does not exist");
         } else {
-            con.query("SELECT * FROM posts WHERE users_user_id = " + uid, function(err, result) {
+            //console.log(uid);
+            con.query("SELECT posts.*, wordpage.word FROM posts, wordpage WHERE posts.users_user_id = "+uid[0].user_id+" && posts.wordpage_wp_id = wordpage.wp_id", function(err, result) {
                 if(err) {
-                    cb("error in finding posts associated with this user");
+                    //cb("error in finding posts associated with this user");
+                    cb(err);
                 } else if(result.length == 0) {
                     cb("this user has no contributions yet");
                 } else {
+
                     var z = JSON.parse(JSON.stringify(result));
                     cb(z);
                 }
@@ -280,7 +284,7 @@ function subPointToPost(definition, points, cb) {
                                             if(err) {
                                                 cb(err);
                                             } else {
-                                                cb("reached all queries: add");
+                                                cb("reached all queries: sub");
                                             }
                                         });
                                     }
@@ -293,6 +297,11 @@ function subPointToPost(definition, points, cb) {
             cb("success");
         }
     })
+}
+
+exports.deleteVote = deleteVote;
+function deleteVote(postid, userid, cb) {
+    con.query("DELETE FROM posts_voted WHERE ")
 }
 
 exports.getPassword = getPassword;
@@ -360,10 +369,10 @@ function deletePost(pid, cb) {
     });
 }
 //delete for wp
-exports.deleteWord = deleteWord;
+/*exports.deleteWord = deleteWord;
 function deleteWord() {
 
-}
+}*/
 
 
 //update user info functions
