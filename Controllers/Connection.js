@@ -190,7 +190,7 @@ function getWords(cb) {
 
 exports.getUserByUsername = getUserByUsername;
 function getUserByUsername(username, cb) {
-    con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, result) {
+    con.query("SELECT user_id, points FROM users WHERE username = '" + username + "'", function(err, result) {
         if(err) {
             cb(err);
         } else if(result.length == 0) {
