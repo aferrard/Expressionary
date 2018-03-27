@@ -556,12 +556,15 @@ app.post('/search', function(req,res) {
 
             Connection.getPostsByUsername(user.username, function (posts) {
                 userloggedincheck(req, function (loggedin) {
-                 //   console.log(user);
                     if (user.username == req.cookies.user){
-                        console.log("Let him edit");
-                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username, points: user.points, posts: posts});
+                       // console.log("Let him edit");
+                        var temp = true;
+                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
+                            points: user.points, posts: posts, editcheck:temp});
                     }else {
-                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username, points: user.points, posts: posts});
+                        var temp = false;
+                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
+                            points: user.points, posts: posts, editcheck:temp});
                     }
                 })
             })
@@ -667,18 +670,22 @@ app.post('/register', function (req,res) {
 
     })
 });
+
 app.get('/user', function(req, res) {
     var username = req.cookies.user;
     Connection.findUserByUsername(username, function(result){
         Connection.getPostsByUsername(username, function(posts){
             userloggedincheck(req,function(loggedin) {
                 if (username == req.cookies.user){
-                    console.log("Let him edit")
-                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: username, points: result.points, posts: posts});
+                    var temp = true;
+                    console.log("Let him edit");
+                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                        username2: username, points: result.points, posts: posts, editcheck: temp});
                 }else {
-                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: username, points: result.points, posts: posts});
+                    var temp = false;
+                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                        username2: username, points: result.points, posts: posts, editcheck: temp});
                 }
-
             });
         })
     })
