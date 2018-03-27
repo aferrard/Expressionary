@@ -42,6 +42,7 @@ function userloggedincheck(req,cb) {
     }
 }
 
+
 con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
@@ -550,19 +551,18 @@ app.post('/search', function(req,res) {
         })
     }
     else if (type == "User") {
-        console.log("ERROR!!");
+      //  console.log("ERROR!!");
         Connection.findUserByUsername(term, function(user) {
 
             Connection.getPostsByUsername(user.username, function (posts) {
                 userloggedincheck(req, function (loggedin) {
-                    console.log(user);
-                    res.render('pages/user', {
-                        loggedin: loggedin,
-                        username: req.cookies.user,
-                        username2: user.username,
-                        points: user.points,
-                        posts: posts
-                    });
+                 //   console.log(user);
+                    if (user.username == req.cookies.user){
+                        console.log("Let him edit");
+                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username, points: user.points, posts: posts});
+                    }else {
+                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username, points: user.points, posts: posts});
+                    }
                 })
             })
         })
@@ -572,8 +572,8 @@ app.post('/search', function(req,res) {
             res.render('pages/search', {loggedin: loggedin, username : req.cookies.user});
         });
     }
-    console.log(term);
-    console.log(type);
+ //   console.log(term);
+  //  console.log(type);
 
 });
 
@@ -592,7 +592,10 @@ app.get('/register', function(req, res) {
 
 app.get('/useredit', function(req, res){
     Connection.getUserByUsername(req.cookies.user,function(user) {
-        res.render('pages/useredit', {user: user});
+        userloggedincheck(req,function(loggedin) {
+            res.render('pages/useredit', {loggedin: loggedin , username : req.cookies.user , user: user});
+        //    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "User Doesn't Exist"});
+        });
     })
 });
 
@@ -669,7 +672,13 @@ app.get('/user', function(req, res) {
     Connection.findUserByUsername(username, function(result){
         Connection.getPostsByUsername(username, function(posts){
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: username, points: result.points, posts: posts});
+                if (username == req.cookies.user){
+                    console.log("Let him edit")
+                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: username, points: result.points, posts: posts});
+                }else {
+                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: username, points: result.points, posts: posts});
+                }
+
             });
         })
     })
