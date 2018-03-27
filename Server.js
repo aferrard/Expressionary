@@ -97,9 +97,9 @@ app.post('/wordlist', function(req,res) {
     var word = req.body.word;
     Connection.getwpFromWord(word, function(wpid) {
         Connection.getPostsFromWordId(wpid, function(posts) {
-            userloggedincheck(req,function(loggedin) {
-                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: word , posts: posts});
-            })
+                userloggedincheck(req,function(loggedin) {
+                    res.render('pages/word', {loggedin: loggedin, username: req.cookies.user, word: word , posts: posts});
+                })
         })
     })
 });

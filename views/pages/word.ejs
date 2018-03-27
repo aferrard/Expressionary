@@ -36,7 +36,9 @@
         <%});%>
         <%while (i < posts.length) { %>
         <li>
+            <%console.log(posts);%>
             User: <%= posts[i].username %><br>
+            --<%=posts[i].username%>'s total points: <%=posts[i].userpoints%><br>
             Definition: <%= posts[i].definition %><br>
 
             Points: <%= posts[i].points %>
