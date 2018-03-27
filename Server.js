@@ -123,7 +123,7 @@ app.post('/word2', function(req, res) {
             Connection.getVotes(post, req.cookies.user, function(votes){
                 //console.log(votes);
                 if(votes[0] == undefined){
-                    Connection.addPointToPost(post, points, function(result) {
+                    Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
@@ -139,7 +139,7 @@ app.post('/word2', function(req, res) {
                     })
                 }else{//vote down
                     Connection.deleteVote(post, req.cookies.user, function(){
-                        Connection.addPointToPost(post, points, function(result) {
+                        Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
@@ -157,7 +157,7 @@ app.post('/word2', function(req, res) {
         else if (vote == '-') {
             Connection.getVotes(post, req.cookies.user, function(votes){
                 if(votes.direction == undefined){
-                    Connection.subPointToPost(post, points, function(result) {
+                    Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
@@ -173,7 +173,7 @@ app.post('/word2', function(req, res) {
                     })
                 }else{//vote up
                     Connection.deleteVote(post, req.cookies.user, function(){
-                        Connection.subPointToPost(post, points, function(result) {
+                        Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
@@ -195,7 +195,7 @@ app.post('/word2', function(req, res) {
         var post = req.body.thePost[i];
         var points = req.body.points[i];
         if (vote == '+') {
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -209,7 +209,7 @@ app.post('/word2', function(req, res) {
             
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -227,7 +227,7 @@ app.post('/word2', function(req, res) {
         var post = req.body.thePost[i];
         var points = req.body.points[i];
         if (vote == '+') {
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -240,7 +240,7 @@ app.post('/word2', function(req, res) {
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -259,7 +259,7 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -272,7 +272,7 @@ app.post('/word2', function(req, res) {
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -291,7 +291,7 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -304,7 +304,7 @@ app.post('/word2', function(req, res) {
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -323,7 +323,7 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -336,7 +336,7 @@ app.post('/word2', function(req, res) {
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -355,7 +355,7 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -368,7 +368,7 @@ app.post('/word2', function(req, res) {
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -387,7 +387,7 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -400,7 +400,7 @@ app.post('/word2', function(req, res) {
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -419,7 +419,7 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -432,7 +432,7 @@ app.post('/word2', function(req, res) {
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -451,7 +451,7 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -464,7 +464,7 @@ app.post('/word2', function(req, res) {
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -483,7 +483,7 @@ app.post('/word2', function(req, res) {
         var points = req.body.points[i];
         if (vote == '+') {
 
-            Connection.addPointToPost(post, points, function(result) {
+            Connection.addPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
@@ -496,7 +496,7 @@ app.post('/word2', function(req, res) {
             })
         }
         else if (vote == '-') {
-            Connection.subPointToPost(post, points, function(result) {
+            Connection.subPointToPost(post, points, req.cookies.user, function(result) {
                 if(result == "success"){
                     Connection.getPostsFromWordId(wpid, function(post) {
                         userloggedincheck(req,function(loggedin) {
