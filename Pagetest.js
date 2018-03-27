@@ -142,13 +142,13 @@ if (tvar == 2) {
         var username3 = '';
         var username4 = 'tempuser3butthisuserissupposedtobemorethen45charachterslongsoshouldntregisterletsseeifitworks';
         var user1 = 'user1';
-        var pass1 = 'pass1';
+        var pass1 = 'a';
 
         connection.getPassword(username2, function (cb) {
             t.equals(cb, "user does not exist", "Non Existent User cannot be pulled")
         });
 
-        connection.getPassword(user1,function (cb) {
+        connection.getPassword(username,function (cb) {
             t.notEquals(cb, "user does not exist", "Existing Users can be pulled")
         });
 
@@ -160,7 +160,7 @@ if (tvar == 2) {
             t.equals(cb, "username is too long", "Username cannot be more then 45 charachters long")
         });
 
-        connection.getPassword(user1,function (cb) {
+        connection.getPassword(username,function (cb) {
             t.equals(cb.password, pass1, "The correct password is being returned")
         });
 

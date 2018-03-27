@@ -656,7 +656,6 @@ function updatePassword(username, oldPassword, newPassword, cb) {
             }
         }
     });
-
 }
 
 exports.updateEmail = updateEmail;
