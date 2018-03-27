@@ -240,6 +240,8 @@ function addMailingList(email, cb) {
 }
 exports.addPointToPost = addPointToPost;
 function addPointToPost(definition, points, username, cb) {
+    console.log("definition: " + definition);
+    console.log("username: " + username);
     var pt = parseInt(points) + 1;
     con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
         if (err) throw err; else {
@@ -254,8 +256,10 @@ function addPointToPost(definition, points, username, cb) {
                             if(err) {
                                 cb(err);
                             } else {
-                                con.query("INSERT INTO posts_voted VALUE(" + postinfo[0].post_id + ", " + userinfo[0].user_id +", 0)", function(err, result) {
+                                console.log("postid:userid " + postinfo[0].post_id+":"+userinfo[0].user_id);
+                                con.query("INSERT INTO posts_voted VALUE(" + postinfo[0].post_id + ", " + userinfo[0].user_id +", 1)", function(err, result) {
                                     if(err) {
+                                        console.log(err);
                                         cb(err);
                                     }
                                 });
@@ -350,6 +354,7 @@ function subPointToPost(definition, points, username, cb) {
 exports.deleteVote = deleteVote;
 //change to definition and th user id
 function deleteVote(definition, username, cb) {
+    console.log("deleting");
     var postid;
     var userid;
     con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function(err, result) {
@@ -357,15 +362,18 @@ function deleteVote(definition, username, cb) {
             cb(err);
         } else {
             postid = result[0].post_id;
+            console.log("postid delete: " + postid);
             con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, result) {
                 if(err) {
                     cb(err);
                 } else {
                     userid = result[0].user_id;
-                    con.query("SELECT direction FROM posts_voted posts_post_id = " + postid + " && posts_users_user_id = " + userid + "'", function(err, Direction){
+                    console.log("userid delete: " + userid);
+                    con.query("SELECT direction FROM posts_voted WHERE posts_post_id = " + postid + " && users_user_id = " + userid + "'", function(err, Direction){
                         if(err) {
                             cb(err);
                         } else {
+                            console.log("delete direction: " + Direction[0].direction);
                             if(Direction[0].direction == 1) {
                                 //added, now subtract
 
@@ -417,7 +425,7 @@ function deleteVote(definition, username, cb) {
                                 });
 
                                 //posts_voted table
-                                con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid, function(err, result) {
+                                con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && users_user_id = " + userid, function(err, result) {
                                     if(err) {
                                         cb(err);
                                     } else {
@@ -475,7 +483,7 @@ function deleteVote(definition, username, cb) {
                                 });
 
                                 //posts_voted table
-                                con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid, function(err, result) {
+                                con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && users_user_id = " + userid, function(err, result) {
                                     if(err) {
                                         cb(err);
                                     } else {
@@ -496,7 +504,8 @@ function deleteVote(definition, username, cb) {
 
 exports.getVotes = getVotes;
 function getVotes(definition, username, cb) {
-    console.log("username");
+    console.log("get username: "+username);
+    console.log("get definition: "+definition);
     var postid;
     var userid;
     con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function(err, result) {
@@ -510,13 +519,13 @@ function getVotes(definition, username, cb) {
                 } else {
                     userid = result[0].user_id;
                     console.log(postid + " " +userid);
-                    con.query("SELECT * FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid, function(err, result) {
+                    con.query("SELECT * FROM posts_voted WHERE posts_post_id = " + postid + " && users_user_id = " + userid, function(err, result) {
                         if(err) {
                             cb(err);
                         } else {
                             console.log("postid: "+postid);
                             console.log("userid: "+userid);
-                            console.log("getVotes: "+result);
+                            console.log(result);
                             var z = JSON.parse(JSON.stringify(result));
                             cb(z);
                         }
