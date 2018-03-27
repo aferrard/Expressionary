@@ -744,10 +744,3 @@ function updateLastName(username, newLastName, cb) {
     }
 }
 
-subPointToPost("homosapien", 0, "a", function(result) {
-    console.log(result);
-    deleteVote("homowapien", "a", function(result) {
-        console.log(result);
-
-    })
-});
