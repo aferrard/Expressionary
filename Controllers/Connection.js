@@ -498,11 +498,13 @@ function getVotes(definition, username, cb) {
                     cb(err);
                 } else {
                     userid = result[0].user_id;
-                    con.query("SELECT * FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user-id = " + userid, function(err, result) {
+                    console.log(postid + " " +userid);
+                    con.query("SELECT * FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid, function(err, result) {
                         if(err) {
                             cb(err);
                         } else {
-                            var z = JSON.parse(JSON.stringify(result[0]));
+                            //console.log(result);
+                            var z = JSON.parse(JSON.stringify(result));
                             cb(z);
                         }
                     });
