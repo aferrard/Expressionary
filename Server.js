@@ -634,14 +634,46 @@ app.get('/register', function(req, res) {
 });
 
 app.get('/useredit', function(req, res){
-    Connection.getUserByUsername(req.cookies.user,function(user) {
+    Connection.findUserByUsername(req.cookies.user,function(user) {
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/useredit', {loggedin: loggedin , username : req.cookies.user , user: user});
+            res.render('pages/useredit', {loggedin: loggedin , username : req.cookies.user , usere: user});
         //    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "User Doesn't Exist"});
         });
     })
 });
+app.post('/useredit', function(req, res){
+    var username = req.cookies.user;
+    var newpass = req.body.pass;
+    var oldpass = req.body.oldpass;
+    var newfirst = req.body.fname;
+    var newlast = req.body.lname;
+    var newmail = req.body.email;
+    Connection.updatePassword(username, oldpass, newpass, function(passError){
+        Connection.updateFirstName(username, newfirst, function(fnameError){
+            Connection.updateLastName(username, newlast, function(lnameError){
+                Connection.updateEmail(username, newmail, function(emailError){
+                    Connection.findUserByUsername(username, function(result){
+                        Connection.getPostsByUsername(username, function(posts){
+                            userloggedincheck(req,function(loggedin) {
+                                if (username == req.cookies.user){
+                                    var temp = true;
+                                    console.log("Let him edit");
+                                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                                }else {
+                                    var temp = false;
+                                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                                }
+                            });
+                        })
+                    })
+                })
+            })
+        })
+    })
 
+});
 app.get('/action_page.php', function (req,res){
     Connection.getPassword(req.query.uname,function (result){
        // console.log(result.password)
