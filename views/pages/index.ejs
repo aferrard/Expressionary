@@ -34,7 +34,7 @@
                         <%return b.points - a.points;%>
                         <%});%>
                         <%topWords.sort(function(a, b){%>
-                        <%return b.points - a.points;%>
+                        <%return b.totalPoints - a.totalPoints;%>
                         <%});%>
                         <%while (i <= 10) { %>
 						<%if(topUsers[i-1] == undefined) break;%>
