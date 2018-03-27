@@ -240,6 +240,8 @@ function addMailingList(email, cb) {
 }
 exports.addPointToPost = addPointToPost;
 function addPointToPost(definition, points, username, cb) {
+    console.log("definition: " + definition);
+    console.log("username: " + username);
     var pt = parseInt(points) + 1;
     con.query("UPDATE posts SET points = '" + pt + "' WHERE definition = '" + definition + "'", function(err, result) {
         if (err) throw err; else {
@@ -254,8 +256,10 @@ function addPointToPost(definition, points, username, cb) {
                             if(err) {
                                 cb(err);
                             } else {
-                                con.query("INSERT INTO posts_voted VALUE(" + postinfo[0].post_id + ", " + userinfo[0].user_id +", 0)", function(err, result) {
+                                console.log("postid:userid " + postinfo[0].post_id+":"+userinfo[0].user_id);
+                                con.query("INSERT INTO posts_voted VALUE(" + postinfo[0].post_id + ", " + userinfo[0].user_id +", 1)", function(err, result) {
                                     if(err) {
+                                        console.log(err);
                                         cb(err);
                                     }
                                 });
@@ -352,17 +356,17 @@ exports.deleteVote = deleteVote;
 function deleteVote(definition, username, cb) {
     var postid;
     var userid;
-    con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function(err, result) {
+    con.query("SELECT post_id, users_user_id FROM posts WHERE definition = '" + definition + "'", function(err, outerpost) {
         if(err) {
             cb(err);
         } else {
-            postid = result[0].post_id;
+            postid = outerpost[0].post_id;
             con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, result) {
                 if(err) {
                     cb(err);
                 } else {
                     userid = result[0].user_id;
-                    con.query("SELECT direction FROM posts_voted posts_post_id = " + postid + " && posts_users_user_id = " + userid + "'", function(err, Direction){
+                    con.query("SELECT direction FROM posts_voted WHERE posts_post_id = " + postid + " && users_user_id = " + userid, function(err, Direction){
                         if(err) {
                             cb(err);
                         } else {
@@ -370,11 +374,11 @@ function deleteVote(definition, username, cb) {
                                 //added, now subtract
 
                                 //users table
-                                con.query("SELECT points FROM users WHERE user_id = " + userid, function (err, user) {
+                                con.query("SELECT points FROM users WHERE user_id = " + outerpost[0].users_user_id, function (err, user) {
                                     if (err) {
                                         cb(err);
                                     } else {
-                                        con.query("UPDATE users SET points = " + (user[0].points - 1) + " WHERE user_id = " + userid, function (err, result) {
+                                        con.query("UPDATE users SET points = " + (user[0].points - 1) + " WHERE user_id = " + outerpost[0].users_user_id, function (err, result) {
                                             if (err) {
                                                 cb(err);
                                             } else {
@@ -390,34 +394,33 @@ function deleteVote(definition, username, cb) {
                                     if(err) {
                                         cb(err);
                                     } else {
-                                        wpid = post[0].wordpage_wp_id;
                                         con.query("UPDATE posts SET points = " + (post[0].points - 1) + " WHERE post_id = " + postid, function(err, result) {
                                             if(err){
                                                 cb(err);
                                             } else {
+                                                con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + post[0].wordpage_wp_id, function(err, wp) {
+                                                    if(err) {
+                                                        cb(err);
+                                                    } else {
+                                                        con.query("UPDATE wordpage SET totalPoints = " + (wp[0].totalPoints - 1) + " WHERE wp_id = " + post[0].wordpage_wp_id, function(err, result) {
+                                                            if(err) {
+                                                                cb(err);
+                                                            } else {
 
+                                                            }
+                                                        });
+                                                    }
+                                                });
                                             }
                                         });
                                     }
                                 });
 
                                 //wordpage table
-                                con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + wpid, function(err, wp) {
-                                    if(err) {
-                                        cb(err);
-                                    } else {
-                                        con.query("UPDATE wordpage SET totalPoints = " + (wp[0].totalPoints - 1) + " WHERE wp_id = " + wpid, function(err, result) {
-                                            if(err) {
-                                                cb(err);
-                                            } else {
 
-                                            }
-                                        });
-                                    }
-                                });
 
                                 //posts_voted table
-                                con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid, function(err, result) {
+                                con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && users_user_id = " + userid, function(err, result) {
                                     if(err) {
                                         cb(err);
                                     } else {
@@ -428,11 +431,11 @@ function deleteVote(definition, username, cb) {
                                 //subtracted, add
 
                                 //users table
-                                con.query("SELECT points FROM users WHERE user_id = " + userid, function (err, user) {
+                                con.query("SELECT points FROM users WHERE user_id = " + outerpost[0].users_user_id, function (err, user) {
                                     if (err) {
                                         cb(err);
                                     } else {
-                                        con.query("UPDATE users SET points = " + (user[0].points + 1) + " WHERE user_id = " + userid, function (err, result) {
+                                        con.query("UPDATE users SET points = " + (user[0].points + 1) + " WHERE user_id = " + outerpost[0].users_user_id, function (err, result) {
                                             if (err) {
                                                 cb(err);
                                             } else {
@@ -453,29 +456,29 @@ function deleteVote(definition, username, cb) {
                                             if(err){
                                                 cb(err);
                                             } else {
+                                                //wordpage table
+                                                con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + wpid, function(err, wp) {
+                                                    if(err) {
+                                                        cb(err);
+                                                    } else {
+                                                        con.query("UPDATE wordpage SET totalPoints = " + (wp[0].totalPoints + 1) + " WHERE wp_id = " + wpid, function(err, result) {
+                                                            if(err) {
+                                                                cb(err);
+                                                            } else {
 
+                                                            }
+                                                        });
+                                                    }
+                                                });
                                             }
                                         });
                                     }
                                 });
 
-                                //wordpage table
-                                con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + wpid, function(err, wp) {
-                                    if(err) {
-                                        cb(err);
-                                    } else {
-                                        con.query("UPDATE wordpage SET totalPoints = " + (wp[0].totalPoints + 1) + " WHERE wp_id = " + wpid, function(err, result) {
-                                            if(err) {
-                                                cb(err);
-                                            } else {
 
-                                            }
-                                        });
-                                    }
-                                });
 
                                 //posts_voted table
-                                con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid, function(err, result) {
+                                con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid + " && users_user_id = " + userid, function(err, result) {
                                     if(err) {
                                         cb(err);
                                     } else {
@@ -496,7 +499,6 @@ function deleteVote(definition, username, cb) {
 
 exports.getVotes = getVotes;
 function getVotes(definition, username, cb) {
-    console.log("username");
     var postid;
     var userid;
     con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function(err, result) {
@@ -509,14 +511,10 @@ function getVotes(definition, username, cb) {
                     cb(err);
                 } else {
                     userid = result[0].user_id;
-                    console.log(postid + " " +userid);
-                    con.query("SELECT * FROM posts_voted WHERE posts_post_id = " + postid + " && posts_users_user_id = " + userid, function(err, result) {
+                    con.query("SELECT * FROM posts_voted WHERE posts_post_id = " + postid + " && users_user_id = " + userid, function(err, result) {
                         if(err) {
                             cb(err);
                         } else {
-                            console.log("postid: "+postid);
-                            console.log("userid: "+userid);
-                            console.log("getVotes: "+result);
                             var z = JSON.parse(JSON.stringify(result));
                             cb(z);
                         }
@@ -737,3 +735,4 @@ function updateLastName(username, newLastName, cb) {
         });
     }
 }
+
