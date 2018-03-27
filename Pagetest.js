@@ -208,10 +208,9 @@ if (tvar == 3){
 }
 
 if (tvar == 4){
-    test('USER STORY #8, Edit Information Test\n 6 TESTS',function (t) {
+    test('USER STORY #8, Edit Information Test\n 9 TESTS',function (t) {
 
         var oldusername = "old-username";
-        var newusername = "new-username";
         var oldemail = "old@yahoo.com";
         var newemail = "new@yahoo.com";
         var oldpassword = "oldpass";
@@ -220,27 +219,44 @@ if (tvar == 4){
         var newfistname = "new-firstname";
         var oldlastname = "old-lastname";
         var newlastname = "new-lastname";
+        var username3 = "tempuser3butthisuserissupposedtobemorethen45charachterslongsoshouldntregisterletsseeifitworks";
 
-   //     connection.updateUsername(oldusername,newusername,function(result){
-     //       t.equals(result,"update successful: username","User Name Updated Successfully")
-      //  });
         connection.registerUser(oldemail,oldusername,oldpassword,oldfirstname,oldlastname,function (result) {
            t.notEquals("failure registering user",result,"Registred user successfully");
-        });
-        connection.updateEmail(oldusername,newemail,function (result) {
-            t.equals(result,"update successful: email","Email updated successfully")
-        });
-        connection.updateFirstName(oldusername,newfistname,function(result){
-            t.equals(result,"update successful: first name","First Name updated Successfully")
-        });
+           var userid = result.insertId;
 
-        connection.updateLastName(oldusername,newlastname,function(result){
-            t.equals(result,"update successful: last name","Last Name updated Successfully")
-        });
+            connection.updateEmail(oldusername,newemail,function (result) {
+               t.equals(result,"update successful: email","Email updated successfully")
+            });
 
-        connection.deleteUser(oldusername,function(result){
-            t.equals(result,"deletion successful","Deletion/Clean up")
-        })
+            connection.updateFirstName(oldusername,newfistname,function(result){
+               t.equals(result,"update successful: first name","First Name updated Successfully")
+            });
+
+            connection.updateLastName(oldusername,newlastname,function(result){
+                t.equals(result,"update successful: last name","Last Name updated Successfully")
+            });
+
+            connection.updatePassword(oldusername,oldpassword,newpassword, function (result) {
+                t.equals(result,"update successful: password","Password updated successfully");
+            });
+
+            connection.updateUsername(oldusername,username3,function(result){
+                t.equals(result,"new username invalid: too long","Edge Case, Check for Valid Username")
+            });
+
+            connection.updateUsername(oldusername,"",function(result){
+               t.equals(result,"new username invalid: cannot have length 0","Edge Case, Check for Valid Username")
+            });
+
+            connection.getPassword(oldusername,function (result) {
+                t.equals(result.password,oldpassword,"Password update check")
+            });
+
+            connection.deleteUser(oldusername,function(result){
+               t.equals(result,"deletion successful","Deletion/Cleanup")
+            });
+        });
 
     });
 }
