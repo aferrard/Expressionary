@@ -185,6 +185,7 @@ if (tvar == 3){
         connection.getPostsFromWordId(1,function (result) {
             post = result[0].definition;
             points = result[0].points;
+
             t.notEquals(result,undefined,"Functions are able to return the post and the points associated with a word")
 
             connection.addPointToPost(post,"janeuser",function (result) {
