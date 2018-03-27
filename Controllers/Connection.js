@@ -93,8 +93,6 @@ function getUsernameByPost(post, cb) {
 }
 
 exports.registerUser = registerUser;
-//maybe need cb
-
 function registerUser(email, username, password, firstName, lastName, cb) {
     var execute = true;
     //firstName, LastName can = "NULL" [optional]
@@ -123,7 +121,7 @@ function registerUser(email, username, password, firstName, lastName, cb) {
             if (err) {
                 cb("failure registering user")
             } else {
-
+               // console.log(result)
                 cb(result);
             }
         });
@@ -142,7 +140,7 @@ function addWord(word, cb) {
 function findUserByEmail(email) {
 
 }
-
+exports.userById = userById;
 function userById(id, cb) {
     con.query("SELECT username FROM users WHERE user_id = " + id + "", function(err, result) {
         if (err) cb("fail1")
@@ -518,7 +516,7 @@ function getVotes(definition, username, cb) {
 
 exports.getPassword = getPassword;
 function getPassword(username,cb) {
-//    console.log(username)
+  //  console.log(username)
     if(username.length == 0) {
         cb("username field cannot be empty");
     } else if(username.length > 45) {
@@ -631,7 +629,7 @@ exports.updatePassword = updatePassword;
 function updatePassword(username, oldPassword, newPassword, cb) {
     //will be modified later to validate old password first
     con.query("SELECT password FROM users WHERE username = '" + username + "'", function(err, oldPasswordreturn) {
-        console.log(oldPasswordreturn);
+      //  console.log(oldPasswordreturn);
         if(err) {
             cb(err);
         } else if(oldPasswordreturn[0].password != oldPassword){
