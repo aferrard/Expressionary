@@ -512,11 +512,12 @@ app.post('/word2', function(req, res) {
     else {
         console.log("hi");
     }
-        //res.render('pages/word', {word: word, posts: posts});
         })
     })
     }else {
-        res.render("pages/registration",{loggedin: loggedin, username : req.cookies.user, regError: "Please Register or Log In"});
+        userloggedincheck(req,function(loggedin) {
+            res.render("pages/registration",{loggedin: loggedin, username : req.cookies.user, regError: "Please Register or Log In"});
+        });
     }
 });
 
@@ -689,8 +690,8 @@ app.get('/action_page.php', function (req,res){
 
         }else if (req.query.psw == result.password ) {
             array.push(req.query.uname);
-            res.cookie('user', req.query.uname , {maxAge: 45000});
-            res.cookie('password', req.query.psw, {maxAge: 45000});
+            res.cookie('user', req.query.uname , {maxAge: 180000});
+            res.cookie('password', req.query.psw, {maxAge: 180000});
 
             userloggedincheck(req,function(loggedin) {
                 var user = req.query.uname;
