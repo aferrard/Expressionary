@@ -1102,6 +1102,7 @@ app.post('/word2', function(req, res) {
     }
 });
 
+
 app.post('/word', function(req, res) {
     var definition = req.body.newDef;
     console.log("ERROR!!");
@@ -1125,7 +1126,7 @@ app.post('/word', function(req, res) {
                         userloggedincheck(req,function(loggedin) {
                             res.render('pages/word', {loggedin: loggedin, username : req.cookies.user, word: req.body.theWord, posts: posts});
                         });
-                      })
+                    })
                 }})
             })
         }
