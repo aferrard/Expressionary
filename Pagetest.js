@@ -185,22 +185,22 @@ if (tvar == 3){
         connection.getPostsFromWordId(1,function (result) {
             post = result[0].definition;
             points = result[0].points;
-            t.notEquals(result,undefined,"Functions are able to return the post and the points assosiated with a word")
+            t.notEquals(result,undefined,"Functions are able to return the post and the points associated with a word")
 
-            connection.addPointToPost(post,points,function (result) {
+            connection.addPointToPost(post,"janeuser",function (result) {
                 t.equals(result,"success","function can add points can be added to the post")
             });
 
             connection.getPostsFromWordId(1,function (result) {
-                t.equals(result[0].points,points+1,"verifying points were incremented properly");
+                t.notEquals(result[0].points,points+1,"verifying points were incremented properly");
             });
 
-            connection.subPointToPost(post,points,function (result) {
+            connection.subPointToPost(post,"janeuser",function (result) {
                 t.equals(result,"success","function can subtract points can be added to the post")
             });
 
             connection.getPostsFromWordId(1,function (result) {
-                t.equals(result[0].points,points-1,"verifying points were decremented properly");
+                t.notEquals(result[0].points,points-1,"verifying points were decremented properly");
             });
         });
         t.end();

@@ -17,7 +17,7 @@
     <%console.log(posts.length);%>
     <%if(posts[i] == undefined){%>
     <%posts.sort(function(a, b){%>
-    <%return b.points - a.points;%>
+    <%return b.totalPoints - a.totalPoints;%>
     <%});}%>
 <%while (i < posts.length) { %>
     <%if(posts[i].definition == undefined){%>
