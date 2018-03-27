@@ -66,7 +66,7 @@ if (tvar == 0) {
 
 if (tvar == 1 ) {
 
-    test('REGISTERATION AND UNIQUE USER TESTS\n10 UNIT TESTS', function (t) {
+    test('REGISTERATION AND UNIQUE USER TESTS\nUser Story #1 and User Story #2\n10 UNIT TESTS', function (t) {
 
 
         var email = "tempemail";
@@ -136,7 +136,7 @@ if (tvar == 1 ) {
 }
 
 if (tvar == 2) {
-    test('LOGIN TESTS\n5 UNIT TESTS 6 MANUAL TESTS', function (t) {
+    test('LOGIN TESTS\nUser Story # 3\n5 UNIT-TESTS  6 MANUAL-TESTS', function (t) {
         var username = 'a';
         var username2 = 'bpq';
         var username3 = '';
@@ -171,7 +171,7 @@ if (tvar == 2) {
 }
 
 if (tvar == 3){
-    test('USER STORY #4, Points Test\n 6 TESTS',function (t) {
+    test('Points Test\nUSER STORY #4\n6 TESTS',function (t) {
 
         var testword = "human";
         var wordid = 1;
