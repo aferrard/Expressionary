@@ -205,15 +205,15 @@ function addMailingList(email, cb) {
     con.query("INSERT INTO mailinglist VALUES('" + email + "')", function(err, result) {
         if (err) cb("failure");
         else {
-            console.log("SUCCESS");
+          //  console.log("SUCCESS");
             cb("success");
         }
     })
 }
 exports.addPointToPost = addPointToPost;
 function addPointToPost(definition, username, cb) {
-    console.log("definition: " + definition);
-    console.log("username: " + username);
+ //   console.log("definition: " + definition);
+ //   console.log("username: " + username);
     //var pt = parseInt(points) + 1;
     con.query("SELECT points FROM posts WHERE definition = '" + definition + "'",function(err, Points) {
         if(err) {cb(err)}
@@ -231,7 +231,7 @@ function addPointToPost(definition, username, cb) {
                                     if(err) {
                                         cb(err);
                                     } else {
-                                        console.log("postid:userid " + postinfo[0].post_id+":"+userinfo[0].user_id);
+                                      //  console.log("postid:userid " + postinfo[0].post_id+":"+userinfo[0].user_id);
                                         con.query("INSERT INTO posts_voted VALUE(" + postinfo[0].post_id + ", " + userinfo[0].user_id +", 1)", function(err, result) {
                                             if(err) {
                                                 console.log(err);

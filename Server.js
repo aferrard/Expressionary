@@ -1,21 +1,34 @@
 // load the things we need
 var express = require('express');
-var array = [];
-
-
-var app = express();
+var HashMap = require('hashmap');
 var Mail = require(__dirname + "/Controllers/Mail.js");
 var Word = require(__dirname + "/Controllers/Word.js");
 var Connection = require(__dirname + "/Controllers/Connection.js");
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var cookieParser = require('cookie-parser');
-app.use(cookieParser());
+var randomstring = require ('randomstring');
 
+var array = [];
+var map = new HashMap();
+var app = express();
+
+var emailmessage1 = "Thank you for Registering with Expressionary.\nPlease enter this code to activate your account.\n     ";
+var emailmessage2 = "\nExpressionary Welcomes you.\n"
+app.use(cookieParser());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(cookie);
 
+
+var User = function (username,password,email,firstname,lastname,randomstring){
+    this._username = username;
+    this._password = password;
+    this._email = email;
+    this._firstname = firstname;
+    this._lastname = lastname;
+    this._randomstring = randomstring;
+};
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -46,6 +59,7 @@ function userloggedincheck(req,cb) {
 con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
+   // Mail.sendEmail("expressionary307@gmail.com", emailmessage1 + emailmessage2)
 
 });
 
@@ -716,6 +730,7 @@ app.post('/word2', function(req, res) {
                             });
                         });
                     })
+
                 }else if(votes[0].direction == 1){//vote up
                     console.log("Deletetest+-");
                     Connection.deleteVote(post, req.cookies.user, function(){
@@ -1203,7 +1218,7 @@ app.post('/search', function(req,res) {
 
 });
 
-// about page 
+// about page
 app.get('/contact', function(req, res) {
     userloggedincheck(req,function(loggedin) {
         res.render('pages/contact', {loggedin: loggedin, username : req.cookies.user});
@@ -1257,7 +1272,34 @@ app.post('/useredit', function(req, res){
     })
 
 });
+
 app.get('/action_page.php', function (req,res){
+  //  console.log(map);
+  //  console.log(map.get(req.query.uname));
+  //  console.log(map.get(req.query.uname)._randomstring);
+    if (map.get(req.query.uname) !=  undefined ){
+    //    console.log("Step 1");
+    //    console.log(req.query.psw);
+        if (map.get(req.query.uname)._randomstring == req.query.psw){
+     //       console.log("Step 2");
+            userloggedincheck(req,function(loggedin) {
+                var username = req.query.uname;
+                var reguname = map.get(username)._username;
+                var password = map.get(username)._password;
+                var email = map.get(username)._email;
+                var firstname = map.get(username)._firstname;
+                var lastname = map.get(username)._lastname;
+                Connection.registerUser(email,reguname,password,firstname,lastname,function(result){
+                    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "Successfully Registered"});
+                    map.delete(username);
+                    return;
+                });
+
+            });
+
+        }
+    }
+
     Connection.getPassword(req.query.uname,function (result){
        // console.log(result.password)
         if (result == 'user not found' || result == 'user does not exist'){
@@ -1297,6 +1339,22 @@ app.post('/register', function (req,res) {
     var email = req.body.email;
     var password = req.body.password;
 
+    if (email.length == 0){
+        userloggedincheck(req,function(loggedin) {
+            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "Please enter valid email"})
+        });
+        return;
+    }else {
+        var random = randomstring.generate();
+        var Person = new User(username,password,email,firstname,lastname, random);
+        map.set(username,Person);
+        Mail.sendEmail("expressionary307@gmail.com", emailmessage1 + random + emailmessage2);
+        userloggedincheck(req,function(loggedin) {
+            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "Please Validate your account before continuing"})
+        });
+        return;
+    }
+
 
     Connection.registerUser(email,username,password,firstname,lastname,function (result){
         if (result=="failure registering user"){
@@ -1317,8 +1375,12 @@ app.post('/register', function (req,res) {
             });
 
         } else {
+            map.set()
+            console.log()
             userloggedincheck(req,function(loggedin) {
                 res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user,regError: "Successfully registered user"});
+
+
             })
         }
 
@@ -1391,7 +1453,7 @@ app.post('/contact', function(req, res) {
      var message = req.body.message;
 
      message = "NAME: " + name + "\nEMAIL: " + email + "\nMESSAGE: " + message;
-     Mail.sendEmail("expressionaryproject@gmail.com", message);
+   //  Mail.sendEmail("expressionaryproject@gmail.com", message);
      //console.log(name + email + message);
 
      userloggedincheck(req,function(loggedin) {

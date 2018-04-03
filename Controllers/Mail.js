@@ -1,4 +1,5 @@
 var nodemailer = require('nodemailer');
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -10,8 +11,8 @@ var transporter = nodemailer.createTransport({
 var mailOptions = {
     from: 'ExpressionaryProject@gmail.com',
     to: 'michaeljquade@gmail.com',
-    subject: 'test',
-    text: 'my life sucks'
+    subject: 'Confirmation',
+    text: 'TEST'
 };
 exports.sendEmail = sendEmail;
 function sendEmail(address, message) {
