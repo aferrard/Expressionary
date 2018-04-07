@@ -72,7 +72,7 @@ app.get('/', function(req, res) {
     Connection.getUsers(function(topUsers){
         Connection.getWords(function(topWords) {
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/index', {loggedin: loggedin, username : req.cookies.user,topUsers: topUsers, topWords: topWords});
+                res.render('pages/index', {loggedin: loggedin, username : req.cookies.user, topUsers: topUsers, topWords: topWords});
             })
         //  res.render('pages/index', {topUsers: topUsers, topWords: topWords});
         })
@@ -1255,7 +1255,6 @@ app.post('/useredit', function(req, res){
                             userloggedincheck(req,function(loggedin) {
                                 if (username == req.cookies.user){
                                     var temp = true;
-                                    console.log("Let him edit");
                                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
                                         username2: username, points: result.points, posts: posts, editcheck: temp});
                                 }else {
@@ -1274,12 +1273,8 @@ app.post('/useredit', function(req, res){
 });
 
 app.get('/action_page.php', function (req,res){
-  //  console.log(map);
-  //  console.log(map.get(req.query.uname));
-  //  console.log(map.get(req.query.uname)._randomstring);
+
     if (map.get(req.query.uname) !=  undefined ){
-    //    console.log("Step 1");
-    //    console.log(req.query.psw);
         if (map.get(req.query.uname)._randomstring == req.query.psw){
      //       console.log("Step 2");
             userloggedincheck(req,function(loggedin) {
@@ -1294,9 +1289,7 @@ app.get('/action_page.php', function (req,res){
                     map.delete(username);
                     return;
                 });
-
             });
-
         }
     }
 
@@ -1314,8 +1307,8 @@ app.get('/action_page.php', function (req,res){
 
         }else if (req.query.psw == result.password ) {
             array.push(req.query.uname);
-            res.cookie('user', req.query.uname , {maxAge: 180000});
-            res.cookie('password', req.query.psw, {maxAge: 180000});
+            res.cookie('user', req.query.uname , {maxAge: 450000});
+            res.cookie('password', req.query.psw, {maxAge: 450000});
 
             userloggedincheck(req,function(loggedin) {
                 var user = req.query.uname;
@@ -1329,7 +1322,6 @@ app.get('/action_page.php', function (req,res){
             });
         }
     });
-
 });
 
 app.post('/register', function (req,res) {
@@ -1453,13 +1445,33 @@ app.post('/contact', function(req, res) {
      var message = req.body.message;
 
      message = "NAME: " + name + "\nEMAIL: " + email + "\nMESSAGE: " + message;
-   //  Mail.sendEmail("expressionaryproject@gmail.com", message);
-     //console.log(name + email + message);
 
      userloggedincheck(req,function(loggedin) {
         res.render('pages/index', {loggedin: loggedin, username : req.cookies.user});
      });
 });
+
+app.get('/logout',function (req,res) {
+
+    Connection.getUsers(function(topUsers){
+        Connection.getWords(function(topWords) {
+            userloggedincheck(req,function(loggedin) { // only log the user out if he's logged in
+                if (loggedin == true) {
+
+                    var index = array.indexOf(req.cookies.user); // get the index of the user
+                    array.splice(index,1); // delete 1 entry at index
+                    res.cookie('user', '', {expires: new Date(0)}); // remove user from the cookie
+                    res.cookie('password', '', {expires: new Date(0)}); // remove pass from the cookie
+
+                    res.render('pages/index', {loggedin: false, username: "", topUsers: topUsers, topWords: topWords});
+                }else {
+                    res.render('pages/index', {loggedin: loggedin, username: req.cookies.user, topUsers: topUsers, topWords: topWords});
+                }
+            })
+        });
+    });
+});
+
 
 app.listen(8080);
 console.log('8080 is the magic port');
