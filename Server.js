@@ -1205,23 +1205,32 @@ app.post('/search', function(req,res) {
     }
     else if (type == "User") {
       //  console.log("ERROR!!");
-        Connection.findUserByUsername(term, function(user) {
-
-            Connection.getPostsByUsername(user.username, function (posts) {
-                userloggedincheck(req, function (loggedin) {
-                    if (user.username == req.cookies.user){
-                       // console.log("Let him edit");
-                        //var temp = true;
-                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
-                            points: user.points, posts: posts, editcheck:true, perror: perror});
-                    }else {
-                        //var temp = false;
-                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
-                            points: user.points, posts: posts, editcheck:false, perror: perror});
-                    }
+        con.query("SELECT * FROM users WHERE username = '" + term + "'", function(err, result) {
+            if (err) throw(err);
+            if(result === undefined || result.length == 0 ) {
+                userloggedincheck(req,function(loggedin) {
+                    //console.log("wordexist check");
+                    res.render('pages/search', {loggedin: loggedin, username : req.cookies.user, perror: "User does not exist"});
                 })
-            })
+            }else{
+                var user = JSON.parse(JSON.stringify(result[0]));
+                Connection.getPostsByUsername(user.username, function (posts) {
+                    userloggedincheck(req, function (loggedin) {
+                        if (user.username == req.cookies.user){
+                            // console.log("Let him edit");
+                            //var temp = true;
+                            res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
+                                points: user.points, posts: posts, editcheck:true, perror: perror});
+                        }else {
+                            //var temp = false;
+                            res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
+                                points: user.points, posts: posts, editcheck:false, perror: perror});
+                        }
+                    })
+                })
+            }
         })
+
     }
     else {
         userloggedincheck(req,function(loggedin) {
@@ -1400,7 +1409,7 @@ app.get('/user', function(req, res) {
     var username = req.cookies.user;
     if (username == undefined){
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user});
+            res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user, perror: perror});
         });
         return;
     }
@@ -1502,11 +1511,11 @@ app.post('/user',function (req,res){
                 if (username == req.cookies.user){
                     var temp = true;
                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                        username2: username, points: result.points, posts: posts, editcheck: temp, perror: perror});
                 }else {
                     var temp = false;
                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                        username2: username, points: result.points, posts: posts, editcheck: temp, perror: perror});
                 }
             });
         })
@@ -1519,7 +1528,7 @@ app.post('/w1',function (req,res){
     Connection.getwpFromWord(word, function(wpid) {
         Connection.getPostsFromWordId(wpid, function(posts) {
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/word', {loggedin: loggedin, username: req.cookies.user, word: word , posts: posts});
+                res.render('pages/word', {loggedin: loggedin, username: req.cookies.user, word: word , posts: posts, perror: perror});
             })
         })
     })
