@@ -3,13 +3,13 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'ExpressionaryProject@gmail.com',
-        pass: 'shittyreddit'
+        user: 'expressionary307@gmail.com',
+        pass: 'sameastheusername'
     }
 });
 
 var mailOptions = {
-    from: 'ExpressionaryProject@gmail.com',
+    from: 'expressionary307@gmail.com',
     to: 'michaeljquade@gmail.com',
     subject: 'Confirmation',
     text: 'TEST'
