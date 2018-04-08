@@ -1381,13 +1381,19 @@ app.post('/register', function (req,res) {
 });
 
 app.get('/user', function(req, res) {
+
     var username = req.cookies.user;
+    if (username == undefined){
+        userloggedincheck(req,function(loggedin) {
+            res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user});
+        });
+        return;
+    }
     Connection.findUserByUsername(username, function(result){
         Connection.getPostsByUsername(username, function(posts){
             userloggedincheck(req,function(loggedin) {
                 if (username == req.cookies.user){
                     var temp = true;
-                    console.log("Let him edit");
                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
                         username2: username, points: result.points, posts: posts, editcheck: temp});
                 }else {
@@ -1472,6 +1478,36 @@ app.get('/logout',function (req,res) {
     });
 });
 
+app.post('/user',function (req,res){
+    var username = req.body.user;
+    Connection.findUserByUsername(username, function(result){
+        Connection.getPostsByUsername(username, function(posts){
+            userloggedincheck(req,function(loggedin) {
+                if (username == req.cookies.user){
+                    var temp = true;
+                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                }else {
+                    var temp = false;
+                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                }
+            });
+        })
+    })
+});
+
+
+app.post('/w1',function (req,res){
+    var word = req.body.word;
+    Connection.getwpFromWord(word, function(wpid) {
+        Connection.getPostsFromWordId(wpid, function(posts) {
+            userloggedincheck(req,function(loggedin) {
+                res.render('pages/word', {loggedin: loggedin, username: req.cookies.user, word: word , posts: posts});
+            })
+        })
+    })
+});
 
 app.listen(8080);
 console.log('8080 is the magic port');
