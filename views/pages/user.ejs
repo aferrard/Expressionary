@@ -53,9 +53,20 @@
 </ol-->
 <%if(editcheck){%>
 <a href="/useredit">Edit Profile</a>
+<a onclick="document.getElementById('delUser').style.display='block'">Delete User</a>
 <%}%>
 <hr>
-
+<div id="delUser" class="modal">
+    <form class="modal-content animate" action="/deleteUser.php">
+        <div class="container">
+            <center><label for="delUser"><b>Are you sure you want to delete your user?</b></label></center>
+            <button type="submit" >OK</button>
+        </div>
+        <div class="container" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('delUser').style.display='none'" class="cancelbtn">Cancel</button>
+        </div>
+    </form>
+</div>
 </body>
 <footer>
     <% include ../partials/footer %>
