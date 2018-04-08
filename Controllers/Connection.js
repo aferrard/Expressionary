@@ -29,35 +29,7 @@ function getwpFromWord(word, cb) {
             cb(z.wp_id);
         }
 
-    })
-    // /*var request = "SELECT posts.date, posts.definition, posts.points, user.username, wordpage.totalPoints FROM wordpage, posts, users WHERE wordpage.word = " + word + "," +
-    //     "posts.wordpage_wp_id = wordpage.wp_id, users.user_id = posts.users_user_id";
-    // var wordPageData = [];
-    // var wordId = 0;
-    // con.query(request, function(err, result) {
-    //     if(err) return "notFound";
-    //     for(var i in result) {
-    //         wordPageData.push(i);
-    //     }
-    //     console.log(result);
-    // });*/
-    // //var wordPageData = [];
-    // con.connect(function (err) {
-    //     if (err) throw err;
-    //
-    //
-    // var requestWord = "SELECT word FROM wordpage WHERE word = '" + word + "'";
-    // //console.log(requestWord);
-    // con.query(requestWord, function(err, result) {
-    //     if(err) return "notFound";
-    //     //for(var i in result) {
-    //     //    wordPageData.push(i);
-    //     //}
-    //     //format: [RowDataPacket { wp_id: int, totalPoints: int}]
-    //     return(result);
-    // });
-    // });
-
+    });
 }
 exports.getPostsFromWordId = getPostsFromWordId;
 function getPostsFromWordId(wp_id, cb) {

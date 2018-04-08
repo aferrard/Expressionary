@@ -26,7 +26,7 @@
 			<div class="row">
 				<div class="col-sm-7">
 					<h2 class="mt-1">Top Users</h2>
-					<form class="form-horizontal" role="form" style="width: 40%;" action="http://localhost:8080/" method="post">
+					<form class="form-horizontal" role="form" style="width: 40%;" action="user" method="post">
 						<!--input hidden id="users" name="users" value = "</%= users %/>"-->
 
                         <%var i = 1; %>
@@ -38,20 +38,25 @@
                         <%});%>
                         <%while (i <= 10) { %>
 						<%if(topUsers[i-1] == undefined) break;%>
-                        <%= i%>: <%=topUsers[i-1].username%><br>&emsp;Total Points: <%=topUsers[i-1].points%><br>
+                        <%= i%>: <input id="user" name="user" type="submit" value="<%=topUsers[i-1].username%>" class="btn btn-info">
+						<br>
+						Total Points: <%=topUsers[i-1].points%><br>
                         <% i++ }%>
 					</form>
 				</div>
 				<div class="col-sm-5">
-					<h2 class="mt-1">Top Words</h2>
-					<form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/" method="post">
+					<h2 class="mt-10"> Top Words </h2>
+					<form class="form-horizontal" role="form" style="width: 50%;" action="w1" method="post">
 						<!--input hidden id="words" name="words" value = "</%= words %/>"-->
 
                         <%var i = 1; %>
 
                         <%while (i <= 10) { %>
                         <%if(topWords[i-1] == undefined) break;%>
-                        <%= i%>: <%=topWords[i-1].word%><br>&emsp;Total Points: <%=topWords[i-1].totalPoints%><br>
+                        <%= i%>:<input id="word" name="word" type="submit" value="<%=topWords[i-1].word%>" class="btn btn-info">
+
+						<br>
+						Total Points: <%=topWords[i-1].totalPoints%><br>
                         <% i++ }%>
 					</form>
 				</div>
