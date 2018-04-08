@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(cookie);
-
+var perror = "none";
 
 var User = function (username,password,email,firstname,lastname,randomstring){
     this._username = username;
@@ -72,7 +72,7 @@ app.get('/', function(req, res) {
     Connection.getUsers(function(topUsers){
         Connection.getWords(function(topWords) {
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/index', {loggedin: loggedin, username : req.cookies.user, topUsers: topUsers, topWords: topWords});
+                res.render('pages/index', {loggedin: loggedin, username : req.cookies.user, topUsers: topUsers, topWords: topWords, perror: perror});
             })
         //  res.render('pages/index', {topUsers: topUsers, topWords: topWords});
         })
@@ -83,7 +83,7 @@ app.get('/', function(req, res) {
 
 app.get('/search', function(req,res) {
     userloggedincheck(req,function(loggedin) {
-        res.render('pages/search', {loggedin: loggedin, username : req.cookies.user});
+        res.render('pages/search', {loggedin: loggedin, username: req.cookies.user, perror: perror});
     })
 });
 
@@ -93,7 +93,7 @@ app.post('/', function(req, res) {
         Mail.sendEmail(email, "You have subscribed to the Expressionary Newsletter");
 
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/index', {loggedin: loggedin, username : req.cookies.user});
+            res.render('pages/index', {loggedin: loggedin, username : req.cookies.user, perror: perror});
         })
     });
     //add to mailing list table
@@ -102,7 +102,7 @@ app.post('/', function(req, res) {
 app.get('/wordlist', function(req,res) {
     Connection.getWordPages(function(wordPages) {
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/wordlist', {loggedin: loggedin, username : req.cookies.user, wordPages : wordPages});
+            res.render('pages/wordlist', {loggedin: loggedin, username : req.cookies.user, wordPages : wordPages, perror: perror});
         })
     })
 });
@@ -112,7 +112,7 @@ app.post('/wordlist', function(req,res) {
     Connection.getwpFromWord(word, function(wpid) {
         Connection.getPostsFromWordId(wpid, function(posts) {
                 userloggedincheck(req,function(loggedin) {
-                    res.render('pages/word', {loggedin: loggedin, username: req.cookies.user, word: word , posts: posts});
+                    res.render('pages/word', {loggedin: loggedin, username: req.cookies.user, word: word , posts: posts, perror: perror});
                 })
         })
     })
@@ -141,7 +141,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -153,7 +153,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -164,7 +164,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -183,7 +183,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -195,7 +195,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -206,7 +206,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -231,7 +231,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -243,7 +243,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -254,7 +254,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -273,7 +273,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -285,7 +285,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -296,7 +296,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -320,7 +320,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -332,7 +332,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -343,7 +343,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -362,7 +362,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -374,7 +374,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -385,7 +385,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -409,7 +409,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -421,7 +421,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -431,7 +431,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -449,7 +449,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -460,7 +460,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -470,7 +470,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -494,7 +494,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -506,7 +506,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -517,7 +517,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -536,7 +536,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -548,7 +548,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -559,7 +559,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -583,7 +583,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -595,7 +595,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -606,7 +606,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -625,7 +625,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -637,7 +637,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -648,7 +648,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -672,7 +672,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -684,7 +684,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -695,7 +695,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -714,7 +714,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -726,7 +726,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -738,7 +738,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -762,7 +762,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -774,7 +774,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -785,7 +785,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -804,7 +804,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -816,7 +816,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -827,7 +827,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -851,7 +851,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -863,7 +863,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -874,7 +874,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -893,7 +893,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -905,7 +905,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -916,7 +916,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -940,7 +940,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -952,7 +952,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -963,7 +963,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -982,7 +982,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -994,7 +994,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -1005,7 +1005,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -1029,7 +1029,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -1041,7 +1041,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -1052,7 +1052,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -1071,7 +1071,7 @@ app.post('/word2', function(req, res) {
                         if(result == "success"){
                             Connection.getPostsFromWordId(wpid, function(post) {
                                 userloggedincheck(req,function(loggedin) {
-                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                    res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                 });
                             });
                         }else{
@@ -1083,7 +1083,7 @@ app.post('/word2', function(req, res) {
                     Connection.deleteVote(post, req.cookies.user, function(){
                         Connection.getPostsFromWordId(wpid, function(post) {
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                             });
                         });
                     })
@@ -1094,7 +1094,7 @@ app.post('/word2', function(req, res) {
                             if(result == "success"){
                                 Connection.getPostsFromWordId(wpid, function(post) {
                                     userloggedincheck(req,function(loggedin) {
-                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post});
+                                        res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: req.body.theWord, posts: post, perror: perror});
                                     });
                                 });
                             }else{
@@ -1112,7 +1112,7 @@ app.post('/word2', function(req, res) {
     })
     }else {
         userloggedincheck(req,function(loggedin) {
-            res.render("pages/registration",{loggedin: loggedin, username : req.cookies.user, regError: "Please Register or Log In"});
+            res.render("pages/registration",{loggedin: loggedin, username : req.cookies.user, perror: "Please Register or Log In"});
         });
     }
 });
@@ -1124,7 +1124,7 @@ app.post('/word', function(req, res) {
     Connection.getwpFromWord(req.body.theWord, function(wpid) {
         if (req.cookies.user == undefined){
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "Please Register or Log In"});
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please Register or Log In"});
             });
         }else {
             var user = req.cookies.user;
@@ -1139,7 +1139,7 @@ app.post('/word', function(req, res) {
                     console.log("ERROR");
                     Connection.getPostsFromWordId(wpid, function (posts) {
                         userloggedincheck(req,function(loggedin) {
-                            res.render('pages/word', {loggedin: loggedin, username : req.cookies.user, word: req.body.theWord, posts: posts});
+                            res.render('pages/word', {loggedin: loggedin, username : req.cookies.user, word: req.body.theWord, posts: posts, perror: perror});
                         });
                     })
                 }})
@@ -1149,43 +1149,58 @@ app.post('/word', function(req, res) {
 });
 
 app.post('/search', function(req,res) {
-    console.log("1- ERROR!!");
+    //console.log("1- ERROR!!");
     var term = req.body.search;
     var type = req.body.searchType;
     if (type == "Word") {
         //search database for words
         con.query("SELECT * FROM wordpage WHERE word = '" + term + "'", function(err, result) {
             if (err) throw err;
-            var word = JSON.parse(JSON.stringify(result[0].word));
-            Connection.getwpFromWord(term, function (wpid) {
-                if (wpid === undefined) {
-                    console.log("ERROR");
-                }
-                else {
-                    console.log(wpid);
-                    Connection.getPostsFromWordId(wpid, function (posts) {
-                        if (posts === undefined) {
-                            console.log("ERROR");
-                        }
-                        else {
-                            // p = posts;
-                            // console.log(posts);
-                            // for (var i = 0; i < posts.length; i++) {
-                            //     Connection.getUsernameByPost(posts[i], function(username) {
-                            //         //console.log("USERNAME AGAIN: " + username);
-                            //         //userz[i] = username;
-                            //         //console.log(userz[0]);
-                            //         // posts[i].username = "barryuser";
-                            //     })
-                            // }
-                            userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user,word: word, posts: posts});
-                            })
-                        }
+            console.log("err: "+err);
+            console.log("result: "+result);
+            if(result === undefined || result.length == 0 ){
+                userloggedincheck(req,function(loggedin) {
+                    //console.log("wordexist check");
+                    res.render('pages/search', {loggedin: loggedin, username : req.cookies.user, perror: "Word does not exist"});
+                })
+            }else {
+                var word = JSON.parse(JSON.stringify(result[0].word));
+                Connection.getwpFromWord(term, function (wpid) {
+                    if (wpid === undefined) {
+                        console.log("wERROR");
+                    }
+                    else {
+                        console.log(wpid);
+                        Connection.getPostsFromWordId(wpid, function (posts) {
+                            if (posts === undefined) {
+                                console.log("pERROR");
+                            }
+                            else {
+                                // p = posts;
+                                // console.log(posts);
+                                // for (var i = 0; i < posts.length; i++) {
+                                //     Connection.getUsernameByPost(posts[i], function(username) {
+                                //         //console.log("USERNAME AGAIN: " + username);
+                                //         //userz[i] = username;
+                                //         //console.log(userz[0]);
+                                //         // posts[i].username = "barryuser";
+                                //     })
+                                // }
+                                userloggedincheck(req, function (loggedin) {
+                                    res.render('pages/word', {
+                                        loggedin: loggedin,
+                                        username: req.cookies.user,
+                                        word: word,
+                                        posts: posts,
+                                        perror: perror
+                                    });
+                                })
+                            }
 
-                    })
-                }
-            });
+                        })
+                    }
+                });
+            }
         })
     }
     else if (type == "User") {
@@ -1196,13 +1211,13 @@ app.post('/search', function(req,res) {
                 userloggedincheck(req, function (loggedin) {
                     if (user.username == req.cookies.user){
                        // console.log("Let him edit");
-                        var temp = true;
+                        //var temp = true;
                         res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
-                            points: user.points, posts: posts, editcheck:temp});
+                            points: user.points, posts: posts, editcheck:true, perror: perror});
                     }else {
-                        var temp = false;
+                        //var temp = false;
                         res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
-                            points: user.points, posts: posts, editcheck:temp});
+                            points: user.points, posts: posts, editcheck:false, perror: perror});
                     }
                 })
             })
@@ -1210,7 +1225,7 @@ app.post('/search', function(req,res) {
     }
     else {
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/search', {loggedin: loggedin, username : req.cookies.user});
+            res.render('pages/search', {loggedin: loggedin, username : req.cookies.user, perror: perror});
         });
     }
  //   console.log(term);
@@ -1221,20 +1236,20 @@ app.post('/search', function(req,res) {
 // about page
 app.get('/contact', function(req, res) {
     userloggedincheck(req,function(loggedin) {
-        res.render('pages/contact', {loggedin: loggedin, username : req.cookies.user});
+        res.render('pages/contact', {loggedin: loggedin, username : req.cookies.user, perror: perror});
     });
 });
 
 app.get('/register', function(req, res) {
     userloggedincheck(req,function(loggedin) {
-        res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user,regError: ""});
+        res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: perror});
     });
 });
 
 app.get('/useredit', function(req, res){
     Connection.findUserByUsername(req.cookies.user,function(user) {
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/useredit', {loggedin: loggedin , username : req.cookies.user , usere: user});
+            res.render('pages/useredit', {loggedin: loggedin , username : req.cookies.user , usere: user, perror: perror});
         //    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "User Doesn't Exist"});
         });
     })
@@ -1254,13 +1269,13 @@ app.post('/useredit', function(req, res){
                         Connection.getPostsByUsername(username, function(posts){
                             userloggedincheck(req,function(loggedin) {
                                 if (username == req.cookies.user){
-                                    var temp = true;
+                                    //var temp = true;
                                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                                        username2: username, points: result.points, posts: posts, editcheck: true, perror: perror});
                                 }else {
-                                    var temp = false;
+                                    //var temp = false;
                                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                                        username2: username, points: result.points, posts: posts, editcheck: false, perror: perror});
                                 }
                             });
                         })
@@ -1285,7 +1300,7 @@ app.get('/action_page.php', function (req,res){
                 var firstname = map.get(username)._firstname;
                 var lastname = map.get(username)._lastname;
                 Connection.registerUser(email,reguname,password,firstname,lastname,function(result){
-                    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "Successfully Registered"});
+                    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Successfully Registered"});
                     map.delete(username);
                     return;
                 });
@@ -1297,12 +1312,12 @@ app.get('/action_page.php', function (req,res){
        // console.log(result.password)
         if (result == 'user not found' || result == 'user does not exist'){
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "User Doesn't Exist"});
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "User Doesn't Exist"});
             });
 
         }else if (req.cookies.user != undefined || array.indexOf(req.query.uname) != -1){
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "User Already Logged In"});
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "User Already Logged In"});
             });
 
         }else if (req.query.psw == result.password ) {
@@ -1313,12 +1328,12 @@ app.get('/action_page.php', function (req,res){
             userloggedincheck(req,function(loggedin) {
                 var user = req.query.uname;
                 loggedin = true;
-                res.render('pages/registration', {loggedin: loggedin, username : user, regError: "Login Successful"});
+                res.render('pages/registration', {loggedin: loggedin, username : user, perror: "Login Successful"});
             });
         }
         else {
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "Invalid Credentials, Please try again"});
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Invalid Credentials, Please try again"});
             });
         }
     });
@@ -1333,7 +1348,7 @@ app.post('/register', function (req,res) {
 
     if (email.length == 0){
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "Please enter valid email"})
+            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please enter valid email"})
         });
         return;
     }else {
@@ -1342,7 +1357,7 @@ app.post('/register', function (req,res) {
         map.set(username,Person);
         Mail.sendEmail("expressionary307@gmail.com", emailmessage1 + random + emailmessage2);
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "Please Validate your account before continuing"})
+            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please validate your account before continuing"})
         });
         return;
     }
@@ -1351,26 +1366,26 @@ app.post('/register', function (req,res) {
     Connection.registerUser(email,username,password,firstname,lastname,function (result){
         if (result=="failure registering user"){
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "Username already exists.Please try again"});
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username already exists. Please try again"});
             });
         }
 
         else if (result=="username field cannot be empty") {
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "username field cannot be empty"});
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username field cannot be empty"});
             });
         }
 
         else if (result=="username is too long") {
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "username is too long"});
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username is too long"});
             });
 
         } else {
             map.set()
             console.log()
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user,regError: "Successfully registered user"});
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Successfully registered user"});
 
 
             })
@@ -1386,14 +1401,14 @@ app.get('/user', function(req, res) {
         Connection.getPostsByUsername(username, function(posts){
             userloggedincheck(req,function(loggedin) {
                 if (username == req.cookies.user){
-                    var temp = true;
+                    //var temp = true;
                     console.log("Let him edit");
                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                        username2: username, points: result.points, posts: posts, editcheck: true, perror: perror});
                 }else {
-                    var temp = false;
+                    //var temp = false;
                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, points: result.points, posts: posts, editcheck: temp});
+                        username2: username, points: result.points, posts: posts, editcheck: false, perror: perror});
                 }
             });
         })
@@ -1423,7 +1438,7 @@ app.get('/random', function(req, res) {
                                 })
                             }
                             userloggedincheck(req,function(loggedin) {
-                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user, word: word, posts: posts});
+                                res.render('pages/word', {loggedin: loggedin, username : req.cookies.user, word: word, posts: posts, perror: perror});
                             });
                         }
                     })
@@ -1434,7 +1449,7 @@ app.get('/random', function(req, res) {
 
 app.get('/developer', function(req, res) {
     userloggedincheck(req,function(loggedin) {
-        res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user});
+        res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user, perror: perror});
     });
 });
 
@@ -1447,7 +1462,7 @@ app.post('/contact', function(req, res) {
      message = "NAME: " + name + "\nEMAIL: " + email + "\nMESSAGE: " + message;
 
      userloggedincheck(req,function(loggedin) {
-        res.render('pages/index', {loggedin: loggedin, username : req.cookies.user});
+        res.render('pages/index', {loggedin: loggedin, username : req.cookies.user, perror: perror});
      });
 });
 
@@ -1463,9 +1478,9 @@ app.get('/logout',function (req,res) {
                     res.cookie('user', '', {expires: new Date(0)}); // remove user from the cookie
                     res.cookie('password', '', {expires: new Date(0)}); // remove pass from the cookie
 
-                    res.render('pages/index', {loggedin: false, username: "", topUsers: topUsers, topWords: topWords});
+                    res.render('pages/index', {loggedin: false, username: "", topUsers: topUsers, topWords: topWords, perror: perror});
                 }else {
-                    res.render('pages/index', {loggedin: loggedin, username: req.cookies.user, topUsers: topUsers, topWords: topWords});
+                    res.render('pages/index', {loggedin: loggedin, username: req.cookies.user, topUsers: topUsers, topWords: topWords, perror: perror});
                 }
             })
         });
