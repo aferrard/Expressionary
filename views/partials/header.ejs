@@ -24,6 +24,27 @@
 			<li><a href="/logout" style="width:auto;">Logout</a></li>
 			<%}%>
 		</ul>
+        <%console.log("perror: "+perror);%>
+        <%if(perror != "none" && perror != "Please validate your account before continuing"){%>
+		<div id="perror" class="emodal">
+			<form class="modal-content animate" action="/error.php">
+				<div class="container">
+					<center><label for="perror"><b><%=perror%></b></label></center>
+					<button type="submit" >OK</button>
+				</div>
+			</form>
+		</div>
+        <%}else if(perror == "Please validate your account before continuing"){%>
+			<div id="validate" class="emodal">
+				<form class="modal-content animate" action="/validate.php">
+					<div class="container">
+						<center><label for="validate"><b><%=perror%></b></label></center>
+						<input type="text" placeholder="Enter Validation Code" name="valid" required>
+						<button type="submit" >OK</button>
+					</div>
+				</form>
+			</div>
+		<%}%>
 		<div id="id1" class="modal">
 			<form class="modal-content animate" action="/action_page.php">
 				<div class="container">
@@ -48,12 +69,19 @@
 		<script>
             // Get the modal
             var modal = document.getElementById('id1');
+            var emodal = document.getElementById('perror');
+            var vmodal = document.getElementById('validate');
             // When the user clicks anywhere outside of the modal, close it
             window.onclick = function(event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
+                }else if(event.target == emodal){
+                    emodal.style.display = "none";
+				}else if(event.target == vmodal){
+                    vmodal.style.display = "none";
                 }
             }
 		</script>
 	</div>
+
 </nav>
