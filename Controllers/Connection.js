@@ -88,7 +88,7 @@ function registerUser(email, username, password, firstName, lastName, cb) {
     if(execute){
         var image;
         var fs = require('fs');
-        fs.readFile("/home/ayush/Desktop/files-and-javascript-10-638.jpg", function(err, result) {
+        fs.readFile("/home/ayush/Desktop/gender-neutral-user.png", function(err, result) {
             if(err) throw err;
             else{
                 //console.log(result);
@@ -728,6 +728,17 @@ function updateLastName(username, newLastName, cb) {
 
         });
     }
+}
+
+exports.updateProfileImg = updateProfileImg;
+function updateProfileImg(username, img, cb) {
+    con.query("UPDATE users SET profile_img = '" + img + "' WHERE username = '" + username + "'", function(err, resul) {
+       if(err) {
+           cb(err);
+       } else {
+           cb("updated profile image");
+       }
+    });
 }
 
 /*function getImageData(image) {
