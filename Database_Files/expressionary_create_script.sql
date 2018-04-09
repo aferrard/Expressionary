@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `expressionary_data`.`users` (
   `email` VARCHAR(85) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
+  `profile_img` BLOB NULL,
   `first_name` VARCHAR(45) NULL,
   `last_name` VARCHAR(45) NULL,
   PRIMARY KEY (`user_id`, `email`, `username`),

@@ -86,7 +86,21 @@ function registerUser(email, username, password, firstName, lastName, cb) {
         execute = false;
     }
     if(execute){
-        var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', '" + firstName + "', '" + lastName + "')";
+        var image;
+        var fs = require('fs');
+        fs.readFile("/home/ayush/Desktop/files-and-javascript-10-638.jpg", function(err, result) {
+            if(err) throw err;
+            else{
+                //console.log(result);
+                fs.writeFile("/home/ayush/Desktop/output.txt", result, function(err) {
+                    if(err)throw(err);
+                    else{
+                        image = result
+                    }
+                });
+            }
+        });
+        var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "','" + image + "', '" + firstName + "', '" + lastName + "')";
         //console.log(request);
         con.query(request, function (err, result) {
 
@@ -716,3 +730,17 @@ function updateLastName(username, newLastName, cb) {
     }
 }
 
+/*function getImageData(image) {
+    var fs = require('fs');
+    fs.readFile(image, function(err, result) {
+        if(err) throw err;
+        else{
+            console.log(result);
+            fs.writeFile("/home/ayush/Desktop/output.txt", result, function(err) {
+                if(err)throw(err);
+            });
+        }
+    });
+}
+
+getImageData("/home/ayush/Desktop/files-and-javascript-10-638.jpg");*/
