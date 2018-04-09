@@ -54,6 +54,10 @@
 <%if(editcheck){%>
 <a href="/useredit">Edit Profile</a>
 <a onclick="document.getElementById('delUser').style.display='block'">Delete User</a>
+<form action="/uploadimage.php">
+    Select an image for your profile: <input type="file" id="profImage" accept=".png" name="usr_img" required>
+    <input type="submit">
+</form>
 <%}%>
 <hr>
 <div id="delUser" class="modal">
