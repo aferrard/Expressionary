@@ -86,7 +86,7 @@ function registerUser(email, username, password, firstName, lastName, cb) {
         execute = false;
     }
     if(execute){
-        var image;
+        /*var image;
         var fs = require('fs');
         fs.readFile("/home/ayush/Desktop/gender-neutral-user.png", function(err, result) {
             if(err) throw err;
@@ -99,8 +99,8 @@ function registerUser(email, username, password, firstName, lastName, cb) {
                     }
                 });
             }
-        });
-        var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "','" + image + "', '" + firstName + "', '" + lastName + "')";
+        });*/
+        var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', NULL, '" + firstName + "', '" + lastName + "')";
         //console.log(request);
         con.query(request, function (err, result) {
 

@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `expressionary_data`.`users` (
   `email` VARCHAR(85) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
-  `profile_img` BLOB NULL,
+  `profile_img` TEXT NULL,
   `first_name` VARCHAR(45) NULL,
   `last_name` VARCHAR(45) NULL,
   PRIMARY KEY (`user_id`, `email`, `username`),
@@ -36,6 +36,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `expressionary_data`.`wordpage` (
   `wp_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `content-type` VARCHAR(45) NOT NULL,
   `word` VARCHAR(60) NOT NULL,
   `totalPoints` INT NOT NULL,
   PRIMARY KEY (`wp_id`, `word`),
