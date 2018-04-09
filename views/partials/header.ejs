@@ -27,9 +27,10 @@
         <%console.log("perror: "+perror);%>
         <%if(perror != "none" && perror != "Please validate your account before continuing"){%>
 		<div id="perror" class="emodal">
-			<form class="modal-content animate" action="/error.php">
+
+			<form class="modal-content animate" action="/">
 				<div class="container">
-					<center><label for="perror"><b><%=perror%></b></label></center>
+					<label for="perror" align="center"><b><%=perror%></b></label>
 					<button type="submit" >OK</button>
 				</div>
 			</form>
@@ -38,7 +39,7 @@
 			<div id="validate" class="emodal">
 				<form class="modal-content animate" action="/validate.php">
 					<div class="container">
-						<center><label for="validate"><b><%=perror%></b></label></center>
+						<label for="validate" align="center"><b><%=perror%></b></label>
 						<input type="text" placeholder="Enter Validation Code" name="valid" required>
 						<button type="submit" >OK</button>
 					</div>

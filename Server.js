@@ -5,9 +5,11 @@ var Mail = require(__dirname + "/Controllers/Mail.js");
 var Word = require(__dirname + "/Controllers/Word.js");
 var Connection = require(__dirname + "/Controllers/Connection.js");
 var bodyParser = require('body-parser');
+var path = require('path');
 var mysql = require('mysql');
 var cookieParser = require('cookie-parser');
 var randomstring = require ('randomstring');
+var fileUpload = require('express-fileupload');
 
 var array = [];
 var map = new HashMap();
@@ -18,6 +20,8 @@ var emailmessage2 = "\nExpressionary Welcomes you.\n"
 app.use(cookieParser());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileUpload());
 //app.use(cookie);
 var perror = "none";
 
@@ -1217,14 +1221,18 @@ app.post('/search', function(req,res) {
                 Connection.getPostsByUsername(user.username, function (posts) {
                     userloggedincheck(req, function (loggedin) {
                         if (user.username == req.cookies.user){
-                            // console.log("Let him edit");
-                            //var temp = true;
-                            res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
-                                points: user.points, posts: posts, editcheck:true, perror: perror});
+                            var pull = "SELECT profile_img FROM users WHERE username = '" + user.username + "'";
+                            con.query(pull, function(err, image){
+                                res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                                    username2: user.username, image:image, points: user.points, posts: posts, editcheck: true, perror: perror});
+                            })
+
                         }else {
-                            //var temp = false;
-                            res.render('pages/user', {loggedin: loggedin, username : req.cookies.user, username2: user.username,
-                                points: user.points, posts: posts, editcheck:false, perror: perror});
+                            var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
+                            con.query(pull, function(err, image){
+                                res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                                    username2: user.username, image:image, points: user.points, posts: posts, editcheck: true, perror: perror});
+                            })
                         }
                     })
                 })
@@ -1277,15 +1285,11 @@ app.post('/useredit', function(req, res){
                     Connection.findUserByUsername(username, function(result){
                         Connection.getPostsByUsername(username, function(posts){
                             userloggedincheck(req,function(loggedin) {
-                                if (username == req.cookies.user){
-                                    //var temp = true;
+                                var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
+                                con.query(pull, function(err, image){
                                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                                        username2: username, points: result.points, posts: posts, editcheck: true, perror: perror});
-                                }else {
-                                    //var temp = false;
-                                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                                        username2: username, points: result.points, posts: posts, editcheck: false, perror: perror});
-                                }
+                                        username2: username, image:image, points: result.points, posts: posts, editcheck: true, perror: perror});
+                                })
                             });
                         })
                     })
@@ -1295,7 +1299,43 @@ app.post('/useredit', function(req, res){
     })
 
 });
+app.post('/imageUp.php', function (req, res){
+   if(!req.files){
+       return res.status(400).send('No files uploaded.');
+   }
+   console.log(req.files);
+   var file = req.files.usr_img;
+   var img_name = file.name;
+   //console.log("data:"+file.data);
+   file.mv('public/images/profImage/'+img_name, function(err){
 
+       if(err) return res.status(500).send(err);
+       var sql = "UPDATE users SET profile_img = '" + img_name + "' WHERE username = '" + req.cookies.user + "'";
+       var query = con.query(sql, function(err, result){
+           //console.log(err);
+           //console.log(result);
+           var username = req.cookies.user;
+           if (username == undefined){
+               userloggedincheck(req,function(loggedin) {
+                   res.render('pages/', {loggedin: loggedin, username : req.cookies.user, perror: perror});
+               });
+               return;
+           }
+           Connection.findUserByUsername(username, function(result){
+               Connection.getPostsByUsername(username, function(posts){
+                   userloggedincheck(req,function(loggedin) {
+                       var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
+                       con.query(pull, function(err, image){
+                           console.log(image);
+                           res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                               username2: username, image:img_name, points: result.points, posts: posts, editcheck: true, perror: perror});
+                       })
+                   });
+               })
+           })
+       });
+   });
+});
 app.get('/action_page.php', function (req,res){
 
     if (map.get(req.query.uname) !=  undefined ){
@@ -1409,23 +1449,20 @@ app.get('/user', function(req, res) {
     var username = req.cookies.user;
     if (username == undefined){
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user, perror: perror});
+            res.render('pages/', {loggedin: loggedin, username : req.cookies.user, perror: perror});
         });
         return;
     }
     Connection.findUserByUsername(username, function(result){
         Connection.getPostsByUsername(username, function(posts){
             userloggedincheck(req,function(loggedin) {
-                if (username == req.cookies.user){
-                    //var temp = true;
-                    console.log("Let him edit");
+                var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
+                con.query(pull, function(err, image){
+                    console.log(image);
+                    console.log(image.profile_img);
                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, points: result.points, posts: posts, editcheck: true, perror: perror});
-                }else {
-                    //var temp = false;
-                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, points: result.points, posts: posts, editcheck: false, perror: perror});
-                }
+                        username2: username, image:image, points: result.points, posts: posts, editcheck: true, perror: perror});
+                })
             });
         })
     })
@@ -1509,13 +1546,17 @@ app.post('/user',function (req,res){
         Connection.getPostsByUsername(username, function(posts){
             userloggedincheck(req,function(loggedin) {
                 if (username == req.cookies.user){
-                    var temp = true;
-                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, points: result.points, posts: posts, editcheck: temp, perror: perror});
+                    var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
+                    con.query(pull, function(err, image){
+                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                            username2: username, image:image, points: result.points, posts: posts, editcheck: true, perror: perror});
+                    })
                 }else {
-                    var temp = false;
-                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, points: result.points, posts: posts, editcheck: temp, perror: perror});
+                    var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
+                    con.query(pull, function(err, image){
+                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                            username2: username, image:image, points: result.points, posts: posts, editcheck: false, perror: perror});
+                    })
                 }
             });
         })

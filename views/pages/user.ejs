@@ -9,6 +9,7 @@
     <% include ../partials/header %>
 </header>
 <h2 id="theUser" name="theUser"><%=username2%></h2>
+<div><img alt="Profile Image: " src="http://localhost:8080/images/profImage/<%=image%>" class="img-responsive"></div>
 <hr>
 <h3>Point total: <%=points%></h3>
 <h3>Definitions:</h3>
@@ -29,41 +30,20 @@
 
 <% i++ }%>
 </p>
-<!--ol>copied from word.ejs FIX FIRST
-    <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/user2" method="post">
-        <input hidden id="theUser" name="theUser" value="</%= username %/>">
-        <input hidden id="posts" name="posts" value = "</%= posts %/>">
-        </% var i = 0; %/>
-
-        </%while (i < posts.length) { %/>
-        <li>
-            User: </%= posts[i].users_user_id %/><br>
-            Definition: </%= posts[i].definition %/><br>
-
-            Points: </%= posts[i].points %/>
-            <div class="form-group">
-                <input hidden id="thePost" name="thePost" value="</%= posts[i].definition %/>">
-                <input hidden id="points" name="points" value="</%= posts[i].points %/>">
-                <input id="vote</%= i %/>" name="vote</%= i %/>" type="submit" value="+" class="btn btn-primary">
-                <input id="vote</%= i %/>" name="vote</%= i %/>" type="submit" value="-" class="btn btn-primary">
-            </div>
-        </li>
-        </% i++ }%/>
-    </form>
-</ol-->
 <%if(editcheck){%>
 <a href="/useredit">Edit Profile</a>
 <a onclick="document.getElementById('delUser').style.display='block'">Delete User</a>
-<form action="/uploadimage.php">
-    Select an image for your profile: <input type="file" id="profImage" accept=".png" name="usr_img" required>
-    <input type="submit">
+<form action="imageUp.php" method="POST" enctype="multipart/form-data">
+    Select an image for your profile (PNG only): <input type="file" id="profImage" accept=".png" name="usr_img" required>
+    <input type="submit" value="Upload">
 </form>
+
 <%}%>
 <hr>
 <div id="delUser" class="modal">
     <form class="modal-content animate" action="/deleteUser.php">
         <div class="container">
-            <center><label for="delUser"><b>Are you sure you want to delete your user?</b></label></center>
+            <label for="delUser" align="center"><b>Are you sure you want to delete your user?</b></label>
             <button type="submit" >OK</button>
         </div>
         <div class="container" style="background-color:#f1f1f1">
