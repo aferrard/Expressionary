@@ -114,8 +114,8 @@ function registerUser(email, username, password, firstName, lastName, cb) {
     }
 }
 exports.addWord = addWord;
-function addWord(word, cb) {
-    var request = "INSERT INTO wordpage VALUES(NULL, '" + word + "', '" + 0 + "'";
+function addWord(content_type, word, cb) {
+    var request = "INSERT INTO wordpage VALUES(NULL, '"+ content_type +"', '" + word + "', '" + 0 + "'";
     con.query(request, function(err, result) {
         if(err) cb("fail1");
         else {

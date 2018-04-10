@@ -37,10 +37,9 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `expressionary_data`.`wordpage` (
   `wp_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `content-type` VARCHAR(45) NOT NULL,
-  `word` VARCHAR(60) NOT NULL,
+  `word` TEXT NOT NULL,
   `totalPoints` INT NOT NULL,
-  PRIMARY KEY (`wp_id`, `word`),
-  UNIQUE INDEX `word_UNIQUE` (`word` ASC))
+  PRIMARY KEY (`wp_id`))
 ENGINE = InnoDB;
 
 

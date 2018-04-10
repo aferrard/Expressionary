@@ -48,16 +48,19 @@ select * from users;
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Human",
     0);
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Person",
     0);
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Life",
     0);
 
@@ -68,16 +71,19 @@ insert into wordpage value(
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Internet",
     0);
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Food",
     0);
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Computer",
     0);
 
@@ -88,11 +94,13 @@ insert into wordpage value(
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Technology",
     0);
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Pneumonoultramicroscopicsilicovolcanoconiosis",
     0);
     
