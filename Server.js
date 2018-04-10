@@ -15,14 +15,16 @@ var array = [];
 var map = new HashMap();
 var app = express();
 
-var emailmessage1 = "Thank you for Registering with Expressionary.\nPlease enter this code to activate your account.\n     ";
-var emailmessage2 = "\nExpressionary Welcomes you.\n"
 app.use(cookieParser());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
 //app.use(cookie);
+var emailmessage1 = "Thank you for Registering with Expressionary.\nPlease enter this code to activate your account.\n     ";
+var emailmessage2 = "\nExpressionary Welcomes you.\n"
+
 var perror = "none";
 
 var User = function (username,password,email,firstname,lastname,randomstring){

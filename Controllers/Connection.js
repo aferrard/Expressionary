@@ -6,6 +6,7 @@ var con = mysql.createConnection({
     password: "sql123",
     database: "expressionary_data"
 });
+
 con.connect(function(err) {
     if (err) throw err;
     else {
@@ -289,6 +290,7 @@ function addPointToPost(definition, username, cb) {
 
 }
 exports.subPointToPost = subPointToPost;
+
 function subPointToPost(definition, username, cb) {
     con.query("SELECT points FROM posts WHERE definition = '" + definition + "'", function(err, Points) {
         con.query("UPDATE posts SET points = '" + (Points[0].points-1) + "' WHERE definition = '" + definition + "'", function(err, result) {
