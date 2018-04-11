@@ -1357,6 +1357,7 @@ app.post('/imageUp.php', function (req, res){
        });
    });
 });
+
 app.get('/validate.php',function(req,res){
     if (map.get(req.query.uname) !=  undefined ){
         if (map.get(req.query.uname)._randomstring == req.query.valid){
@@ -1384,6 +1385,7 @@ app.get('/validate.php',function(req,res){
         });
         }
 });
+
 app.get('/action_page.php', function (req,res){
 
     if (map.get(req.query.uname) !=  undefined ){
@@ -1443,18 +1445,26 @@ app.post('/register', function (req,res) {
     var email = req.body.email;
     var password = req.body.password;
 
-    // Connection.registerUser(email,username,password,firstname,lastname,function(result){
-    //     res.render('pages/registration', {loggedin: false, username : req.cookies.user, perror: "Successfully Registered"});
-    //    // map.delete(username);
-    //     return;
-    // });
 
     if (email.length == 0){
         userloggedincheck(req,function(loggedin) {
             res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please enter valid email"})
         });
         return;
-    }else {
+    }else if (username.length==0){
+        userloggedincheck(req,function(loggedin) {
+            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username Cannot be empty"})
+        });
+    }else if (password.length == 0) {
+        userloggedincheck(req, function (loggedin) {
+            res.render('pages/registration', {
+                loggedin: loggedin,
+                username: req.cookies.user,
+                perror: "Password Cannot be empty"
+            })
+        });
+    }
+    else {
         var random = randomstring.generate();
         var Person = new User(username,password,email,firstname,lastname, random);
         map.set(username,Person);
@@ -1462,9 +1472,9 @@ app.post('/register', function (req,res) {
         userloggedincheck(req,function(loggedin) {
             res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please validate your account before continuing"})
         });
-        return;
-    }
 
+    }
+    return;
 
     Connection.registerUser(email,username,password,firstname,lastname,function (result){
         if (result=="failure registering user"){
@@ -1626,10 +1636,20 @@ app.get('/validate.php',function(req,res){
                 var email = map.get(username)._email;
                 var firstname = map.get(username)._firstname;
                 var lastname = map.get(username)._lastname;
-                Connection.registerUser(email,reguname,password,firstname,lastname,function(result){
-                    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Successfully Registered"});
-                    map.delete(username);
-                    return;
+
+                Connection.registerUser(email,username,password,firstname,lastname,function(result){
+                    if (result != "success"){
+                        userloggedincheck(req,function(loggedin) {
+                            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username already exists. Please try again"});
+                        });
+                    }else {
+                        res.render('pages/registration', {
+                            loggedin: loggedin,
+                            username: req.cookies.user,
+                            perror: "Successfully Registered"
+                        });
+                        map.delete(username);
+                    }
                 });
             });
         }else {
