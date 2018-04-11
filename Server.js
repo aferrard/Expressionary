@@ -1139,7 +1139,7 @@ app.post('/word', function(req, res) {
                 if (result == "User Does not exist"){
                     console.error("SEVERE PROBLEM. SOMEONE IS TRYING TO HACK")
                 }
-                con.query("INSERT INTO posts VALUE (NULL, NOW(), 0, '" + definition + "', "+ result +", " + wpid + ");", function(err, result) {
+                con.query("INSERT INTO posts VALUE (NULL, NOW(), 0, 'text', '" + definition + "', "+ result +", " + wpid + ");", function(err, result) {
                 if (err) throw err;
                 else {
                     console.log("ERROR");
@@ -1461,10 +1461,11 @@ app.get('/user', function(req, res) {
             userloggedincheck(req,function(loggedin) {
                 var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
                 con.query(pull, function(err, image){
+                    console.log(username);
                     console.log(image);
-                    console.log(image.profile_img);
+                    console.log(image[0].profile_img);
                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, image:image, points: result.points, posts: posts, editcheck: true, perror: perror});
+                        username2: username, image:image[0].profile_img, points: result.points, posts: posts, editcheck: true, perror: perror});
                 })
             });
         })
@@ -1552,13 +1553,13 @@ app.post('/user',function (req,res){
                     var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
                     con.query(pull, function(err, image){
                         res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                            username2: username, image:image, points: result.points, posts: posts, editcheck: true, perror: perror});
+                            username2: username, image:image[0].profile_img, points: result.points, posts: posts, editcheck: true, perror: perror});
                     })
                 }else {
                     var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
                     con.query(pull, function(err, image){
                         res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                            username2: username, image:image, points: result.points, posts: posts, editcheck: false, perror: perror});
+                            username2: username, image:image[0].profile_img, points: result.points, posts: posts, editcheck: false, perror: perror});
                     })
                 }
             });
