@@ -1299,8 +1299,8 @@ app.post('/useredit', function(req, res){
             })
         })
     })
-
 });
+
 app.post('/imageUp.php', function (req, res){
    if(!req.files){
        return res.status(400).send('No files uploaded.');
@@ -1338,6 +1338,7 @@ app.post('/imageUp.php', function (req, res){
        });
    });
 });
+
 app.get('/action_page.php', function (req,res){
 
     if (map.get(req.query.uname) !=  undefined ){
@@ -1575,6 +1576,16 @@ app.post('/w1',function (req,res){
             })
         })
     })
+});
+
+app.get('/suggest',function (req,res) {
+    userloggedincheck(req,function(loggedin) {
+        res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: perror});
+    })
+});
+
+app.post('/suggest',function(req,res){
+    res.send(req.body.suggested);
 });
 
 app.listen(8080);
