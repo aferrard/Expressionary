@@ -1299,8 +1299,8 @@ app.post('/useredit', function(req, res){
             })
         })
     })
-
 });
+
 app.post('/imageUp.php', function (req, res){
    if(!req.files){
        return res.status(400).send('No files uploaded.');
@@ -1338,6 +1338,7 @@ app.post('/imageUp.php', function (req, res){
        });
    });
 });
+
 app.get('/action_page.php', function (req,res){
 
     if (map.get(req.query.uname) !=  undefined ){
@@ -1460,10 +1461,11 @@ app.get('/user', function(req, res) {
             userloggedincheck(req,function(loggedin) {
                 var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
                 con.query(pull, function(err, image){
+                    console.log(username);
                     console.log(image);
-                    console.log(image.profile_img);
+                    console.log(image[0].profile_img);
                     res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, image:image, points: result.points, posts: posts, editcheck: true, perror: perror});
+                        username2: username, image:image[0].profile_img, points: result.points, posts: posts, editcheck: true, perror: perror});
                 })
             });
         })
@@ -1551,13 +1553,13 @@ app.post('/user',function (req,res){
                     var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
                     con.query(pull, function(err, image){
                         res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                            username2: username, image:image, points: result.points, posts: posts, editcheck: true, perror: perror});
+                            username2: username, image:image[0].profile_img, points: result.points, posts: posts, editcheck: true, perror: perror});
                     })
                 }else {
                     var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
                     con.query(pull, function(err, image){
                         res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                            username2: username, image:image, points: result.points, posts: posts, editcheck: false, perror: perror});
+                            username2: username, image:image[0].profile_img, points: result.points, posts: posts, editcheck: false, perror: perror});
                     })
                 }
             });
@@ -1575,6 +1577,16 @@ app.post('/w1',function (req,res){
             })
         })
     })
+});
+
+app.get('/suggest',function (req,res) {
+    userloggedincheck(req,function(loggedin) {
+        res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: perror});
+    })
+});
+
+app.post('/suggest',function(req,res){
+    res.send(req.body.suggested);
 });
 
 app.listen(8080);
