@@ -66,6 +66,7 @@ insert into wordpage value(
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Artificial Intelligence",
     0);
 
@@ -89,6 +90,7 @@ insert into wordpage value(
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Machine",
     0);
 
@@ -127,7 +129,7 @@ delete from posts where wordPage_wp_id = 3;
 select * from posts;
 
 
-insert into users value(
+/*insert into users value(
 	#shuold fail due to duplicate username
 	NULL,
     0,
@@ -135,4 +137,4 @@ insert into users value(
     "thatguy",
     "thatguyotherpass",
     NULL,
-    NULL);
+    NULL);*/
