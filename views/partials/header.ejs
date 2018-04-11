@@ -9,10 +9,10 @@
 			<li><a href="/">Home</a></li>
 			<li><a href="/contact">Contact</a></li>
 			<li><a href="/developer">Updates</a></li>
-			<li><a href="/wordlist">Word List</a></li>
+			<li><a href="/appendix">Appendix</a></li>
             <li><a href="/search">Search</a></li>
-            <li><a href="/random">Random Word</a></li>
-			<li><a href="/suggest">Suggest a Word?</a></li>
+            <li><a href="/random">Random</a></li>
+			<li><a href="/suggest">Suggest New Content</a></li>
 			<!--<//%var loggedin = false;%>-->
 			<%if(!loggedin){%>
 			<li><a href="/register">Register</a></li>
@@ -41,6 +41,7 @@
 				<form class="modal-content animate" action="/validate.php">
 					<div class="container">
 						<label for="validate" align="center"><b><%=perror%></b></label>
+						<input type="text" placeholder="Username" name="uname" required>
 						<input type="text" placeholder="Enter Validation Code" name="valid" required>
 						<button type="submit" >OK</button>
 					</div>

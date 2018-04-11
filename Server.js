@@ -105,23 +105,52 @@ app.post('/', function(req, res) {
     //add to mailing list table
 });
 
-app.get('/wordlist', function(req,res) {
+app.get('/appendix', function(req,res) {
     Connection.getWordPages(function(wordPages) {
-        userloggedincheck(req,function(loggedin) {
-            res.render('pages/wordlist', {loggedin: loggedin, username : req.cookies.user, wordPages : wordPages, perror: perror});
-        })
-    })
+        Connection.getUsers(function(users){
+            userloggedincheck(req,function(loggedin) {
+                res.render('pages/wordlist', {loggedin: loggedin, username : req.cookies.user, wordPages : wordPages, users: users, perror: perror});
+            })
+        });
+    });
 });
 
-app.post('/wordlist', function(req,res) {
+app.post('/appendix', function(req,res) {
+    console.log(req.body.word);
+    console.log(req.body.user);
     var word = req.body.word;
-    Connection.getwpFromWord(word, function(wpid) {
-        Connection.getPostsFromWordId(wpid, function(posts) {
+    var username = req.body.user;
+    if(username == undefined){
+        Connection.getwpFromWord(word, function(wpid) {
+            Connection.getPostsFromWordId(wpid, function(posts) {
                 userloggedincheck(req,function(loggedin) {
                     res.render('pages/word', {loggedin: loggedin, username: req.cookies.user, word: word , posts: posts, perror: perror});
                 })
+            })
         })
-    })
+    }else if(word == undefined){
+        Connection.findUserByUsername(username, function(user){
+            Connection.getPostsByUsername(username, function (posts) {
+                userloggedincheck(req, function (loggedin) {
+                    if (username == req.cookies.user){
+                        var pull = "SELECT profile_img FROM users WHERE username = '" + user.username + "'";
+                        con.query(pull, function(err, image){
+                            res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                                username2: user.username, image:image, points: user.points, posts: posts, editcheck: true, perror: perror});
+                        })
+                    }else {
+                        var pull = "SELECT profile_img FROM users WHERE username = '" + user.username + "'";
+                        con.query(pull, function(err, image){
+                            res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                                username2: user.username, image:image[0].profile_img, points: user.points, posts: posts, editcheck: true, perror: perror});
+                        })
+                    }
+                })
+            })
+        })
+    }
+
+
 });
 
 app.post('/word2', function(req, res) {
@@ -1217,14 +1246,14 @@ app.post('/search', function(req,res) {
                             var pull = "SELECT profile_img FROM users WHERE username = '" + user.username + "'";
                             con.query(pull, function(err, image){
                                 res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                                    username2: user.username, image:image, points: user.points, posts: posts, editcheck: true, perror: perror});
+                                    username2: user.username, image:image[0].profile_img, points: user.points, posts: posts, editcheck: true, perror: perror});
                             })
 
                         }else {
                             var pull = "SELECT profile_img FROM users WHERE username = '" + user.username + "'";
                             con.query(pull, function(err, image){
                                 res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                                    username2: user.username, image:image, points: user.points, posts: posts, editcheck: true, perror: perror});
+                                    username2: user.username, image:image[0].profile_img, points: user.points, posts: posts, editcheck: true, perror: perror});
                             })
                         }
                     })
@@ -1329,7 +1358,33 @@ app.post('/imageUp.php', function (req, res){
        });
    });
 });
-
+app.get('/validate.php',function(req,res){
+    if (map.get(req.query.uname) !=  undefined ){
+        if (map.get(req.query.uname)._randomstring == req.query.valid){
+            userloggedincheck(req,function(loggedin) {
+                var username = req.query.uname;
+                var reguname = map.get(username)._username;
+                var password = map.get(username)._password;
+                var email = map.get(username)._email;
+                var firstname = map.get(username)._firstname;
+                var lastname = map.get(username)._lastname;
+                Connection.registerUser(email,reguname,password,firstname,lastname,function(result){
+                    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Successfully Registered"});
+                    map.delete(username);
+                    return;
+                    });
+                });
+            }else {
+            userloggedincheck(req,function(loggedin) {
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Invalid Validation Code"})
+            });
+            }
+    }else {
+        userloggedincheck(req,function(loggedin) {
+            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Invaid Username"})
+        });
+        }
+});
 app.get('/action_page.php', function (req,res){
 
     if (map.get(req.query.uname) !=  undefined ){

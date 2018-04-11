@@ -37,7 +37,7 @@
         <%while (i < posts.length) { %>
         <li>
             <%console.log(posts);%>
-            User: <%= posts[i].username %><br>
+            User: <%= posts[i].username %><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=users[i].profile_img%>" class="img-responsive"><br>
             --<%=posts[i].username%>'s total points: <%=posts[i].userpoints%><br>
             Definition: <%= posts[i].definition %><br>
 
