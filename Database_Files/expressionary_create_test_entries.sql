@@ -5,6 +5,7 @@ insert into users value(
     "janesemail@serve.com",
     "janeuser",
     "janepass",
+    NULL,
     "Jane",
     "Doe");
 
@@ -14,6 +15,7 @@ insert into users value(
     "johnsemail@serve.com",
     "johnuser",
     "johnpass",
+    NULL,
     "John",
     "Smith");
 
@@ -23,6 +25,7 @@ insert into users value(
     "ayushsemail@serve.com",
     "ayushuser",
     "ayushpass",
+    NULL,
     "Ayush",
     "Patel");
 
@@ -32,6 +35,7 @@ insert into users value(
     "barrysemail@serve.com",
     "barryuser",
     "barrypass",
+    NULL,
     "Barry",
     "Allen");
 
@@ -41,6 +45,7 @@ insert into users value(
     "brucesemail@serve.com",
     "bruceuser",
     "brucepass",
+    NULL,
     "Bruce",
     "Wayne");
     
