@@ -743,6 +743,30 @@ function updateProfileImg(username, img, cb) {
     });
 }
 
+exports.postSuggestion = postSuggestion;
+function postSuggestion(username, suggestion, cb) {
+    //NULL, NOW(), 0, 'suggestion', suggestion, user_id, wp_id_for_suggestion_page
+    con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, user) {
+        if(err) {
+            cb(err);
+        } else {
+            con.query("SELECT wp_id FROM wordpage WHERE word = 'suggestionPage'", function(err,page) {
+                if(err) {
+                    cb(err);
+                } else {
+                    con.query("INSERT INTO posts VALUE(NULL, NOW(), 0, 'suggestion'," + user[0].user_id + ", " + page[0].wp_id + ")", function (err, result) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            cb("suggestion posted");
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
 /*function getImageData(image) {
     var fs = require('fs');
     fs.readFile(image, function(err, result) {
