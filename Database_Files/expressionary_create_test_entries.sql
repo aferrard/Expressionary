@@ -117,6 +117,7 @@ insert into posts value(
 	NULL,
     NOW(),
     0,
+    "text",
     "homosapien",
     1,
     1);
@@ -125,6 +126,7 @@ insert into posts value(
 	NULL,
     NOW(),
     0,
+    "text",
     "Intelligent animal",
     4,
     1);

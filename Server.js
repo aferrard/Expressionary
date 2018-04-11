@@ -1139,7 +1139,7 @@ app.post('/word', function(req, res) {
                 if (result == "User Does not exist"){
                     console.error("SEVERE PROBLEM. SOMEONE IS TRYING TO HACK")
                 }
-                con.query("INSERT INTO posts VALUE (NULL, NOW(), 0, '" + definition + "', "+ result +", " + wpid + ");", function(err, result) {
+                con.query("INSERT INTO posts VALUE (NULL, NOW(), 0, 'text', '" + definition + "', "+ result +", " + wpid + ");", function(err, result) {
                 if (err) throw err;
                 else {
                     console.log("ERROR");
