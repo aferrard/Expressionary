@@ -86,6 +86,8 @@ function registerUser(email, username, password, firstName, lastName, cb) {
         cb("password is too long");
         execute = false;
     }
+
+
     if(execute){
         /*var image;
         var fs = require('fs');
@@ -101,15 +103,26 @@ function registerUser(email, username, password, firstName, lastName, cb) {
                 });
             }
         });*/
-        var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', 'default.png', '" + firstName + "', '" + lastName + "')";
-        //console.log(request);
-        con.query(request, function (err, result) {
-
-            if (err) {
-                cb("failure registering user")
+        con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, result){
+            if(err) {
+                cb(err);
             } else {
-               // console.log(result)
-                cb(result);
+                if(result.length != 0) {
+                    cb("failure registering user");
+                }
+                else {
+                    var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', 'default.png', '" + firstName + "', '" + lastName + "')";
+                    //console.log(request);
+                    con.query(request, function (err, result) {
+
+                        if (err) {
+                            cb("failure registering user")
+                        } else {
+                            // console.log(result)
+                            cb(result);
+                        }
+                    });
+                }
             }
         });
     }
