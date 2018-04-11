@@ -5,6 +5,7 @@ insert into users value(
     "janesemail@serve.com",
     "janeuser",
     "janepass",
+    "default.png",
     "Jane",
     "Doe");
 
@@ -14,6 +15,7 @@ insert into users value(
     "johnsemail@serve.com",
     "johnuser",
     "johnpass",
+    "default.png",
     "John",
     "Smith");
 
@@ -23,6 +25,7 @@ insert into users value(
     "ayushsemail@serve.com",
     "ayushuser",
     "ayushpass",
+    "default.png",
     "Ayush",
     "Patel");
 
@@ -32,6 +35,7 @@ insert into users value(
     "barrysemail@serve.com",
     "barryuser",
     "barrypass",
+    "default.png",
     "Barry",
     "Allen");
 
@@ -41,6 +45,7 @@ insert into users value(
     "brucesemail@serve.com",
     "bruceuser",
     "brucepass",
+    "default.png",
     "Bruce",
     "Wayne");
     
@@ -66,6 +71,7 @@ insert into wordpage value(
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Artificial Intelligence",
     0);
 
@@ -89,6 +95,7 @@ insert into wordpage value(
 
 insert into wordpage value(
 	NULL,
+    "word",
     "Machine",
     0);
 
@@ -110,6 +117,7 @@ insert into posts value(
 	NULL,
     NOW(),
     0,
+    "text",
     "homosapien",
     1,
     1);
@@ -118,6 +126,7 @@ insert into posts value(
 	NULL,
     NOW(),
     0,
+    "text",
     "Intelligent animal",
     4,
     1);
@@ -127,7 +136,7 @@ delete from posts where wordPage_wp_id = 3;
 select * from posts;
 
 
-insert into users value(
+/*insert into users value(
 	#shuold fail due to duplicate username
 	NULL,
     0,
@@ -135,4 +144,4 @@ insert into users value(
     "thatguy",
     "thatguyotherpass",
     NULL,
-    NULL);
+    NULL);*/

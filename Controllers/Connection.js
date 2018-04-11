@@ -101,7 +101,7 @@ function registerUser(email, username, password, firstName, lastName, cb) {
                 });
             }
         });*/
-        var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', NULL, '" + firstName + "', '" + lastName + "')";
+        var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', 'default.png', '" + firstName + "', '" + lastName + "')";
         //console.log(request);
         con.query(request, function (err, result) {
 
