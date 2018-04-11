@@ -1123,7 +1123,6 @@ app.post('/word2', function(req, res) {
     }
 });
 
-
 app.post('/word', function(req, res) {
     var definition = req.body.newDef;
     console.log("ERROR!!");
@@ -1469,7 +1468,6 @@ app.get('/user', function(req, res) {
     })
 });
 
-
 app.get('/random', function(req, res) {
     var userz = [];
 	Connection.getWordPages(function(wordPages) {
@@ -1506,7 +1504,6 @@ app.get('/developer', function(req, res) {
         res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user, perror: perror});
     });
 });
-
 
 app.post('/contact', function(req, res) {
      var name = req.body.name;
@@ -1559,12 +1556,38 @@ app.get('/deleteUser.php', function(req,res){
                     res.render('pages/developer', {loggedin: loggedin, username: req.cookies.user, perror: "Deletion Failed"});
                 }
             });
-            //res.render('pages/developer', {loggedin: loggedin, username: req.cookies.user, perror: perror});
         }
     });
-  // res.send(req.cookies.user)
 });
 
+app.get('/validate.php',function(req,res){
+
+    if (map.get(req.query.uname) !=  undefined ){
+        if (map.get(req.query.uname)._randomstring == req.query.valid){
+            userloggedincheck(req,function(loggedin) {
+                var username = req.query.uname;
+                var reguname = map.get(username)._username;
+                var password = map.get(username)._password;
+                var email = map.get(username)._email;
+                var firstname = map.get(username)._firstname;
+                var lastname = map.get(username)._lastname;
+                Connection.registerUser(email,reguname,password,firstname,lastname,function(result){
+                    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Successfully Registered"});
+                    map.delete(username);
+                    return;
+                });
+            });
+        }else {
+            userloggedincheck(req,function(loggedin) {
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Invalid Validation Code"})
+            });
+        }
+    }else {
+        userloggedincheck(req,function(loggedin) {
+            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Invaid Username"})
+        });
+    }
+});
 
 app.post('/user',function (req,res){
     var username = req.body.user;
@@ -1588,7 +1611,6 @@ app.post('/user',function (req,res){
         })
     })
 });
-
 
 app.post('/w1',function (req,res){
     var word = req.body.word;

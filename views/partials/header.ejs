@@ -37,15 +37,16 @@
 			</form>
 		</div>
         <%}else if(perror == "Please validate your account before continuing"){%>
-			<div id="validate" class="emodal">
-				<form class="modal-content animate" action="/validate.php">
-					<div class="container">
-						<label for="validate" align="center"><b><%=perror%></b></label>
-						<input type="text" placeholder="Enter Validation Code" name="valid" required>
-						<button type="submit" >OK</button>
-					</div>
-				</form>
-			</div>
+        <div id="validate" class="emodal">
+            <form class="modal-content animate" action="/validate.php">
+                <div class="container">
+                    <label for="validate" align="center"><b>Please validate your account before continuing</b></label>
+                    <input type="text" placeholder="Username" name="uname" required>
+                    <input type="text" placeholder="Enter Validation Code" name="valid" required>
+                    <button type="submit" >OK</button>
+                </div>
+            </form>
+        </div>
 		<%}%>
 
 		<div id="id1" class="modal">

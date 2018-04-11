@@ -50,11 +50,12 @@
                 </div>
             </div>
         </form>
-        <a onclick="document.getElementById('validate').style.display='block'">Validate User</a>
-        <div id="validate" class="modal">
+        <a onclick="document.getElementById('validate1').style.display='block'">Validate User</a>
+        <div id="validate1" class="modal">
             <form class="modal-content animate" action="/validate.php">
                 <div class="container">
                     <label for="validate" align="center"><b>Please validate your account before continuing</b></label>
+                    <input type="text" placeholder="Username" name="uname" required>
                     <input type="text" placeholder="Enter Validation Code" name="valid" required>
                     <button type="submit" >OK</button>
                 </div>
