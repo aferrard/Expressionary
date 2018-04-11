@@ -21,7 +21,7 @@
             <ul>
                 <% var i = 0; %>
                 <%while (i < wordPages.length) { %>
-                <input id="word" name="word" type="submit" value="<%= wordPages[i].word %>" class="btn btn-primary">
+                <input id="word" name="word" type="submit" value="<%= wordPages[i].word %>" class="btn btn-sm" >
                 <br>
                 <% i++ }%>
             </ul>
@@ -34,7 +34,7 @@
             <ul>
                 <% var i = 0;%>
                 <% while (i < users.length){%>
-                <input id="user" name="user" type="submit" value="<%=users[i].username%>" class="btn btn-primary"><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=users[i].profile_img%>" class="img-responsive">
+                <input id="user" name="user" type="submit" value="<%=users[i].username%>" class="btn btn-sm"><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=users[i].profile_img%>" class="img-responsive">
                 <br>
                 <%i++ }%>
             </ul>
