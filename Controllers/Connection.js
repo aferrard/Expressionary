@@ -35,7 +35,7 @@ function getwpFromWord(word, cb) {
 exports.getPostsFromWordId = getPostsFromWordId;
 function getPostsFromWordId(wp_id, cb) {
     //var request = "SELECT posts.date, posts.points, posts.definition, users.username FROM posts, users WHERE posts. wordPage_wp_id = " + wp_id + "&& posts.users_user_id = users.user_id";
-    var request = "SELECT posts.*, users.username, users.points AS userpoints FROM posts, users WHERE posts.wordpage_wp_id = " + wp_id + " && posts.users_user_id = users.user_id";
+    var request = "SELECT posts.*, users.username, users.points AS userpoints, users.profile_img FROM posts, users WHERE posts.wordpage_wp_id = " + wp_id + " && posts.users_user_id = users.user_id";
     con.query(request, function(err, result) {
         if(err) cb("fail1");
         else {
