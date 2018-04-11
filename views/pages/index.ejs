@@ -38,7 +38,7 @@
                         <%});%>
                         <%while (i <= 10) { %>
 						<%if(topUsers[i-1] == undefined) break;%>
-                        <%= i%>: <input id="user" name="user" type="submit" value="<%=topUsers[i-1].username%>" class="btn btn-info">
+                        <%= i%>: <input id="user" name="user" type="submit" value="<%=topUsers[i-1].username%>" class="btn btn-info"><img width="40" height="40" src="http://localhost:8080/images/profImage/<%=topUsers[i-1].profile_img%>" class="img-responsive">
 						<br>
 						Total Points: <%=topUsers[i-1].points%><br>
                         <% i++ }%>

@@ -10,7 +10,7 @@
 </header>
 <h2 id="theUser" name="theUser"><%=username2%></h2>
 <%console.log(image);%>
-<div><img alt="Profile Image: " src="http://localhost:8080/images/profImage/<%=image%>" class="img-responsive"></div>
+<div><img width="25%" height="25%" alt="Profile Image: " src="http://localhost:8080/images/profImage/<%=image%>" class="img-responsive"></div>
 <hr>
 <h3>Point total: <%=points%></h3>
 <h3>Definitions:</h3>
@@ -35,10 +35,9 @@
 <a href="/useredit">Edit Profile</a>
 <a onclick="document.getElementById('delUser').style.display='block'">Delete User</a>
 <form action="imageUp.php" method="POST" enctype="multipart/form-data">
-    Select an image for your profile (PNG only): <input type="file" id="profImage" accept=".png" name="usr_img" required>
+    Select an image for your profile (PNG. JPG, JPEG only): <input type="file" id="profImage" accept=".png, .jpg, .jpeg" name="usr_img" required>
     <input type="submit" value="Upload">
 </form>
-
 <%}%>
 <hr>
 <div id="delUser" class="modal">
