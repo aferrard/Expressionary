@@ -35,7 +35,7 @@ function getwpFromWord(word, cb) {
 exports.getPostsFromWordId = getPostsFromWordId;
 function getPostsFromWordId(wp_id, cb) {
     //var request = "SELECT posts.date, posts.points, posts.definition, users.username FROM posts, users WHERE posts. wordPage_wp_id = " + wp_id + "&& posts.users_user_id = users.user_id";
-    var request = "SELECT posts.*, users.username, users.points AS userpoints FROM posts, users WHERE posts.wordpage_wp_id = " + wp_id + " && posts.users_user_id = users.user_id";
+    var request = "SELECT posts.*, users.username, users.points AS userpoints, users.profile_img FROM posts, users WHERE posts.wordpage_wp_id = " + wp_id + " && posts.users_user_id = users.user_id";
     con.query(request, function(err, result) {
         if(err) cb("fail1");
         else {
@@ -740,6 +740,30 @@ function updateProfileImg(username, img, cb) {
        } else {
            cb("updated profile image");
        }
+    });
+}
+
+exports.postSuggestion = postSuggestion;
+function postSuggestion(username, suggestion, cb) {
+    //NULL, NOW(), 0, 'suggestion', suggestion, user_id, wp_id_for_suggestion_page
+    con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, user) {
+        if(err) {
+            cb(err);
+        } else {
+            con.query("SELECT wp_id FROM wordpage WHERE word = 'suggestionPage'", function(err,page) {
+                if(err) {
+                    cb(err);
+                } else {
+                    con.query("INSERT INTO posts VALUE(NULL, NOW(), 0, 'suggestion'," + user[0].user_id + ", " + page[0].wp_id + ")", function (err, result) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            cb("suggestion posted");
+                        }
+                    });
+                }
+            });
+        }
     });
 }
 
