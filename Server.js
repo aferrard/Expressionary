@@ -1155,15 +1155,16 @@ app.post('/word', function(req, res) {
 });
 
 app.post('/search', function(req,res) {
-    //console.log("1- ERROR!!");
     var term = req.body.search;
     var type = req.body.searchType;
+    console.log(term);
     if (type == "Word") {
+        console.log("WORD?"+term);
+
         //search database for words
         con.query("SELECT * FROM wordpage WHERE word = '" + term + "'", function(err, result) {
             if (err) throw err;
-            console.log("err: "+err);
-            console.log("result: "+result);
+
             if(result === undefined || result.length == 0 ){
                 userloggedincheck(req,function(loggedin) {
                     //console.log("wordexist check");
@@ -1182,16 +1183,6 @@ app.post('/search', function(req,res) {
                                 console.log("pERROR");
                             }
                             else {
-                                // p = posts;
-                                // console.log(posts);
-                                // for (var i = 0; i < posts.length; i++) {
-                                //     Connection.getUsernameByPost(posts[i], function(username) {
-                                //         //console.log("USERNAME AGAIN: " + username);
-                                //         //userz[i] = username;
-                                //         //console.log(userz[0]);
-                                //         // posts[i].username = "barryuser";
-                                //     })
-                                // }
                                 userloggedincheck(req, function (loggedin) {
                                     res.render('pages/word', {
                                         loggedin: loggedin,
@@ -1230,7 +1221,7 @@ app.post('/search', function(req,res) {
                             })
 
                         }else {
-                            var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
+                            var pull = "SELECT profile_img FROM users WHERE username = '" + user.username + "'";
                             con.query(pull, function(err, image){
                                 res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
                                     username2: user.username, image:image, points: user.points, posts: posts, editcheck: true, perror: perror});
@@ -1398,6 +1389,12 @@ app.post('/register', function (req,res) {
     var email = req.body.email;
     var password = req.body.password;
 
+    // Connection.registerUser(email,username,password,firstname,lastname,function(result){
+    //     res.render('pages/registration', {loggedin: false, username : req.cookies.user, perror: "Successfully Registered"});
+    //    // map.delete(username);
+    //     return;
+    // });
+
     if (email.length == 0){
         userloggedincheck(req,function(loggedin) {
             res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please enter valid email"})
@@ -1543,6 +1540,31 @@ app.get('/logout',function (req,res) {
         });
     });
 });
+
+app.get('/deleteUser.php', function(req,res){
+   var username = req.cookies.user;
+   var perror = "";
+    userloggedincheck(req,function(loggedin) {
+        if (loggedin == false){
+            res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user, perror: "Please Log in Or Register first"});
+        }else {
+            Connection.deleteUser(username,function(result){
+                if (result == "deletion successful"){
+                    var index = array.indexOf(req.cookies.user); // get the index of the user
+                    array.splice(index,1); // delete 1 entry at index
+                    res.cookie('user', '', {expires: new Date(0)}); // remove user from the cookie
+                    res.cookie('password', '', {expires: new Date(0)}); // remove pass from the cookie
+                    res.render('pages/developer', {loggedin: loggedin, username: req.cookies.user, perror: "Deletion Successful"});
+                }else {
+                    res.render('pages/developer', {loggedin: loggedin, username: req.cookies.user, perror: "Deletion Failed"});
+                }
+            });
+            //res.render('pages/developer', {loggedin: loggedin, username: req.cookies.user, perror: perror});
+        }
+    });
+  // res.send(req.cookies.user)
+});
+
 
 app.post('/user',function (req,res){
     var username = req.body.user;
