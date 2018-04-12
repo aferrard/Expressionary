@@ -24,6 +24,8 @@
                         <%topWords.sort(function(a, b){%>
                         <%return b.totalPoints - a.totalPoints;%>
                         <%});%>
+
+
                         <%while (i <= 10) { %>
 						<%if(topUsers[i-1] == undefined) break;%>
                         <%= i%>: <input id="user" name="user" type="submit" value="<%=topUsers[i-1].username%>" class="btn btn-info"><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=topUsers[i-1].profile_img%>" class="img-responsive">
