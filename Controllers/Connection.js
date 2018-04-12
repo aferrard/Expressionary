@@ -103,11 +103,11 @@ function registerUser(email, username, password, firstName, lastName, cb) {
                 });
             }
         });*/
-        con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, result){
+        con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, user){
             if(err) {
                 cb(err);
             } else {
-                if(result.length != 0) {
+                if(user.length != 0) {
                     cb("failure registering user");
                 }
                 else {
