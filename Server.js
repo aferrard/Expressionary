@@ -20,10 +20,11 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(fileUpload());
 //app.use(cookie);
 var emailmessage1 = "Thank you for Registering with Expressionary.\nPlease enter this code to activate your account.\n     ";
-var emailmessage2 = "\nExpressionary Welcomes you.\n"
+var emailmessage2 = "\nExpressionary Welcomes you.\n";
 
 var perror = "none";
 
@@ -1285,13 +1286,22 @@ app.get('/register', function(req, res) {
 });
 
 app.get('/useredit', function(req, res){
-    Connection.findUserByUsername(req.cookies.user,function(user) {
-        userloggedincheck(req,function(loggedin) {
-            res.render('pages/useredit', {loggedin: loggedin , username : req.cookies.user , usere: user, perror: perror});
-        //    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "User Doesn't Exist"});
-        });
-    })
+    userloggedincheck(req,function (loggedin) {
+        if (loggedin == false){
+            res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: "Please Log In First"});
+            return;
+        }else {
+            Connection.findUserByUsername(req.cookies.user,function(user) {
+                userloggedincheck(req,function(loggedin) {
+                    res.render('pages/useredit', {loggedin: loggedin , username : req.cookies.user , usere: user, perror: perror});
+                    //    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, regError: "User Doesn't Exist"});
+                });
+            })
+        }
+    });
+
 });
+
 app.post('/useredit', function(req, res){
     var username = req.cookies.user;
     var newpass = req.body.pass;
@@ -1510,27 +1520,29 @@ app.post('/register', function (req,res) {
 
 app.get('/user', function(req, res) {
 
+
     var username = req.cookies.user;
+
     if (username == undefined){
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/', {loggedin: loggedin, username : req.cookies.user, perror: perror});
+            res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: "Please Login First"});
         });
-        return;
-    }
-    Connection.findUserByUsername(username, function(result){
-        Connection.getPostsByUsername(username, function(posts){
-            userloggedincheck(req,function(loggedin) {
-                var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
-                con.query(pull, function(err, image){
-                    console.log(username);
-                    console.log(image);
-                    console.log(image[0].profile_img);
-                    res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
-                        username2: username, image:image[0].profile_img, points: result.points, posts: posts, editcheck: true, perror: perror});
-                })
-            });
+    }else {
+        Connection.findUserByUsername(username, function(result){
+            Connection.getPostsByUsername(username, function(posts){
+                userloggedincheck(req,function(loggedin) {
+                    var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
+                    con.query(pull, function(err, image){
+                        console.log(username);
+                        console.log(image);
+                        console.log(image[0].profile_img);
+                        res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
+                            username2: username, image:image[0].profile_img, points: result.points, posts: posts, editcheck: true, perror: perror});
+                    })
+                });
+            })
         })
-    })
+    }
 });
 
 app.get('/random', function(req, res) {
@@ -1665,7 +1677,17 @@ app.get('/validate.php',function(req,res){
 });
 
 app.post('/user',function (req,res){
+    // userloggedincheck(req,function (loggedin) {
+    //     if (loggedin == false){
+    //         res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: "Please Log In First"});
+    //         return;
+    //     }
+    // });
     var username = req.body.user;
+
+    if (username == undefined){
+        return;
+    }
     Connection.findUserByUsername(username, function(result){
         Connection.getPostsByUsername(username, function(posts){
             userloggedincheck(req,function(loggedin) {
