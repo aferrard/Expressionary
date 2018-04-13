@@ -192,7 +192,8 @@ exports.getUserByUsername = getUserByUsername;
 function getUserByUsername(username, cb) {
     con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function(err, result) {
         if(err) {
-            cb(err);
+            //cb(err);
+            cb("error");
         } else if(result.length == 0) {
             cb("user does not exist");
         } else {
