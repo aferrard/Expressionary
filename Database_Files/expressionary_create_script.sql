@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `expressionary_data`.`users` (
   `profile_img` TEXT NULL,
   `first_name` VARCHAR(45) NULL,
   `last_name` VARCHAR(45) NULL,
+  `notification` INT NOT NULL,
   PRIMARY KEY (`user_id`, `email`, `username`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC))
 ENGINE = InnoDB;
@@ -50,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `expressionary_data`.`posts` (
   `post_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `date` DATETIME NOT NULL,
   `points` INT NOT NULL,
+  `content_type` VARCHAR(45) NOT NULL,
   `definition` TEXT NOT NULL,
   `users_user_id` INT UNSIGNED NOT NULL,
   `wordpage_wp_id` INT UNSIGNED NOT NULL,

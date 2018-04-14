@@ -7,7 +7,8 @@ insert into users value(
     "janepass",
     "default.png",
     "Jane",
-    "Doe");
+    "Doe",
+    0);
 
 insert into users value(
 	NULL,
@@ -17,7 +18,8 @@ insert into users value(
     "johnpass",
     "default.png",
     "John",
-    "Smith");
+    "Smith",
+    0);
 
 insert into users value(
 	NULL,
@@ -27,7 +29,8 @@ insert into users value(
     "ayushpass",
     "default.png",
     "Ayush",
-    "Patel");
+    "Patel",
+    0);
 
 insert into users value(
 	NULL,
@@ -37,7 +40,8 @@ insert into users value(
     "barrypass",
     "default.png",
     "Barry",
-    "Allen");
+    "Allen",
+    0);
 
 insert into users value(
 	NULL,
@@ -47,7 +51,8 @@ insert into users value(
     "brucepass",
     "default.png",
     "Bruce",
-    "Wayne");
+    "Wayne",
+    0);
     
 select * from users;
 
