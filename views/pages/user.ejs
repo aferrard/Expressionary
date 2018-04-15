@@ -34,12 +34,16 @@
 
 
 <%if(editcheck){%>
-<a href="/useredit">Edit Profile</a>
+<a href="/useredit">Edit Profile</a><br>
 <a onclick="document.getElementById('delUser').style.display='block'">Delete User</a>
+<br>
 <form action="imageUp.php" method="POST" enctype="multipart/form-data">
     Select an image for your profile (PNG. JPG, JPEG only): <input type="file" id="profImage" accept=".png, .jpg, .jpeg" name="usr_img" required>
     <input type="submit" value="Upload">
 </form>
+<br>
+<a href="/unsub">Unsubscribe</a> from Expressionary Updates<br>
+<a href="/sub">Subscribe</a> to Expressionary Updates
 <%}%>
 <hr>
 <div id="delUser" class="modal">
