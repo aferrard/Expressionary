@@ -49,7 +49,7 @@ function getPostsFromWordId(wp_id, cb) {
 
 exports.getWordPages = getWordPages;
 function getWordPages(cb) {
-    con.query("SELECT word FROM wordpage", function(err, result) {
+    con.query("SELECT word, content_type FROM wordpage", function(err, result) {
         if (err) cb("fail1");
         else {
             var z = JSON.parse(JSON.stringify(result));
