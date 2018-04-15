@@ -116,6 +116,18 @@ insert into wordpage value(
     "Pneumonoultramicroscopicsilicovolcanoconiosis",
     0);
     
+insert into wordpage value(
+	NULL,
+    "image",
+    "Syria_bombing.png",
+    0);
+    
+insert into wordpage value(
+	NULL,
+    "image",
+    "starwarspresidential",
+    0);
+    
 select * from wordpage;
 
 insert into posts value(
