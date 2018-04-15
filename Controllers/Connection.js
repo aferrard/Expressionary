@@ -244,6 +244,14 @@ function addPointToPost(definition, username, cb) {
  //   console.log("definition: " + definition);
  //   console.log("username: " + username);
     //var pt = parseInt(points) + 1;
+    var newDef = "";
+    for(var i = 0; i < definition.length; i++){
+        if(definition[i] == '\'') {
+            newDef = newDef.concat('\\');
+        }
+        newDef = newDef.concat(definition[i]);
+    }
+    definition = newDef;
     con.query("SELECT points FROM posts WHERE definition = '" + definition + "'",function(err, Points) {
         if(err) {cb(err)}
         else {
@@ -306,6 +314,14 @@ function addPointToPost(definition, username, cb) {
 exports.subPointToPost = subPointToPost;
 
 function subPointToPost(definition, username, cb) {
+    var newDef = "";
+    for(var i = 0; i < definition.length; i++){
+        if(definition[i] == '\'') {
+            newDef = newDef.concat('\\');
+        }
+        newDef = newDef.concat(definition[i]);
+    }
+    definition = newDef;
     con.query("SELECT points FROM posts WHERE definition = '" + definition + "'", function(err, Points) {
         con.query("UPDATE posts SET points = '" + (Points[0].points-1) + "' WHERE definition = '" + definition + "'", function(err, result) {
             if (err) throw err; else {
@@ -366,6 +382,14 @@ exports.deleteVote = deleteVote;
 function deleteVote(definition, username, cb) {
     var postid;
     var userid;
+    var newDef = "";
+    for(var i = 0; i < definition.length; i++){
+        if(definition[i] == '\'') {
+            newDef = newDef.concat('\\');
+        }
+        newDef = newDef.concat(definition[i]);
+    }
+    definition = newDef;
     con.query("SELECT post_id, users_user_id FROM posts WHERE definition = '" + definition + "'", function(err, outerpost) {
         if(err) {
             cb(err);
@@ -511,6 +535,16 @@ exports.getVotes = getVotes;
 function getVotes(definition, username, cb) {
     var postid;
     var userid;
+    //console.log("voted definition: "+definition);
+    var newDef = "";
+    for(var i = 0; i < definition.length; i++){
+        if(definition[i] == '\'') {
+            newDef = newDef.concat('\\');
+        }
+        newDef = newDef.concat(definition[i]);
+    }
+    definition = newDef;
+    //console.log("new Definition: " + definition);
     con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function(err, result) {
         if(err) {
             cb(err);
