@@ -38,7 +38,7 @@ insert into users value(
     "barrysemail@serve.com",
     "barryuser",
     "barrypass",
-    "default.png",
+    "Flash_series_logo.png",
     "Barry",
     "Allen",
     0);
@@ -49,7 +49,7 @@ insert into users value(
     "brucesemail@serve.com",
     "bruceuser",
     "brucepass",
-    "default.png",
+    "Batman-logo-A33AD65044-seeklogo.com.png",
     "Bruce",
     "Wayne",
     0);
