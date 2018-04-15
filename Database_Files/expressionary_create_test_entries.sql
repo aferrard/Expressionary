@@ -128,6 +128,30 @@ insert into wordpage value(
     "starwarspresidential.png",
     0);
     
+insert into wordpage value(
+	NULL,
+    "image",
+    "picassoGuernica.jpg",
+    0);
+    
+insert into wordpage value(
+	NULL,
+    "image",
+    "sunReacher.jpg",
+    0);
+    
+insert into wordpage value(
+	NULL,
+    "image",
+    "Waking-in-the-night.jpg",
+    0);
+    
+insert into wordpage value(
+	NULL,
+    "image",
+    "can-cats-and-dogs-be-friends-1.jpg",
+    0);
+    
 select * from wordpage;
 
 insert into posts value(
