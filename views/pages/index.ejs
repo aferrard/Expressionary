@@ -11,20 +11,18 @@
 
 	<main>
 		<div class="jumbotron">
-			<div class="row">
-				<div class="col-sm-7">
-					<h2 class="mt-1">Top Users</h2>
-					<form class="form-horizontal" role="form" style="width: 40%;" action="user" method="post">
+			<h1>Expressionary</h1>
+			<hr>
+			<div class="tab">
+				<button class="tablinks" style="width:auto;" onclick="openBoard(event, 'user')">Top Users</button>
+				<button class="tablinks" style="width:auto;" onclick="openBoard(event, 'word')">Top Words</button>
+			</div>
+					<form role="form" id="user" class="tabcontent" action="user" method="post">
 						<!--input hidden id="users" name="users" value = "</%= users %/>"-->
-
                         <%var i = 1; %>
                         <%topUsers.sort(function(a, b){%>
                         <%return b.points - a.points;%>
                         <%});%>
-                        <%topWords.sort(function(a, b){%>
-                        <%return b.totalPoints - a.totalPoints;%>
-                        <%});%>
-
 
                         <%while (i <= 10) { %>
 						<%if(topUsers[i-1] == undefined) break;%>
@@ -32,24 +30,34 @@
 						Total Points: <%=topUsers[i-1].points%><br>
                         <% i++ }%>
 					</form>
-				</div>
-				<div class="col-sm-5">
-					<h2 class="mt-10"> Top Words </h2>
-					<form class="form-horizontal" role="form" style="width: 50%;" action="w1" method="post">
+					<form role="form" id="word" class="tabcontent" action="w1" method="post">
 						<!--input hidden id="words" name="words" value = "</%= words %/>"-->
-
                         <%var i = 1; %>
-
+                        <%topWords.sort(function(a, b){%>
+                        <%return b.totalPoints - a.totalPoints;%>
+                        <%});%>
                         <%while (i <= 10) { %>
                         <%if(topWords[i-1] == undefined) break;%>
                         <%= i%>:<input id="word" name="word" type="submit" value="<%=topWords[i-1].word%>" class="btn btn-info">
-
 						<br>
 						Total Points: <%=topWords[i-1].totalPoints%><br>
                         <% i++ }%>
 					</form>
-				</div>
-			</div>
+			<script>
+				function openBoard(evt, boardContent){
+				  var i, tabcontent, tablinks;
+				  tabcontent = document.getElementsByClassName("tabcontent");
+				  for(i = 0; i < tabcontent.length; i++){
+				      tabcontent[i].style.display = "none";
+				  }
+				  tablinks = document.getElementsByClassName("tablinks");
+                    for (i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className = tablinks[i].className.replace(" active", "");
+                    }
+                    document.getElementById(boardContent).style.display = "block";
+                    evt.currentTarget.className += " active";
+				}
+			</script>
 			<hr>
 			<h2 class="mt-2">Join our Newsletter</h2>
 			<form class="form-horizontal" role="form" style="width: 100%;" action="http://localhost:8080/" method="post">
