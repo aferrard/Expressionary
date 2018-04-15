@@ -9,14 +9,13 @@
     <% include ../partials/header %>
 </header>
 <h2 id="theUser" name="theUser"><%=username2%></h2>
-<%console.log(image);%>
+
 <div><img width="25%" height="25%" alt="Profile Image: " src="http://localhost:8080/images/profImage/<%=image%>" class="img-responsive"></div>
 <hr>
 <h3>Point total: <%=points%></h3>
 <h3>Definitions:</h3>
 <p>
 <% var i = 0; %>
-    <%console.log(posts.length);%>
     <%if(posts[i] == undefined){%>
     <%posts.sort(function(a, b){%>
     <%return b.totalPoints - a.totalPoints;%>

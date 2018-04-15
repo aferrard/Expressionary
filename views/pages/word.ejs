@@ -53,42 +53,6 @@
                 <input id="vote<%= i %>" name="vote<%= i %>" title="unpressed" type="submit" value="-" class="btn btn-primary" onclick="<%= i %>update()">
 
             </div>
-            <!--script>
-                function </%= i%/>update(){
-                    if(document.getElementById("vote</%= i%/>").valueOf() == "+"){
-
-                        if(document.getElementById("vote</%= i%/>").title == "pressed"){
-                            document.getElementById("points").textContent--;
-                            document.getElementById("vote</%= i %/>").title = "unpressed";
-                            document.getElementById("vote</%= i %/>").style.background='white';
-                        }else{
-                            if(document.getElementById("vote</%= i%/>").title == "pressed"){
-                                document.getElementById("points").textContent++;
-                                document.getElementById("vote</%= i%/>").title = "unpressed";
-                                document.getElementById("vote</%= i%/>").style.background='white';
-                            }
-                            document.getElementById("points").textContent++;
-                            document.getElementById("vote</%= i%/>").title = "pressed";
-                            document.getElementById("vote</%= i%/>").style.background='blue';
-                        }
-                    }else{
-                        if(document.getElementById("decrement").title == "pressed"){
-                            document.getElementById("wordScore").textContent++;
-                            document.getElementById("decrement").title = "unpressed";
-                            document.getElementById("decrement").style.background='white';
-                        }else{
-                            if(document.getElementById("increment").title == "pressed"){
-                                document.getElementById("wordScore").textContent--;
-                                document.getElementById("increment").title = "unpressed";
-                                document.getElementById("increment").style.background='white';
-                            }
-                            document.getElementById("wordScore").textContent--;
-                            document.getElementById("decrement").title = "pressed";
-                            document.getElementById("decrement").style.background='red';
-                        }
-                    }
-            }
-            </script-->
 
         </li>
         <% i++ }%>

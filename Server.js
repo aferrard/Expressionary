@@ -1343,7 +1343,7 @@ app.post('/imageUp.php', function (req, res){
    if(!req.files){
        return res.status(400).send('No files uploaded.');
    }
-   console.log(req.files);
+   //console.log(req.files);
    var file = req.files.usr_img;
    var img_name = file.name;
    //console.log("data:"+file.data);
@@ -1366,7 +1366,7 @@ app.post('/imageUp.php', function (req, res){
                    userloggedincheck(req,function(loggedin) {
                        var pull = "SELECT profile_img FROM users WHERE username = '" + username + "'";
                        con.query(pull, function(err, image){
-                           console.log(image);
+                           //console.log(image);
                            res.render('pages/user', {loggedin: loggedin, username : req.cookies.user,
                                username2: username, image:img_name, points: result.points, posts: posts, editcheck: true, perror: perror});
                        })
@@ -1746,6 +1746,22 @@ app.post('/suggest',function(req,res){
     res.send(req.body.suggested);
 });
 
+app.get('/sub',function(req,res){
+    Connection.subscribeUser(req.cookies.user, function(perror){
+        userloggedincheck(req,function(loggedin) {
+            console.log(req.cookies.user + ": subscribed");
+            res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: perror});
+        })
+    })
+});
+app.get('/unsub',function(req,res){
+    Connection.unsubscribeUser(req.cookies.user, function(perror){
+        userloggedincheck(req,function(loggedin) {
+            console.log(req.cookies.user + ": unsubscribed");
+            res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: perror});
+        })
+    })
+});
 app.listen(8080);
 console.log('8080 is the magic port');
 
