@@ -8,6 +8,12 @@
 <header>
     <% include ../partials/header %>
 </header>
+<%if(word.includes(".png") || word.includes(".jpg") || word.includes(".jpeg")){%>
+<h1>IMAGE:</h1>
+<img src="http://localhost:8080/images/postimage/<%=word%>" class="img-responsive">
+<%}else{%>
+<h1>WORD:</h1>
+<%}%>
 <h2 id="theWord" name="theWord"><%= word %></h2>
 <div>Post your own definition:</div>
 <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/word" method="post">
@@ -26,7 +32,6 @@
 </form>
 <ol>
 
-
     <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/word2" method="post">
         <input hidden id="theWord" name="theWord" value="<%= word %>">
         <input hidden id="posts" name="posts" value = "<%= posts %>">
@@ -36,7 +41,6 @@
         <%});%>
         <%while (i < posts.length) { %>
         <li>
-            <%console.log(posts);%>
             User: <%= posts[i].username %><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=posts[i].profile_img%>" class="img-responsive"><br>
             --<%=posts[i].username%>'s total points: <%=posts[i].userpoints%><br>
             Definition: <%= posts[i].definition %><br>

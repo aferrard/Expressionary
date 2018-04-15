@@ -4,44 +4,72 @@
     <% include ../partials/head %>
 </head>
 <body class="container">
-
 <header>
     <% include ../partials/header %>
 </header>
-
 <main>
-    <div class ="container-fluid">
-        <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/appendix" method="post">
-            <%wordPages.sort(function(a, b){%>
-            <%if(a.word < b.word) return -1;%>
-            <%if(a.word > b.word) return 1;%>
-            <%return 0;%>
-            <%});%>
-            Words:
-            <ul>
-                <% var i = 0; %>
-                <%while (i < wordPages.length) { %>
-                <input id="word" name="word" type="submit" value="<%= wordPages[i].word %>" class="btn btn-sm" >
-                <br>
-                <% i++ }%>
-            </ul>
-            <%users.sort(function(a, b){%>
-            <%if(a.username < b.username) return -1;%>
-            <%if(a.username > b.username) return 1;%>
-            <%return 0;%>
-            <%});%>
-            Users:
-            <ul>
-                <% var i = 0;%>
-                <% while (i < users.length){%>
-                <input id="user" name="user" type="submit" value="<%=users[i].username%>" class="btn btn-sm"><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=users[i].profile_img%>" class="img-responsive">
-                <br>
-                <%i++ }%>
-            </ul>
-        </form>
+    <div class="tab">
+        <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'user')">Users</button>
+        <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'word')">Words</button>
+        <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'img')">Images</button>
     </div>
+    <form role="form" id="user" class="tabcontent" action="appendix" method="post">
+        <%users.sort(function(a, b){%>
+        <%if(a.username < b.username) return -1;%>
+        <%if(a.username > b.username) return 1;%>
+        <%return 0;%>
+        <%});%>
+        <% var i = 0;%>
+        <% while (i < users.length){%>
+        <input id="user" name="user" type="submit" value="<%=users[i].username%>" class="btn btn-sm"><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=users[i].profile_img%>" class="img-responsive">
+        <br>
+        <%i++ }%>
+    </form>
+    <form role="form" id="word" class="tabcontent" action="appendix" method="post">
+        <%wordPages.sort(function(a, b){%>
+        <%if(a.word < b.word) return -1;%>
+        <%if(a.word > b.word) return 1;%>
+        <%return 0;%>
+        <%});%>
+        <% var i = 0; %>
+        <%while (i < wordPages.length) { %>
+        <%if(wordPages[i].content_type == "word"){%>
+        <input id="word" name="word" type="submit" value="<%= wordPages[i].word %>" class="btn btn-sm" >
+        <br>
+        <%}%>
+        <% i++ }%>
+    </form>
+    <form role="form" id="img" class="tabcontent" action="appendix" method="post">
+        <%wordPages.sort(function(a, b){%>
+        <%if(a.word < b.word) return -1;%>
+        <%if(a.word > b.word) return 1;%>
+        <%return 0;%>
+        <%});%>
+        <% var i = 0; %>
+        <%while (i < wordPages.length) { %>
+        <%if(wordPages[i].content_type == "image"){%>
+        <input id="word" name="word" type="submit" value="<%= wordPages[i].word%>" class="btn btn-sm" >
+        <img width="50" height="50" allign="left" src="http://localhost:8080/images/postimage/<%=wordPages[i].word%>" class="img-responsive">
+        <br>
+        <%}%>
+        <% i++ }%>
+    </form>
+    <script>
+        function openBoard(evt, boardContent){
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for(i = 0; i < tabcontent.length; i++){
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(boardContent).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
 </main>
-
 <footer>
     <% include ../partials/footer %>
 </footer>
