@@ -830,7 +830,7 @@ exports.unsubscribeUser = unsubscribeUser;
 function unsubscribeUser(username, cb){
     con.query("UPDATE users SET notification = 0 WHERE username = '" + username + "'", function(err, result) {
         if(err) {
-            cb("unsubcription error");
+            cb("unsubscription error");
         } else {
             cb("user unsubscribed");
         }
