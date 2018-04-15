@@ -125,7 +125,7 @@ insert into wordpage value(
 insert into wordpage value(
 	NULL,
     "image",
-    "starwarspresidential",
+    "starwarspresidential.png",
     0);
     
 select * from wordpage;
