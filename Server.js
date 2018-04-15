@@ -1155,19 +1155,31 @@ app.post('/word2', function(req, res) {
 
 app.post('/word', function(req, res) {
     var definition = req.body.newDef;
-    console.log("ERROR!!");
+    //console.log("ERROR!!");
     Connection.getwpFromWord(req.body.theWord, function(wpid) {
         if (req.cookies.user == undefined){
+            console.log("user undefined");
             userloggedincheck(req,function(loggedin) {
                 res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please Register or Log In"});
             });
         }else {
+            //console.log("posting");
             var user = req.cookies.user;
             Connection.getUserByUsername(user,function(result){
 
                 if (result == "User Does not exist"){
                     console.error("SEVERE PROBLEM. SOMEONE IS TRYING TO HACK")
                 }
+                // handle apostrophe in definition
+                var newDef = "";
+                for(var i = 0; i < definition.length; i++){
+                    if(definition[i] == '\'') {
+                        newDef = newDef.concat('\\');
+                    }
+                    newDef = newDef.concat(definition[i]);
+                }
+                definition = newDef;
+
                 con.query("INSERT INTO posts VALUE (NULL, NOW(), 0, 'text', '" + definition + "', "+ result +", " + wpid + ");", function(err, result) {
                 if (err) throw err;
                 else {
