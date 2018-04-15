@@ -62,7 +62,6 @@ function userloggedincheck(req,cb) {
     }
 }
 
-
 con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
@@ -86,7 +85,6 @@ app.get('/', function(req, res) {
     })
     //res.render('pages/index');
 });
-
 
 app.get('/search', function(req,res) {
     userloggedincheck(req,function(loggedin) {
@@ -1284,7 +1282,6 @@ app.post('/search', function(req,res) {
 
 });
 
-// about page
 app.get('/contact', function(req, res) {
     userloggedincheck(req,function(loggedin) {
         res.render('pages/contact', {loggedin: loggedin, username : req.cookies.user, perror: perror});
@@ -1443,8 +1440,8 @@ app.get('/action_page.php', function (req,res){
 
         }else if (req.query.psw == result.password ) {
             array.push(req.query.uname);
-            res.cookie('user', req.query.uname , {maxAge: 450000});
-            res.cookie('password', req.query.psw, {maxAge: 450000});
+            res.cookie('user', req.query.uname , {maxAge: 9000000});
+            res.cookie('password', req.query.psw, {maxAge: 9000000});
 
             userloggedincheck(req,function(loggedin) {
                 var user = req.query.uname;
@@ -1487,14 +1484,22 @@ app.post('/register', function (req,res) {
         });
     }
     else {
-        var random = randomstring.generate();
-        var Person = new User(username,password,email,firstname,lastname, random);
-        map.set(username,Person);
-        Mail.sendEmail("expressionary307@gmail.com", emailmessage1 + random + emailmessage2);
-        userloggedincheck(req,function(loggedin) {
-            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please validate your account before continuing"})
+        Connection.getUserByUsername(username,function(result){
+            //console.log(result);
+            if (result != "user does not exist"){
+                userloggedincheck(req,function(loggedin) {
+                    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username already exists, Please choose a different Username"})
+                });
+            }else {
+                var random = randomstring.generate();
+                var Person = new User(username,password,email,firstname,lastname, random);
+                map.set(username,Person);
+                Mail.sendEmail("expressionary307@gmail.com", emailmessage1 + random + emailmessage2);
+                userloggedincheck(req,function(loggedin) {
+                    res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please validate your account before continuing"})
+                });
+            }
         });
-
     }
     return;
 
@@ -1531,7 +1536,6 @@ app.post('/register', function (req,res) {
 });
 
 app.get('/user', function(req, res) {
-
 
     var username = req.cookies.user;
 
