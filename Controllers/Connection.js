@@ -815,6 +815,28 @@ function postSuggestion(username, suggestion, cb) {
     });
 }
 
+exports.subscribeUser = subscribeUser;
+function subscribeUser(username, cb){
+    con.query("UPDATE users SET notification = 1 WHERE username = '" + username +"'", function(err, result) {
+        if(err) {
+            cb("subscription error");
+        } else {
+            cb("user subscribed");
+        }
+    });
+}
+
+exports.unsubscribeUser = unsubscribeUser;
+function unsubscribeUser(username, cb){
+    con.query("UPDATE users SET notification = 0 WHERE username = '" + username + "'", function(err, result) {
+        if(err) {
+            cb("unsubcription error");
+        } else {
+            cb("user unsubscribed");
+        }
+    });
+}
+
 /*function getImageData(image) {
     var fs = require('fs');
     fs.readFile(image, function(err, result) {
