@@ -21,49 +21,53 @@
 					<form role="form" id="user" class="tabcontent" action="user" method="post">
 						<!--input hidden id="users" name="users" value = "</%= users %/>"-->
                         <%var i = 1; %>
+						<%var index = 0;%>
                         <%topUsers.sort(function(a, b){%>
                         <%return b.points - a.points;%>
                         <%});%>
 
                         <%while (i <= 10) { %>
-						<%if(topUsers[i-1] == undefined) break;%>
-                        <%= i%>: <input id="user" name="user" type="submit" value="<%=topUsers[i-1].username%>" class="btn btn-info"><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=topUsers[i-1].profile_img%>" class="img-responsive">
-						Total Points: <%=topUsers[i-1].points%><br>
-                        <% i++ }%>
+						<%if(topUsers[index] == undefined) break;%>
+                        <%= i%>: <input id="user" name="user" type="submit" value="<%=topUsers[index].username%>" class="btn btn-info"><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=topUsers[index].profile_img%>" class="img-responsive">
+						Total Points: <%=topUsers[index].points%><br>
+                        <% index++;%>
+                        <%i++; }%>
 					</form>
 					<form role="form" id="word" class="tabcontent" action="w1" method="post">
 						<!--input hidden id="words" name="words" value = "</%= words %/>"-->
-                        <%var i = 1; %>
+                        <%var i = 1;%>
+						<%var index = 0;%>
                         <%topWords.sort(function(a, b){%>
                         <%return b.totalPoints - a.totalPoints;%>
                         <%});%>
-						<%var limit = 10;%>
-                        <%while (i <= limit) { %>
-                        <%if(topWords[i-1] == undefined) break;%>
-						<%if(topWords[i-1].content_type == 'word'){%>
-                        <%= i%>:<input id="word" name="word" type="submit" value="<%=topWords[i-1].word%>" class="btn btn-info">
+                        <%while (i <= 10) { %>
+                        <%if(topWords[index] == undefined) break;%>
+						<%if(topWords[index].content_type == 'word'){%>
+                        <%= i%>:<input id="word" name="word" type="submit" value="<%=topWords[index].word%>" class="btn btn-info">
 						<br>
-						Total Points: <%=topWords[i-1].totalPoints%><br>
+						Total Points: <%=topWords[index].totalPoints%><br>
 						<%}else{%>
-						<%limit++;}%>
-                        <% i++ }%>
+						<%i--;%>
+						<%index++;}%>
+                        <% index++;
+                        i++; }%>
 					</form>
 					<form role="form" id="img" class="tabcontent" action="w1" method="post">
-                        <%var i = 1; %>
+                        <%var j = 1; %>
+						<%var jndex = 0;%>
                         <%topWords.sort(function(a, b){%>
                         <%return b.totalPoints - a.totalPoints;%>
                         <%});%>
-                        <%var limit = 10;%>
-                        <%while (i <= limit) { %>
-                        <%if(topWords[i-1] == undefined) break;%>
-                        <%if(topWords[i-1].content_type == 'image'){%>
-                        <%= i%>:<input id="word" name="word" type="submit" value="<%=topWords[i-1].word%>" class="btn btn-info">
-						<img width="50" height="50" allign="left" src="http://localhost:8080/images/postimage/<%=topWords[i-1].word%>" class="img-responsive">
+                        <%while (j <= 10) { %>
+                        <%if(topWords[jndex] == undefined) break;%>
+                        <%if(topWords[jndex].content_type == 'image'){%>
+                        <%= j%>:<input id="word" name="word" type="submit" value="<%=topWords[jndex].word%>" class="btn btn-info">
+						<img width="50" height="50" allign="left" src="http://localhost:8080/images/postimage/<%=topWords[jndex].word%>" class="img-responsive">
 						<br>
-						Total Points: <%=topWords[i-1].totalPoints%><br>
-                        <%}else{%>
-                        <%limit++;}%>
-                        <% i++ }%>
+						Total Points: <%=topWords[jndex].totalPoints%><br>
+                        <%j++;jndex++;}else{%>
+						<%jndex++;}%>
+                        <%}%>
 					</form>
 			<script>
 				function openBoard(evt, boardContent){
