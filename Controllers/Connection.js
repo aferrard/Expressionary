@@ -837,6 +837,32 @@ function unsubscribeUser(username, cb){
     });
 }
 
+exports.addSuggestionImage = addSuggestionImage;
+function addSuggestionImage(image, username, wp_id, cb) {
+    getUserByUsername(username, function(user_id) {
+        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_image', '" + image + "', " + user_id + ", " + wp_id, function(err, result) {
+            if(err) {
+                cb("suggest image error");
+            } else {
+                cb("image suggested");
+            }
+        });
+    });
+}
+
+exports.addSuggestionText = addSuggestionText;
+function addSuggestionText(text, username, wp_id, cb) {
+    getUserByUsername(username, function(user_id) {
+        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_text', '" + text + "', " + user_id + ", " + wp_id, function(err, result) {
+            if(err) {
+                cb("suggest text error");
+            } else {
+                cb("text suggested");
+            }
+        });
+    });
+}
+
 /*function getImageData(image) {
     var fs = require('fs');
     fs.readFile(image, function(err, result) {
