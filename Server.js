@@ -1494,7 +1494,7 @@ app.post('/register', function (req,res) {
                 var random = randomstring.generate();
                 var Person = new User(username,password,email,firstname,lastname, random);
                 map.set(username,Person);
-                Mail.sendEmail("expressionary307@gmail.com", emailmessage1 + random + emailmessage2);
+                Mail.sendEmail(email, emailmessage1 + random + emailmessage2);
                 userloggedincheck(req,function(loggedin) {
                     res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Please validate your account before continuing"})
                 });
@@ -1718,6 +1718,7 @@ app.get('/sub',function(req,res){
         })
     })
 });
+
 app.get('/unsub',function(req,res){
     Connection.unsubscribeUser(req.cookies.user, function(perror){
         userloggedincheck(req,function(loggedin) {
@@ -1726,6 +1727,7 @@ app.get('/unsub',function(req,res){
         })
     })
 });
+
 app.listen(8080);
 console.log('8080 is the magic port');
 
