@@ -37,8 +37,10 @@
         <%= sugt[index].definition %>
         <br>
         Points: <%= sugt[index].points %><br>
-        <input id="vote<%= index %>" name="vote<%= index %>" title="unpressed" type="submit" value="+" class="btn btn-primary" >
-        <input id="vote<%= index %>" name="vote<%= index %>" title="unpressed" type="submit" value="-" class="btn btn-primary" >
+        <input hidden id="thePost" name="text" value="<%= sugt[index].definition %>">
+        <input hidden id="points" name="points" value="<%= sugt[index].points %>">
+        <input id="vote" name="<%= index%>" title="unpressed" type="submit" value="+" class="btn btn-primary" >
+        <input id="vote" name="<%= index%>" title="unpressed" type="submit" value="-" class="btn btn-primary" >
         <br>
         <%index++; }%>
     </form>
@@ -54,8 +56,10 @@
              src="http://localhost:8080/images/sugimage/<%= sugi[index].definition %>" class="img-responsive">
         <br>
         Points: <%= sugi[index].points %><br>
-        <input id="vote<%= index %>" name="vote<%= index %>" title="unpressed" type="submit" value="+" class="btn btn-primary" >
-        <input id="vote<%= index %>" name="vote<%= index %>" title="unpressed" type="submit" value="-" class="btn btn-primary" >
+        <input hidden id="thePost" name="imageName" value="<%= sugi[index].definition %>">
+        <input hidden id="points" name="points" value="<%= sugi[index].points %>">
+        <input id="vote" name="vote" title="unpressed" type="submit" value="+" class="btn btn-primary" >
+        <input id="vote" name="vote" title="unpressed" type="submit" value="-" class="btn btn-primary" >
         <br>
         <%index++; }%>
     </form>

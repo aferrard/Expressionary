@@ -188,7 +188,7 @@ app.post('/appendix', function (req, res) {
 });
 
 app.post('/word2', function (req, res) {
-
+    //console.log(req.body);
     if (req.cookies.user != undefined) {
         var word = req.body.theWord;
         Connection.getwpFromWord(word, function (wpid) {
@@ -2367,7 +2367,13 @@ app.post('/isuggest', function (req, res) {
         });
     });
 });
-
+app.post('/voteTSuggest', function (req, res) {
+    console.log(req.body);
+    console.log(req.body.text[0]);
+});
+app.post('/voteISuggest', function (req, res) {
+    console.log(req.body);
+});
 app.get('/sub', function (req, res) {
     Connection.subscribeUser(req.cookies.user, function (perror) {
         userloggedincheck(req, function (loggedin) {
