@@ -838,9 +838,9 @@ function unsubscribeUser(username, cb){
 }
 
 exports.addSuggestionImage = addSuggestionImage;
-function addSuggestionImage(image, username, wp_id, cb) {
+function addSuggestionImage(image, username, cb) {
     getUserByUsername(username, function(user_id) {
-        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_image', '" + image + "', " + user_id + ", " + wp_id, function(err, result) {
+        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_image', '" + image + "', " + user_id + ", NULL", function(err, result) {
             if(err) {
                 cb("suggest image error");
             } else {
@@ -851,15 +851,39 @@ function addSuggestionImage(image, username, wp_id, cb) {
 }
 
 exports.addSuggestionText = addSuggestionText;
-function addSuggestionText(text, username, wp_id, cb) {
+function addSuggestionText(text, username, cb) {
     getUserByUsername(username, function(user_id) {
-        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_text', '" + text + "', " + user_id + ", " + wp_id, function(err, result) {
+        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_text', '" + text + "', " + user_id + ", NULL", function(err, result) {
             if(err) {
                 cb("suggest text error");
             } else {
                 cb("text suggested");
             }
         });
+    });
+}
+
+exports.getSuggestionText = getSuggestionText;
+function getSuggestionText(cb) {
+    con.query("SELECT points, definition FROM posts WHERE content_type = 'suggestion_text'", function(err, result) {
+        if (err) {
+            cb("error getting suggested texts");
+        } else {
+            var z = JSON.parse(JSON.stringify(result));
+            cb(z);
+        }
+    });
+}
+
+exports.getSuggestionImage = getSuggestionImage;
+function getSuggestionImage(cb) {
+    con.query("SELECT points, definition FROM posts WHERE content_type = 'suggestion_image'", function(err, result) {
+        if (err) {
+            cb("error getting suggested images");
+        } else {
+            var z = JSON.parse(JSON.stringify(result));
+            cb(z);
+        }
     });
 }
 

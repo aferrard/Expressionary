@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS `expressionary_data`.`posts` (
   `content_type` VARCHAR(45) NOT NULL,
   `definition` TEXT NOT NULL,
   `users_user_id` INT UNSIGNED NOT NULL,
-  `wordpage_wp_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`post_id`, `users_user_id`, `wordpage_wp_id`),
+  `wordpage_wp_id` INT UNSIGNED NULL,
+  PRIMARY KEY (`post_id`, `users_user_id`),
   INDEX `fk_posts_users_idx` (`users_user_id` ASC),
   INDEX `fk_posts_wordPage1_idx` (`wordpage_wp_id` ASC),
   CONSTRAINT `fk_posts_users`
