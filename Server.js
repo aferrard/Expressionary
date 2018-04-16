@@ -1297,7 +1297,7 @@ app.get('/register', function(req, res) {
 app.get('/useredit', function(req, res){
     userloggedincheck(req,function (loggedin) {
         if (loggedin == false){
-            res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: "Please Log In First"});
+            res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: "Please Register or Log In"});
             return;
         }else {
             Connection.findUserByUsername(req.cookies.user,function(user) {
@@ -1430,7 +1430,7 @@ app.get('/action_page.php', function (req,res){
        // console.log(result.password)
         if (result == 'user not found' || result == 'user does not exist'){
             userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "User Doesn't Exist"});
+                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "User doesn't exist"});
             });
 
         }else if (req.cookies.user != undefined || array.indexOf(req.query.uname) != -1){
@@ -1503,36 +1503,6 @@ app.post('/register', function (req,res) {
     }
     return;
 
-    Connection.registerUser(email,username,password,firstname,lastname,function (result){
-        if (result=="failure registering user"){
-            userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username already exists. Please try again"});
-            });
-        }
-
-        else if (result=="username field cannot be empty") {
-            userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username field cannot be empty"});
-            });
-        }
-
-        else if (result=="username is too long") {
-            userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username is too long"});
-            });
-
-        } else {
-            map.set()
-            console.log()
-            userloggedincheck(req,function(loggedin) {
-                res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Successfully registered user"});
-
-
-            })
-        }
-
-
-    })
 });
 
 app.get('/user', function(req, res) {
@@ -1541,7 +1511,7 @@ app.get('/user', function(req, res) {
 
     if (username == undefined){
         userloggedincheck(req,function(loggedin) {
-            res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: "Please Login First"});
+            res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: "Please Register or Log In"});
         });
     }else {
         Connection.findUserByUsername(username, function(result){
@@ -1633,10 +1603,9 @@ app.get('/logout',function (req,res) {
 
 app.get('/deleteUser.php', function(req,res){
    var username = req.cookies.user;
-   var perror = "";
     userloggedincheck(req,function(loggedin) {
         if (loggedin == false){
-            res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user, perror: "Please Log in Or Register first"});
+            res.render('pages/developer', {loggedin: loggedin, username : req.cookies.user, perror: "Please Register or Log In"});
         }else {
             Connection.deleteUser(username,function(result){
                 if (result == "deletion successful"){
@@ -1668,7 +1637,7 @@ app.get('/validate.php',function(req,res){
                 Connection.registerUser(email,username,password,firstname,lastname,function(result){
                     if (result != "success"){
                         userloggedincheck(req,function(loggedin) {
-                            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username already exists. Please try again"});
+                            res.render('pages/registration', {loggedin: loggedin, username : req.cookies.user, perror: "Username already exists, Please choose a different Username"});
                         });
                     }else {
                         res.render('pages/registration', {
@@ -1693,12 +1662,7 @@ app.get('/validate.php',function(req,res){
 });
 
 app.post('/user',function (req,res){
-    // userloggedincheck(req,function (loggedin) {
-    //     if (loggedin == false){
-    //         res.render('pages/suggest', {loggedin: loggedin, username : req.cookies.user, perror: "Please Log In First"});
-    //         return;
-    //     }
-    // });
+
     var username = req.body.user;
 
     if (username == undefined){

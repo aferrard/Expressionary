@@ -14,7 +14,7 @@
 			<%if(!loggedin){%>
 			<li><a href="/register">Register</a></li>
 			<li><button onclick="document.getElementById('id1').style.display='block'"
-						style="width:auto;">Login
+						style="width:auto; color: white;">Login
 				</button>
 			</li>
 			<%}else{%>
@@ -22,7 +22,33 @@
 			<li><a href="/logout" style="width:auto;">Logout</a></li>
 			<%}%>
 		</ul>
-        <%if(perror != "none" && perror != "Please validate your account before continuing"){%>
+
+
+
+
+		<%if(perror == "User does not exist" || perror == "Word does not exist"){%>
+		<div id="perror" class="emodal">
+
+			<form class="modal-content animate" action="/search">
+				<div class="container">
+					<label for="perror" align="center"><b><%=perror%></b></label>
+					<button type="submit" >OK</button>
+				</div>
+			</form>
+		</div>
+        <%}else if(perror == "Please Register or Log In" || perror == "Please enter valid email" || perror == "Username Cannot be empty" ||
+				perror == "Password Cannot be empty" || perror == "Username already exists, Please choose a different Username"
+				|| perror == "Please validate your account before continuing" || perror == "User doesn't exist"){%>
+		<div id="perror" class="emodal">
+
+			<form class="modal-content animate" action="/register">
+				<div class="container">
+					<label for="perror" align="center"><b><%=perror%></b></label>
+					<button type="submit" >OK</button>
+				</div>
+			</form>
+		</div>
+        <%}else if(perror != "none" && perror != "Please validate your account before continuing"){%>
 		<div id="perror" class="emodal">
 
 			<form class="modal-content animate" action="/">
@@ -53,13 +79,13 @@
 					<label for="psw"><b>Password</b></label>
 					<input type="password" placeholder="Enter Password" name="psw" required>
 
-					<button type="submit">Login</button>
+					<button type="submit" style="color: white;" >Login</button>
 					<label>
 						<input type="checkbox" checked="checked" name="remember"> Remember me
 					</label>
 				</div>
 				<div class="container" style="background-color:#f1f1f1">
-					<button type="button" onclick="document.getElementById('id1').style.display='none'" class="cancelbtn">Cancel</button>
+					<button type="button" style="color: white" onclick="document.getElementById('id1').style.display='none'" class="cancelbtn">Cancel</button>
 					<span class="psw">Forgot <a href="#">password?</a></span>
 				</div>
 			</form>
