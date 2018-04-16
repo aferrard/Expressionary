@@ -2324,7 +2324,7 @@ app.get('/suggest', function (req, res) {
 });
 
 app.post('/wsuggest', function (req, res) {
-    console.log(req.body.suggested);
+    //console.log(req.body.suggested);
     Connection.addSuggestionText(req.body.suggested, req.cookies.user, function (err) {
         Connection.getSuggestionText(function (sugt) {
             Connection.getSuggestionImage(function (sugi) {
