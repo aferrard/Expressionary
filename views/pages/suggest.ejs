@@ -37,6 +37,9 @@
         <%= sugt[index].definition %>
         <br>
         Points: <%= sugt[index].points %><br>
+        <input id="vote<%= index %>" name="vote<%= index %>" title="unpressed" type="submit" value="+" class="btn btn-primary" >
+        <input id="vote<%= index %>" name="vote<%= index %>" title="unpressed" type="submit" value="-" class="btn btn-primary" >
+        <br>
         <%index++; }%>
     </form>
     <form id="sugimg" role="form" class="tabcontent2" action="http://localhost:8080/voteISuggest" method="post">
@@ -51,6 +54,9 @@
              src="http://localhost:8080/images/sugimage/<%= sugi[index].definition %>" class="img-responsive">
         <br>
         Points: <%= sugi[index].points %><br>
+        <input id="vote<%= index %>" name="vote<%= index %>" title="unpressed" type="submit" value="+" class="btn btn-primary" >
+        <input id="vote<%= index %>" name="vote<%= index %>" title="unpressed" type="submit" value="-" class="btn btn-primary" >
+        <br>
         <%index++; }%>
     </form>
     <script>
