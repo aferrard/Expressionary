@@ -880,7 +880,7 @@ exports.addSuggestionImage = addSuggestionImage;
 
 function addSuggestionImage(image, username, cb) {
     getUserByUsername(username, function (user_id) {
-        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_image', '" + image + "', " + user_id + ", NULL", function (err, result) {
+        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_image', '" + image + "', " + user_id + ", NULL)", function (err, result) {
             if (err) {
                 cb("suggest image error");
             } else {
@@ -893,9 +893,8 @@ function addSuggestionImage(image, username, cb) {
 exports.addSuggestionText = addSuggestionText;
 
 function addSuggestionText(text, username, cb) {
-    console.log(text + " : " + username);
     getUserByUsername(username, function (user_id) {
-        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_text', '" + text + "', " + user_id + ", NULL", function (err, result) {
+        con.query("INSERT INTO posts VALUE ( NULL, NOW(), 0 , 'suggestion_text', '" + text + "', " + user_id + ", NULL)", function (err, result) {
             if (err) {
                 cb("suggest text error");
             } else {
