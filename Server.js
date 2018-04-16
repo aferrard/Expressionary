@@ -1706,8 +1706,20 @@ app.get('/suggest',function (req,res) {
     })
 });
 
-app.post('/suggest',function(req,res){
+app.post('/wsuggest',function(req,res){
     res.send(req.body.suggested);
+});
+app.post('/isuggest',function(req,res){
+    if(!req.files){
+        return res.status(400).send('No files uploaded.');
+    }
+    //console.log(req.files);
+    var file = req.files.sug_img;
+    var img_name = file.name;
+    //console.log("data:"+file.data);
+    file.mv('public/images/sugimage/'+img_name, function(err){
+        if(err) return res.status(500).send(err);
+
 });
 
 app.get('/sub',function(req,res){
