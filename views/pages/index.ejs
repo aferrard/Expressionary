@@ -1,109 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<% include ../partials/head %>
+    <% include ../partials/head %>
 </head>
 <body class="container">
 
-	<header>
-		<% include ../partials/header %>
-	</header>
+<header>
+    <% include ../partials/header %>
+</header>
 
-	<main>
-		<div class="jumbotron">
-			<h1>Expressionary</h1>
-			<hr>
-			<div class="tab">
-				<button class="tablinks" style="width:auto;" onclick="openBoard(event, 'user')">Top Users</button>
-				<button class="tablinks" style="width:auto;" onclick="openBoard(event, 'word')">Top Words</button>
-				<button class="tablinks" style="width:auto;" onclick="openBoard(event, 'img')">Top Images</button>
-			</div>
-					<form role="form" id="user" class="tabcontent" action="user" method="post">
-						<!--input hidden id="users" name="users" value = "</%= users %/>"-->
-                        <%var i = 1; %>
-						<%var index = 0;%>
-                        <%topUsers.sort(function(a, b){%>
-                        <%return b.points - a.points;%>
-                        <%});%>
+<main>
+    <div class="jumbotron">
+        <h1>Expressionary</h1>
+        <hr>
+        <div class="tab">
+            <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'user')">Top Users</button>
+            <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'word')">Top Words</button>
+            <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'img')">Top Images</button>
+        </div>
+        <form role="form" id="user" class="tabcontent" action="user" method="post">
+            <!--input hidden id="users" name="users" value = "</%= users %/>"-->
+            <% var i = 1; %>
+            <% var index = 0; %>
+            <% topUsers.sort(function(a, b){ %>
+            <% return b.points - a.points; %>
+            <% }); %>
+            <% while (i <= 10) { %>
+            <% if(topUsers[index] == undefined) break; %>
+            <%= i %>: <input id="user" name="user" type="submit" value="<%= topUsers[index].username %>"
+                             class="btn btn-info"><img width="35" height="35" allign="left"
+                                                       src="http://localhost:8080/images/profImage/<%= topUsers[index].profile_img %>"
+                                                       class="img-responsive">
+            Total Points: <%= topUsers[index].points %><br>
+            <% index++; %>
+            <% i++; } %>
+        </form>
+        <form role="form" id="word" class="tabcontent" action="w1" method="post">
+            <!--input hidden id="words" name="words" value = "</%= words %/>"-->
+            <% var i = 1; %>
+            <% var index = 0; %>
+            <% topWords.sort(function(a, b){ %>
+            <% return b.totalPoints - a.totalPoints; %>
+            <% }); %>
+            <% while (i <= 10) { %>
+            <% if(topWords[index] == undefined) break; %>
+            <% if(topWords[index].content_type == 'word'){ %>
+            <%= i %>:<input id="word" name="word" type="submit" value="<%= topWords[index].word %>"
+                            class="btn btn-info">
+            <br>
+            Total Points: <%= topWords[index].totalPoints %><br>
+            <% }else{ %>
+            <% i--; %>
+            <% index++;} %>
+            <% index++;
+                i++; } %>
+        </form>
+        <form role="form" id="img" class="tabcontent" action="w1" method="post">
+            <% var j = 1; %>
+            <% var jndex = 0; %>
+            <% topWords.sort(function(a, b){ %>
+            <% return b.totalPoints - a.totalPoints; %>
+            <% }); %>
+            <% while (j <= 10) { %>
+            <% if(topWords[jndex] == undefined) break; %>
+            <% if(topWords[jndex].content_type == 'image'){ %>
+            <%= j %>:<input id="word" name="word" type="submit" value="<%= topWords[jndex].word %>"
+                            class="btn btn-info">
+            <img width="50" height="50" allign="left"
+                 src="http://localhost:8080/images/postimage/<%= topWords[jndex].word %>" class="img-responsive">
+            <br>
+            Total Points: <%= topWords[jndex].totalPoints %><br>
+            <% j++;jndex++;}else{ %>
+            <% jndex++;} %>
+            <% } %>
+        </form>
+        <script>
+            function openBoard(evt, boardContent) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(boardContent).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+        </script>
+        <hr>
+        <h2 class="mt-2">Join our Newsletter</h2>
+        <form class="form-horizontal" role="form" style="width: 100%;" action="http://localhost:8080/" method="post">
+            <div class="form-group">
+                <label for="email" class="col-sm-1 control-label">Email:</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com"
+                           value="">
+                </div>
+            </div>
+            <p>
+                <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
+            </p>
+        </form>
+    </div>
 
-                        <%while (i <= 10) { %>
-						<%if(topUsers[index] == undefined) break;%>
-                        <%= i%>: <input id="user" name="user" type="submit" value="<%=topUsers[index].username%>" class="btn btn-info"><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=topUsers[index].profile_img%>" class="img-responsive">
-						Total Points: <%=topUsers[index].points%><br>
-                        <% index++;%>
-                        <%i++; }%>
-					</form>
-					<form role="form" id="word" class="tabcontent" action="w1" method="post">
-						<!--input hidden id="words" name="words" value = "</%= words %/>"-->
-                        <%var i = 1;%>
-						<%var index = 0;%>
-                        <%topWords.sort(function(a, b){%>
-                        <%return b.totalPoints - a.totalPoints;%>
-                        <%});%>
-                        <%while (i <= 10) { %>
-                        <%if(topWords[index] == undefined) break;%>
-						<%if(topWords[index].content_type == 'word'){%>
-                        <%= i%>:<input id="word" name="word" type="submit" value="<%=topWords[index].word%>" class="btn btn-info">
-						<br>
-						Total Points: <%=topWords[index].totalPoints%><br>
-						<%}else{%>
-						<%i--;%>
-						<%index++;}%>
-                        <% index++;
-                        i++; }%>
-					</form>
-					<form role="form" id="img" class="tabcontent" action="w1" method="post">
-                        <%var j = 1; %>
-						<%var jndex = 0;%>
-                        <%topWords.sort(function(a, b){%>
-                        <%return b.totalPoints - a.totalPoints;%>
-                        <%});%>
-                        <%while (j <= 10) { %>
-                        <%if(topWords[jndex] == undefined) break;%>
-                        <%if(topWords[jndex].content_type == 'image'){%>
-                        <%= j%>:<input id="word" name="word" type="submit" value="<%=topWords[jndex].word%>" class="btn btn-info">
-						<img width="50" height="50" allign="left" src="http://localhost:8080/images/postimage/<%=topWords[jndex].word%>" class="img-responsive">
-						<br>
-						Total Points: <%=topWords[jndex].totalPoints%><br>
-                        <%j++;jndex++;}else{%>
-						<%jndex++;}%>
-                        <%}%>
-					</form>
-			<script>
-				function openBoard(evt, boardContent){
-				  var i, tabcontent, tablinks;
-				  tabcontent = document.getElementsByClassName("tabcontent");
-				  for(i = 0; i < tabcontent.length; i++){
-				      tabcontent[i].style.display = "none";
-				  }
-				  tablinks = document.getElementsByClassName("tablinks");
-                    for (i = 0; i < tablinks.length; i++) {
-                        tablinks[i].className = tablinks[i].className.replace(" active", "");
-                    }
-                    document.getElementById(boardContent).style.display = "block";
-                    evt.currentTarget.className += " active";
-				}
-			</script>
-			<hr>
-			<h2 class="mt-2">Join our Newsletter</h2>
-			<form class="form-horizontal" role="form" style="width: 100%;" action="http://localhost:8080/" method="post">
-				<div class="form-group">
-					<label for="email" class="col-sm-1 control-label">Email:</label>
-					<div class="col-sm-10">
-						<input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com" value="">
-					</div>
-				</div>
-				<p>
-					<input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
-				</p>
-			</form>
-		</div>
+</main>
 
-	</main>
+<footer>
+    <% include ../partials/footer %>
+</footer>
 
-	<footer>
-		<% include ../partials/footer %>
-	</footer>
-	
 </body>
 </html>

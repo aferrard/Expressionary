@@ -8,51 +8,54 @@
 <header>
     <% include ../partials/header %>
 </header>
-<h2 id="theUser" name="theUser"><%=username2%></h2>
+<h2 id="theUser" name="theUser"><%= username2 %></h2>
 
-<div><img width="25%" height="25%" alt="Profile Image: " src="http://localhost:8080/images/profImage/<%=image%>" class="img-responsive"></div>
+<div><img width="25%" height="25%" alt="Profile Image: " src="http://localhost:8080/images/profImage/<%= image %>"
+          class="img-responsive"></div>
 <hr>
-<h3>Point total: <%=points%></h3>
+<h3>Point total: <%= points %></h3>
 <h3>Definitions:</h3>
 <p>
-<% var i = 0; %>
-    <%if(posts[i] == undefined){%>
-    <%posts.sort(function(a, b){%>
-    <%return b.totalPoints - a.totalPoints;%>
-    <%});}%>
-<%while (i < posts.length) { %>
-    <%if(posts[i].definition == undefined){%>
+    <% var i = 0; %>
+    <% if(posts[i] == undefined){ %>
+    <% posts.sort(function(a, b){ %>
+    <% return b.totalPoints - a.totalPoints; %>
+    <% });} %>
+    <% while (i < posts.length) { %>
+    <% if(posts[i].definition == undefined){ %>
     None. Try clicking on Random Word to get started!
-    <%break;}%>
-    <b><%=posts[i].word%></b><br>
+    <% break;} %>
+    <b><%= posts[i].word %></b><br>
     Definition: <%= posts[i].definition %><br>
     Points: <%= posts[i].points %><br><br>
 
-<% i++ }%>
+    <% i++ } %>
 </p>
 
-
-<%if(editcheck){%>
+<% if(editcheck){ %>
 <a href="/useredit">Edit Profile</a><br>
 <a onclick="document.getElementById('delUser').style.display='block'">Delete User</a>
 <br>
 <form action="imageUp.php" method="POST" enctype="multipart/form-data">
-    Select an image for your profile (PNG. JPG, JPEG only): <input type="file" id="profImage" accept=".png, .jpg, .jpeg" name="usr_img" required>
+    Select an image for your profile (PNG. JPG, JPEG only): <input type="file" id="profImage" accept=".png, .jpg, .jpeg"
+                                                                   name="usr_img" required>
     <input type="submit" value="Upload">
 </form>
 <br>
 <a href="/unsub">Unsubscribe</a> from Expressionary Updates<br>
 <a href="/sub">Subscribe</a> to Expressionary Updates
-<%}%>
+<% } %>
 <hr>
 <div id="delUser" class="modal">
     <form class="modal-content animate" action="/deleteUser.php">
         <div class="container">
             <label for="delUser" align="center"><b>Are you sure you want to delete your user?</b></label>
-            <button type="submit" >OK</button>
+            <button type="submit">OK</button>
         </div>
         <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('delUser').style.display='none'" class="cancelbtn">Cancel</button>
+            <button type="button" onclick="document.getElementById('delUser').style.display='none'" class="cancelbtn">
+                Cancel
+            </button>
         </div>
     </form>
 </div>

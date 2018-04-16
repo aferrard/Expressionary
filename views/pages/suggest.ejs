@@ -14,30 +14,67 @@
     <button class="tablinks" style="width:auto;" onclick="openTab(event, 'sugged')">Vote on Suggestions</button>
 </div>
 <form id="sug" role="form" class="tabcontent" action="http://localhost:8080/wsuggest" method="post">
-    <textarea class="form-control" rows="1" id="suggested" name="suggested" placeholder="Suggest a word here..."></textarea>
+    <textarea class="form-control" rows="1" id="suggested" name="suggested"
+              placeholder="Suggest a word here..."></textarea>
     <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
 </form>
 <form id="sugi" role="form" class="tabcontent" action="http://localhost:8080/isuggest" method="post">
     <form action="imageUp.php" method="POST" enctype="multipart/form-data">
-        Select an image to suggest(PNG. JPG, JPEG only): <input type="file" id="sugImage" accept=".png, .jpg, .jpeg" name="sug_img" required>
+        Select an image to suggest(PNG. JPG, JPEG only): <input type="file" id="sugImage" accept=".png, .jpg, .jpeg"
+                                                                name="sug_img" required>
         <input type="submit" value="Upload">
     </form>
 </form>
-<form id="sugged" role="form" class="tabcontent" action="http://localhost:8080/isuggest" method="post">
-    Nothing so far!
-</form>
+<div id="sugged" class="tabcontent">
+    <div class="tab2">
+        <button class="tablinks2" style="width:auto;" onclick="openTab2(event, 'sugtext')">Suggested Words</button>
+        <button class="tablinks2" style="width:auto;" onclick="openTab2(event, 'sugimg')">Suggested Images</button>
+    </div>
+    <form id="sugtext" role="form" class="tabcontent2" action="http://localhost:8080/suggest" method="post">
+        <%console.log(sugt);%>
+        <%console.log(sugi);%>
+        <% var index = 0; %>
+        <% sugt.sort(function(a, b){ %>
+        <% return b.points - a.points; %>
+        <% }); %>
+        <% while (index < sugt.length) { %>
+        <% if(sugt[index] == undefined) break; %>
+        <%= sugt[index].definition %>
+        <br>
+        Points: <%= sugt[index].points %><br>
+        <%index++; }%>
+    </form>
+    <form id="sug" role="form" class="tabcontent2" action="http://localhost:8080/suggest" method="post">
+
+    </form>
+    <script>
+        function openTab2(evt, tabContent2) {
+            var i, tabcontent2, tablinks2;
+            tabcontent2 = document.getElementsByClassName("tabcontent2");
+            for (i = 0; i < tabcontent2.length; i++) {
+                tabcontent2[i].style.display = "none";
+            }
+            tablinks2 = document.getElementsByClassName("tablinks2");
+            for (i = 0; i < tablinks2.length; i++) {
+                tablinks2[i].className = tablinks2[i].className.replace(" active", "");
+            }
+            document.getElementById(tabContent2).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</div>
 <script>
-    function openTab(evt, boardContent){
+    function openTab(evt, tabContent) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
-        for(i = 0; i < tabcontent.length; i++){
+        for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
         }
         tablinks = document.getElementsByClassName("tablinks");
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
-        document.getElementById(boardContent).style.display = "block";
+        document.getElementById(tabContent).style.display = "block";
         evt.currentTarget.className += " active";
     }
 </script>
