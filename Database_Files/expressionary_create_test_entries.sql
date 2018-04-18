@@ -8,6 +8,7 @@ insert into users value(
     "default.png",
     "Jane",
     "Doe",
+    0,
     0);
 
 insert into users value(
@@ -19,6 +20,7 @@ insert into users value(
     "default.png",
     "John",
     "Smith",
+    0,
     0);
 
 insert into users value(
@@ -30,6 +32,7 @@ insert into users value(
     "default.png",
     "Ayush",
     "Patel",
+    0,
     0);
 
 insert into users value(
@@ -41,6 +44,7 @@ insert into users value(
     "Flash_series_logo.png",
     "Barry",
     "Allen",
+    0,
     0);
 
 insert into users value(
@@ -52,6 +56,7 @@ insert into users value(
     "Batman-logo-A33AD65044-seeklogo.com.png",
     "Bruce",
     "Wayne",
+    0,
     0);
     
 select * from users;

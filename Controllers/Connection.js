@@ -118,7 +118,7 @@ function registerUser(email, username, password, firstName, lastName, cb) {
                     cb("failure registering user");
                 }
                 else {
-                    var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', 'default.png', '" + firstName + "', '" + lastName + "', 0)";
+                    var request = "INSERT INTO users VALUE(NULL, 0, '" + email + "', '" + username + "', '" + password + "', 'default.png', '" + firstName + "', '" + lastName + "', 0, 0)";
                     //console.log(request);
                     con.query(request, function (err, result) {
 

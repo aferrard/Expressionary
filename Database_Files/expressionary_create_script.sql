@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `expressionary_data`.`users` (
   `first_name` VARCHAR(45) NULL,
   `last_name` VARCHAR(45) NULL,
   `notification` INT NOT NULL,
+  `milestone` INT NOT NULL,
   PRIMARY KEY (`user_id`, `email`, `username`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC))
 ENGINE = InnoDB;
