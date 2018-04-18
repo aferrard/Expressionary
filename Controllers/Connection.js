@@ -306,19 +306,21 @@ function addPointToPost(definition, username, cb) {
                                                         cb(err);
                                                     }
                                                 });
-                                                con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, totalpoints) {
-                                                    if (err) {
-                                                        cb(err);
-                                                    } else {
-                                                        con.query("UPDATE wordpage SET totalPoints = " + (totalpoints[0].totalPoints + 1) + " WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, result) {
-                                                            if (err) {
-                                                                cb(err);
-                                                            } else {
-                                                                cb("success");
-                                                            }
-                                                        });
-                                                    }
-                                                });
+                                                if(postinfo[0].wordpage_wp_id != NULL) {
+                                                    con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, totalpoints) {
+                                                        if (err) {
+                                                            cb(err);
+                                                        } else {
+                                                            con.query("UPDATE wordpage SET totalPoints = " + (totalpoints[0].totalPoints + 1) + " WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, result) {
+                                                                if (err) {
+                                                                    cb(err);
+                                                                } else {
+                                                                    cb("success");
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                }
                                             }
                                         });
                                     }
@@ -373,19 +375,21 @@ function subPointToPost(definition, username, cb) {
                                                     cb(err);
                                                 }
                                             });
-                                            con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, totalpoints) {
-                                                if (err) {
-                                                    cb(err);
-                                                } else {
-                                                    con.query("UPDATE wordpage SET totalPoints = " + (totalpoints[0].totalPoints - 1) + " WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, result) {
-                                                        if (err) {
-                                                            cb(err);
-                                                        } else {
-                                                            cb("success");
-                                                        }
-                                                    });
-                                                }
-                                            });
+                                            if(postinfo[0].wordpage_wp_id != NULL) {
+                                                con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, totalpoints) {
+                                                    if (err) {
+                                                        cb(err);
+                                                    } else {
+                                                        con.query("UPDATE wordpage SET totalPoints = " + (totalpoints[0].totalPoints - 1) + " WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, result) {
+                                                            if (err) {
+                                                                cb(err);
+                                                            } else {
+                                                                cb("success");
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
                                         }
                                     });
                                 }
