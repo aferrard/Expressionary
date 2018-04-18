@@ -1006,13 +1006,22 @@ function convertSuggestion(definition, cb) {
                     });
                 }
             });
+            cb("success");
         }
     });
 }
 
-exports getPointsFromPost = getPointsFromPost;
+exports.getPointsFromPost = getPointsFromPost;
 function getPointsFromPost(definition, cb) {
-    con.query("SELECT points FROM posts WHERE defintion = '" + definition + "'", function(err, result) {
+    var newDef = "";
+    for (var i = 0; i < definition.length; i++) {
+        if (definition[i] == '\'') {
+            newDef = newDef.concat('\\');
+        }
+        newDef = newDef.concat(definition[i]);
+    }
+    definition = newDef;
+    con.query("SELECT points FROM posts WHERE definition = '" + definition + "'", function(err, result) {
         if(err) {
             cb(err);
         } else {
@@ -1020,6 +1029,34 @@ function getPointsFromPost(definition, cb) {
             cb(z);
         }
     });
+}
+
+exports.deleteSuggestion = deleteSuggestion;
+function deleteSuggestion(definition, cb) {
+    var newDef = "";
+    for (var i = 0; i < definition.length; i++) {
+        if (definition[i] == '\'') {
+            newDef = newDef.concat('\\');
+        }
+        newDef = newDef.concat(definition[i]);
+    }
+    definition = newDef;
+
+    con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function(err, post) {
+        if(err) {
+            cb(err);
+        } else {
+            con.query("DELETE FROM posts WHERE post_id = " + post[0].post_id, function(err, result) {
+                if(err) {
+                    cb(err);
+                }
+            });
+            con.query("DELETE FROM posts_voted WHERE posts_post_id = " + post[0].post_id, function(err, result) {
+                cb(err);
+            })
+        }
+    });
+    cb("success");
 }
 
 /*function getImageData(image) {
