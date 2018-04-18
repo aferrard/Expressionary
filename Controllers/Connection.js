@@ -938,6 +938,33 @@ function getSuggestionImage(cb) {
     });
 }
 
+exports.getCurrentMilestone = getCurrentMilestone;
+function getCurrentMilestone(username, cb) {
+    con.query("SELECT milestone FROM users WHERE username = '" + username + "'", function(err, result) {
+        if(err) {
+            cb(err);
+        } else {
+            var z = JSON.parse(JSON.stringify(result[0].milestone));
+            cb(z);
+        }
+    });
+}
+
+exports.incrementMilestone = incrementMilestone;
+function incrementMilestone(username, cb) {
+    var currentMilestone;
+    getCurrentMilestone(username, function(result) {
+        currentMilestone = result;
+        con.query("UPDATE users SET milestone = " + (currentMilestone +1) + " WHERE username = '" + username + "'", function(err, result) {
+            if(err) {
+                cb(err);
+            } else {
+                cb("success");
+            }
+        });
+    });
+}
+
 /*function getImageData(image) {
     var fs = require('fs');
     fs.readFile(image, function(err, result) {
