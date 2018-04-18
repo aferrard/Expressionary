@@ -2324,9 +2324,40 @@ app.get('/suggest', function (req, res) {
 });
 
 app.post('/wsuggest', function (req, res) {
+// <<<<<<< Updated upstream
     if (req.cookies.user != undefined) {
         //console.log(req.body.suggested);
         Connection.addSuggestionText(req.body.suggested, req.cookies.user, function (err) {
+// =======
+//     //console.log(req.body.suggested);
+//     Connection.addSuggestionText(req.body.suggested, req.cookies.user, function (err) {
+//         Connection.getSuggestionText(function (sugt) {
+//             Connection.getSuggestionImage(function (sugi) {
+//                 userloggedincheck(req, function (loggedin) {
+//                     res.render('pages/suggest', {
+//                         loggedin: loggedin,
+//                         username: req.cookies.user,
+//                         sugi: sugi,
+//                         sugt: sugt,
+//                         perror: perror
+//                     });
+//                 })
+//             });
+//         });
+//     });
+// });
+//
+// app.post('/isuggest', function (req, res) {
+//     if (!req.files) {
+//         return res.status(400).send('No files uploaded.');
+//     }
+//     console.log(req.files);
+//     var file = req.files.sug_img;
+//     var img_name = file.name;
+//     file.mv('public/images/sugimage/' + img_name, function (err) {
+//         if (err) return res.status(500).send(err);
+//         Connection.addSuggestionImage(img_name, req.cookies.user, function (err) {
+// >>>>>>> Stashed changes
             Connection.getSuggestionText(function (sugt) {
                 Connection.getSuggestionImage(function (sugi) {
                     userloggedincheck(req, function (loggedin) {
@@ -2388,6 +2419,7 @@ app.post('/isuggest', function (req, res) {
         });
     }
 });
+
 app.post('/voteTSuggest', function (req, res) {
     if (req.cookies.user != undefined) {
         //console.log(req.body);
@@ -2532,6 +2564,7 @@ app.post('/voteTSuggest', function (req, res) {
         });
     }
 });
+
 app.post('/voteISuggest', function (req, res) {
     if (req.cookies.user != undefined) {
         //console.log(req.body);
@@ -2676,6 +2709,7 @@ app.post('/voteISuggest', function (req, res) {
         });
     }
 });
+
 app.get('/sub', function (req, res) {
     Connection.subscribeUser(req.cookies.user, function (perror) {
         userloggedincheck(req, function (loggedin) {
