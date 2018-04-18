@@ -19,7 +19,12 @@
     <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
 </form>
 <form id="sugi" role="form" class="tabcontent" action="http://localhost:8080/isuggest" method="post" enctype="multipart/form-data">
-    Select an image to suggest(PNG. JPG, JPEG only): <input type="file" id="sugImage" accept=".png, .jpg, .jpeg" name="sug_img" required>
+    <label class="custom-file-upload">
+        <input type="file" id="sugImage" accept=".png, .jpg, .jpeg" name="sug_img" required>
+        <!--<input type="file" accept=".png, .jpg, .jpeg" name="img">-->
+        Choose a file
+    </label>
+    <!--Select an image to suggest(PNG. JPG, JPEG only): <input type="file" id="sugImage" accept=".png, .jpg, .jpeg" name="sug_img" required>-->
     <input type="submit" value="Upload">
 </form>
 <div id="sugged" class="tabcontent">

@@ -993,15 +993,21 @@ function convertSuggestion(definition, cb) {
                     }
                 });
                 if(contenttype[0].content_type == "suggestion_text") {
-                    con.query("INSERT INTO wordpage VALUE(NULL, 'text','" + definition + "', 0)", function(err, result) {
+                    con.query("INSERT INTO wordpage VALUE(NULL, 'word','" + definition + "', 0)", function(err, result) {
                         if(err) {
                             cb(err);
+                        }
+                        else {
+                            cb("success");
                         }
                     });
                 } else if(contenttype[0].content_type == "suggestion_image") {
                     con.query("INSERT INTO wordpage VALUE(NULL, 'image','" + definition + "', 0)", function(err, result) {
                         if(err) {
                             cb(err);
+                        }
+                        else {
+                            cb("success")
                         }
                     });
                 }

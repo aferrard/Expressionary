@@ -2383,12 +2383,13 @@ app.post('/wsuggest', function (req, res) {
     }
 
 });
+
 app.post('/isuggest', function (req, res) {
     if (req.cookies.user != undefined) {
         if (!req.files) {
             return res.status(400).send('No files uploaded.');
         }
-        console.log(req.files);
+        //console.log(req.files);
         var file = req.files.sug_img;
         var img_name = file.name;
         file.mv('public/images/sugimage/' + img_name, function (err) {
@@ -2433,25 +2434,61 @@ app.post('/voteTSuggest', function (req, res) {
             Connection.getVotes(req.body.text[index], req.cookies.user, function (votes) {
                 if (votes[0] == undefined) {
                     Connection.addPointToPost(req.body.text[index], req.cookies.user, function (result) {
+
                         if (result == "success") {
-                            Connection.getSuggestionText(function (sugt) {
-                                Connection.getSuggestionImage(function (sugi) {
-                                    userloggedincheck(req, function (loggedin) {
-                                        res.render('pages/suggest', {
-                                            loggedin: loggedin,
-                                            username: req.cookies.user,
-                                            sugi: sugi,
-                                            sugt: sugt,
-                                            perror: perror
+                            Connection.getUsers(function (allusers) {
+                                Connection.getPointsFromPost(req.body.text[index],function(numpoints){
+                                    var userpercent = ((allusers.length/5)| 0);
+                                   // console.log(numpoints +"   +   "+userpercent);
+                                    if (numpoints > userpercent){
+                                        Connection.convertSuggestion(req.body.text[index],function(converted){
+                                            if (converted == "success"){
+                                                Connection.getUsers(function (topUsers) {
+                                                    Connection.getWords(function (topWords) {
+                                                        userloggedincheck(req, function (loggedin) {
+                                                            res.render('pages/index', {
+                                                                loggedin: loggedin,
+                                                                username: req.cookies.user,
+                                                                topUsers: topUsers,
+                                                                topWords: topWords,
+                                                                perror: "Congratulation!! The word got selected"
+                                                            });
+                                                            return;
+                                                        })
+                                                        //  res.render('pages/index', {topUsers: topUsers, topWords: topWords});
+                                                    })
+                                                });
+
+                                                //console.log("IT WORKS");
+                                            }
                                         });
-                                    })
-                                });
-                            });
+                                    }else {
+                                        Connection.getSuggestionText(function (sugt) {
+                                            Connection.getSuggestionImage(function (sugi) {
+                                                userloggedincheck(req, function (loggedin) {
+                                                    res.render('pages/suggest', {
+                                                        loggedin: loggedin,
+                                                        username: req.cookies.user,
+                                                        sugi: sugi,
+                                                        sugt: sugt,
+                                                        perror: perror
+                                                    });
+                                                })
+                                            });
+                                        });
+                                    }
+                                })
+                            }) ;
+
+
+
+
                         } else {
                             console.log("failure to vote")
                         }
                     })
                 } else if (votes[0].direction == 1) {//vote up
+                    console.log("IT WORKS--");
                     Connection.deleteVote(req.body.text[index], req.cookies.user, function () {
                         Connection.getSuggestionText(function (sugt) {
                             Connection.getSuggestionImage(function (sugi) {
@@ -2470,20 +2507,53 @@ app.post('/voteTSuggest', function (req, res) {
                 } else if (votes[0].direction == 0) {//vote down
                     Connection.deleteVote(req.body.text[index], req.cookies.user, function () {
                         Connection.addPointToPost(req.body.text[index], req.cookies.user, function (result) {
+                            console.log("IT WORKS!!");
                             if (result == "success") {
-                                Connection.getSuggestionText(function (sugt) {
-                                    Connection.getSuggestionImage(function (sugi) {
-                                        userloggedincheck(req, function (loggedin) {
-                                            res.render('pages/suggest', {
-                                                loggedin: loggedin,
-                                                username: req.cookies.user,
-                                                sugi: sugi,
-                                                sugt: sugt,
-                                                perror: perror
+                                Connection.getUsers(function (allusers) {
+                                    Connection.getPointsFromPost(req.body.text[index],function(numpoints){
+                                        var userpercent = ((allusers.length/5)| 0);
+                                         console.log(numpoints +"   +   "+userpercent);
+                                        if (numpoints > userpercent){
+                                            Connection.convertSuggestion(req.body.text[index],function(converted){
+                                                if (converted == "success"){
+                                                    Connection.getUsers(function (topUsers) {
+                                                        Connection.getWords(function (topWords) {
+                                                            userloggedincheck(req, function (loggedin) {
+                                                                res.render('pages/index', {
+                                                                    loggedin: loggedin,
+                                                                    username: req.cookies.user,
+                                                                    topUsers: topUsers,
+                                                                    topWords: topWords,
+                                                                    perror: "Congratulation!! The word got selected"
+                                                                });
+                                                                return;
+                                                            })
+                                                            //  res.render('pages/index', {topUsers: topUsers, topWords: topWords});
+                                                        })
+                                                    });
+
+                                                    //console.log("IT WORKS");
+                                                }
                                             });
-                                        })
-                                    });
-                                });
+                                        }else {
+
+
+                                        Connection.getSuggestionText(function (sugt) {
+                                            Connection.getSuggestionImage(function (sugi) {
+                                                userloggedincheck(req, function (loggedin) {
+                                                    res.render('pages/suggest', {
+                                                        loggedin: loggedin,
+                                                        username: req.cookies.user,
+                                                        sugi: sugi,
+                                                        sugt: sugt,
+                                                        perror: perror
+                                                    });
+                                                })
+                                            });
+                                        });
+                                        }
+                                    })
+                                }) ;
                             } else {
                                 console.log("failure to vote")
                             }
@@ -2567,8 +2637,6 @@ app.post('/voteTSuggest', function (req, res) {
 
 app.post('/voteISuggest', function (req, res) {
     if (req.cookies.user != undefined) {
-        //console.log(req.body);
-        //console.log(req.body.vote);
         var vote = req.body.vote;
         var index = vote.substring(0,1);
         vote = vote.substring(1,2);
@@ -2579,19 +2647,51 @@ app.post('/voteISuggest', function (req, res) {
                 if (votes[0] == undefined) {
                     Connection.addPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
                         if (result == "success") {
-                            Connection.getSuggestionText(function (sugt) {
-                                Connection.getSuggestionImage(function (sugi) {
-                                    userloggedincheck(req, function (loggedin) {
-                                        res.render('pages/suggest', {
-                                            loggedin: loggedin,
-                                            username: req.cookies.user,
-                                            sugi: sugi,
-                                            sugt: sugt,
-                                            perror: perror
+
+                            Connection.getUsers(function (allusers) {
+                                Connection.getPointsFromPost(req.body.imageName[index],function(numpoints){
+                                    var userpercent = ((allusers.length/5)| 0);
+                                    console.log(numpoints +"   +   "+userpercent);
+                                    if (numpoints > userpercent){
+                                        Connection.convertSuggestion(req.body.imageName[index],function(converted){
+                                            if (converted == "success"){
+                                                Connection.getUsers(function (topUsers) {
+                                                    Connection.getWords(function (topWords) {
+                                                        userloggedincheck(req, function (loggedin) {
+                                                            res.render('pages/index', {
+                                                                loggedin: loggedin,
+                                                                username: req.cookies.user,
+                                                                topUsers: topUsers,
+                                                                topWords: topWords,
+                                                                perror: "Congratulation!! The image got selected"
+                                                            });
+                                                            return;
+                                                        })
+                                                        //  res.render('pages/index', {topUsers: topUsers, topWords: topWords});
+                                                    })
+                                                });
+
+                                                //console.log("IT WORKS");
+                                            }
                                         });
-                                    })
-                                });
-                            });
+                                    }else {
+                                        Connection.getSuggestionText(function (sugt) {
+                                            Connection.getSuggestionImage(function (sugi) {
+                                                userloggedincheck(req, function (loggedin) {
+                                                    res.render('pages/suggest', {
+                                                        loggedin: loggedin,
+                                                        username: req.cookies.user,
+                                                        sugi: sugi,
+                                                        sugt: sugt,
+                                                        perror: perror
+                                                    });
+                                                })
+                                            });
+                                        });
+                                    }
+                                })
+                            }) ;
+
                         } else {
                             console.log("failure to vote")
                         }
@@ -2616,19 +2716,50 @@ app.post('/voteISuggest', function (req, res) {
                     Connection.deleteVote(req.body.imageName[index], req.cookies.user, function () {
                         Connection.addPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
                             if (result == "success") {
-                                Connection.getSuggestionText(function (sugt) {
-                                    Connection.getSuggestionImage(function (sugi) {
-                                        userloggedincheck(req, function (loggedin) {
-                                            res.render('pages/suggest', {
-                                                loggedin: loggedin,
-                                                username: req.cookies.user,
-                                                sugi: sugi,
-                                                sugt: sugt,
-                                                perror: perror
+                                Connection.getUsers(function (allusers) {
+                                    Connection.getPointsFromPost(req.body.imageName[index],function(numpoints){
+                                        var userpercent = ((allusers.length/5)| 0);
+                                        console.log(numpoints +"   +   "+userpercent);
+                                        if (numpoints > userpercent){
+                                            Connection.convertSuggestion(req.body.imageName[index],function(converted){
+                                                if (converted == "success"){
+                                                    Connection.getUsers(function (topUsers) {
+                                                        Connection.getWords(function (topWords) {
+                                                            userloggedincheck(req, function (loggedin) {
+                                                                res.render('pages/index', {
+                                                                    loggedin: loggedin,
+                                                                    username: req.cookies.user,
+                                                                    topUsers: topUsers,
+                                                                    topWords: topWords,
+                                                                    perror: "Congratulation!! The image got selected"
+                                                                });
+                                                                return;
+                                                            })
+                                                            //  res.render('pages/index', {topUsers: topUsers, topWords: topWords});
+                                                        })
+                                                    });
+                                                    //console.log("IT WORKS");
+                                                }
                                             });
-                                        })
-                                    });
-                                });
+                                        }else {
+
+
+                                            Connection.getSuggestionText(function (sugt) {
+                                                Connection.getSuggestionImage(function (sugi) {
+                                                    userloggedincheck(req, function (loggedin) {
+                                                        res.render('pages/suggest', {
+                                                            loggedin: loggedin,
+                                                            username: req.cookies.user,
+                                                            sugi: sugi,
+                                                            sugt: sugt,
+                                                            perror: perror
+                                                        });
+                                                    })
+                                                });
+                                            });
+                                        }
+                                    })
+                                }) ;
                             } else {
                                 console.log("failure to vote")
                             }
