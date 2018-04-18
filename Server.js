@@ -2396,7 +2396,7 @@ app.post('/voteTSuggest', function (req, res) {
         var index = vote.substring(0,1);
         vote = vote.substring(1,2);
         //console.log(vote + " " + index);
-        console.log(req.body.text[index]);
+        //console.log(req.body.text[index]);
         if(vote == '+'){
             Connection.getVotes(req.body.text[index], req.cookies.user, function (votes) {
                 if (votes[0] == undefined) {
@@ -2540,39 +2540,131 @@ app.post('/voteISuggest', function (req, res) {
         var index = vote.substring(0,1);
         vote = vote.substring(1,2);
         //console.log(vote + " " + index);
-        console.log(req.body.text[index]);
+        //console.log(req.body.imageName[index]);
         if(vote == '+'){
-            Connection.addPointToPost(req.body.text[index], req.cookies.user, function(err){
-                Connection.getSuggestionText(function (sugt) {
-                    Connection.getSuggestionImage(function (sugi) {
-                        userloggedincheck(req, function (loggedin) {
-                            res.render('pages/suggest', {
-                                loggedin: loggedin,
-                                username: req.cookies.user,
-                                sugi: sugi,
-                                sugt: sugt,
-                                perror: perror
+            Connection.getVotes(req.body.imageName[index], req.cookies.user, function (votes) {
+                if (votes[0] == undefined) {
+                    Connection.addPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
+                        if (result == "success") {
+                            Connection.getSuggestionText(function (sugt) {
+                                Connection.getSuggestionImage(function (sugi) {
+                                    userloggedincheck(req, function (loggedin) {
+                                        res.render('pages/suggest', {
+                                            loggedin: loggedin,
+                                            username: req.cookies.user,
+                                            sugi: sugi,
+                                            sugt: sugt,
+                                            perror: perror
+                                        });
+                                    })
+                                });
                             });
+                        } else {
+                            console.log("failure to vote")
+                        }
+                    })
+                } else if (votes[0].direction == 1) {//vote up
+                    Connection.deleteVote(req.body.imageName[index], req.cookies.user, function () {
+                        Connection.getSuggestionText(function (sugt) {
+                            Connection.getSuggestionImage(function (sugi) {
+                                userloggedincheck(req, function (loggedin) {
+                                    res.render('pages/suggest', {
+                                        loggedin: loggedin,
+                                        username: req.cookies.user,
+                                        sugi: sugi,
+                                        sugt: sugt,
+                                        perror: perror
+                                    });
+                                })
+                            });
+                        });
+                    })
+                } else if (votes[0].direction == 0) {//vote down
+                    Connection.deleteVote(req.body.imageName[index], req.cookies.user, function () {
+                        Connection.addPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
+                            if (result == "success") {
+                                Connection.getSuggestionText(function (sugt) {
+                                    Connection.getSuggestionImage(function (sugi) {
+                                        userloggedincheck(req, function (loggedin) {
+                                            res.render('pages/suggest', {
+                                                loggedin: loggedin,
+                                                username: req.cookies.user,
+                                                sugi: sugi,
+                                                sugt: sugt,
+                                                perror: perror
+                                            });
+                                        })
+                                    });
+                                });
+                            } else {
+                                console.log("failure to vote")
+                            }
                         })
-                    });
-                });
-            });
+                    })
+                }
+            })
         }else{
-            Connection.subPointToPost(req.body.text[index], req.cookies.user, function(err){
-                Connection.getSuggestionText(function (sugt) {
-                    Connection.getSuggestionImage(function (sugi) {
-                        userloggedincheck(req, function (loggedin) {
-                            res.render('pages/suggest', {
-                                loggedin: loggedin,
-                                username: req.cookies.user,
-                                sugi: sugi,
-                                sugt: sugt,
-                                perror: perror
+            Connection.getVotes(req.body.text[index], req.cookies.user, function (votes) {
+                if (votes[0] == undefined) {
+                    Connection.subPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
+                        if (result == "success") {
+                            Connection.getSuggestionText(function (sugt) {
+                                Connection.getSuggestionImage(function (sugi) {
+                                    userloggedincheck(req, function (loggedin) {
+                                        res.render('pages/suggest', {
+                                            loggedin: loggedin,
+                                            username: req.cookies.user,
+                                            sugi: sugi,
+                                            sugt: sugt,
+                                            perror: perror
+                                        });
+                                    })
+                                });
                             });
+                        } else {
+                            console.log("failure to vote")
+                        }
+                    })
+                } else if (votes[0].direction == 0) {//vote down
+                    Connection.deleteVote(req.body.imageName[index], req.cookies.user, function () {
+                        Connection.getSuggestionText(function (sugt) {
+                            Connection.getSuggestionImage(function (sugi) {
+                                userloggedincheck(req, function (loggedin) {
+                                    res.render('pages/suggest', {
+                                        loggedin: loggedin,
+                                        username: req.cookies.user,
+                                        sugi: sugi,
+                                        sugt: sugt,
+                                        perror: perror
+                                    });
+                                })
+                            });
+                        });
+                    })
+                } else if (votes[0].direction == 1) {//vote up
+                    Connection.deleteVote(req.body.imageName[index], req.cookies.user, function () {
+                        Connection.subPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
+                            if (result == "success") {
+                                Connection.getSuggestionText(function (sugt) {
+                                    Connection.getSuggestionImage(function (sugi) {
+                                        userloggedincheck(req, function (loggedin) {
+                                            res.render('pages/suggest', {
+                                                loggedin: loggedin,
+                                                username: req.cookies.user,
+                                                sugi: sugi,
+                                                sugt: sugt,
+                                                perror: perror
+                                            });
+                                        })
+                                    });
+                                });
+                            } else {
+                                console.log("failure to vote")
+                            }
                         })
-                    });
-                });
-            });
+                    })
+                }
+            })
         }
     }else{
         userloggedincheck(req, function (loggedin) {

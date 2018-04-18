@@ -306,10 +306,8 @@ function addPointToPost(definition, username, cb) {
                                                         cb(err);
                                                     }
                                                 });
-                                                console.log("testbeforenull");
                                                 if(postinfo[0].wordpage_wp_id != null) {
                                                     con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, totalpoints) {
-                                                        console.log("test where undef was");
                                                         if (err) {
                                                             cb(err);
                                                         } else {
@@ -323,7 +321,7 @@ function addPointToPost(definition, username, cb) {
                                                         }
                                                     });
                                                 }else{
-                                                    cb("votedonsuggestion");
+                                                    cb("success");
                                                 }
                                             }
                                         });
@@ -394,7 +392,7 @@ function subPointToPost(definition, username, cb) {
                                                     }
                                                 });
                                             }else{
-                                                cb("votedonsuggestion");
+                                                cb("success");
                                             }
                                         }
                                     });
@@ -528,7 +526,7 @@ function deleteVote(definition, username, cb) {
                                                 con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + wpid, function (err, wp) {
                                                     if (err) {
                                                         cb(err);
-                                                    } else if(posts[0].wordpage_wp_id != null){
+                                                    } else if(post[0].wordpage_wp_id != null){
                                                         con.query("UPDATE wordpage SET totalPoints = " + (wp[0].totalPoints + 1) + " WHERE wp_id = " + wpid, function (err, result) {
                                                             if (err) {
                                                                 cb(err);
