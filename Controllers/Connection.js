@@ -965,6 +965,63 @@ function incrementMilestone(username, cb) {
     });
 }
 
+exports.convertSuggestion = convertSuggestion;
+function convertSuggestion(definition, cb) {
+    var newDef = "";
+    for (var i = 0; i < definition.length; i++) {
+        if (definition[i] == '\'') {
+            newDef = newDef.concat('\\');
+        }
+        newDef = newDef.concat(definition[i]);
+    }
+    definition = newDef;
+    con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function(err, postid) {
+        if(err) {
+            cb(err);
+        } else {
+            con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid[0].post_id, function(err, result) {
+                if(err) {
+                    cb(err);
+                }
+            });
+            console.log(postid);
+            con.query("SELECT content_type FROM posts WHERE post_id = " + postid[0].post_id, function(err,contenttype) {
+                console.log(contenttype);
+                con.query("DELETE FROM posts WHERE post_id = " + postid[0].post_id, function(err, result) {
+                    if(err) {
+                        cb(err);
+                    }
+                });
+                if(contenttype[0].content_type == "suggestion_text") {
+                    con.query("INSERT INTO wordpage VALUE(NULL, 'text','" + definition + "', 0)", function(err, result) {
+                        if(err) {
+                            cb(err);
+                        }
+                    });
+                } else if(contenttype[0].content_type == "suggestion_image") {
+                    con.query("INSERT INTO wordpage VALUE(NULL, 'image','" + definition + "', 0)", function(err, result) {
+                        if(err) {
+                            cb(err);
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+exports getPointsFromPost = getPointsFromPost;
+function getPointsFromPost(definition, cb) {
+    con.query("SELECT points FROM posts WHERE defintion = '" + definition + "'", function(err, result) {
+        if(err) {
+            cb(err);
+        } else {
+            var z = JSON.parse(JSON.stringify(result[0].points));
+            cb(z);
+        }
+    });
+}
+
 /*function getImageData(image) {
     var fs = require('fs');
     fs.readFile(image, function(err, result) {
