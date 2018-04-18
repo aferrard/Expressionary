@@ -469,7 +469,7 @@ function deleteVote(definition, username, cb) {
                                                 con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + post[0].wordpage_wp_id, function (err, wp) {
                                                     if (err) {
                                                         cb(err);
-                                                    } else {
+                                                    } else if(post[0].wordpage_wp_id != null) {
                                                         con.query("UPDATE wordpage SET totalPoints = " + (wp[0].totalPoints - 1) + " WHERE wp_id = " + post[0].wordpage_wp_id, function (err, result) {
                                                             if (err) {
                                                                 cb(err);
