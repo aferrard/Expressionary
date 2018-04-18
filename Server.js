@@ -2324,33 +2324,9 @@ app.get('/suggest', function (req, res) {
 });
 
 app.post('/wsuggest', function (req, res) {
-    //console.log(req.body.suggested);
-    Connection.addSuggestionText(req.body.suggested, req.cookies.user, function (err) {
-        Connection.getSuggestionText(function (sugt) {
-            Connection.getSuggestionImage(function (sugi) {
-                userloggedincheck(req, function (loggedin) {
-                    res.render('pages/suggest', {
-                        loggedin: loggedin,
-                        username: req.cookies.user,
-                        sugi: sugi,
-                        sugt: sugt,
-                        perror: perror
-                    });
-                })
-            });
-        });
-    });
-});
-app.post('/isuggest', function (req, res) {
-    if (!req.files) {
-        return res.status(400).send('No files uploaded.');
-    }
-    console.log(req.files);
-    var file = req.files.sug_img;
-    var img_name = file.name;
-    file.mv('public/images/sugimage/' + img_name, function (err) {
-        if (err) return res.status(500).send(err);
-        Connection.addSuggestionImage(img_name, req.cookies.user, function (err) {
+    if (req.cookies.user != undefined) {
+        //console.log(req.body.suggested);
+        Connection.addSuggestionText(req.body.suggested, req.cookies.user, function (err) {
             Connection.getSuggestionText(function (sugt) {
                 Connection.getSuggestionImage(function (sugi) {
                     userloggedincheck(req, function (loggedin) {
@@ -2365,14 +2341,160 @@ app.post('/isuggest', function (req, res) {
                 });
             });
         });
-    });
+    }else{
+        userloggedincheck(req, function (loggedin) {
+            res.render("pages/registration", {
+                loggedin: loggedin,
+                username: req.cookies.user,
+                perror: "Please Register or Log In"
+            });
+        });
+    }
+
+});
+app.post('/isuggest', function (req, res) {
+    if (req.cookies.user != undefined) {
+        if (!req.files) {
+            return res.status(400).send('No files uploaded.');
+        }
+        console.log(req.files);
+        var file = req.files.sug_img;
+        var img_name = file.name;
+        file.mv('public/images/sugimage/' + img_name, function (err) {
+            if (err) return res.status(500).send(err);
+            Connection.addSuggestionImage(img_name, req.cookies.user, function (err) {
+                Connection.getSuggestionText(function (sugt) {
+                    Connection.getSuggestionImage(function (sugi) {
+                        userloggedincheck(req, function (loggedin) {
+                            res.render('pages/suggest', {
+                                loggedin: loggedin,
+                                username: req.cookies.user,
+                                sugi: sugi,
+                                sugt: sugt,
+                                perror: perror
+                            });
+                        })
+                    });
+                });
+            });
+        });
+    }else{
+        userloggedincheck(req, function (loggedin) {
+            res.render("pages/registration", {
+                loggedin: loggedin,
+                username: req.cookies.user,
+                perror: "Please Register or Log In"
+            });
+        });
+    }
 });
 app.post('/voteTSuggest', function (req, res) {
-    console.log(req.body);
-    console.log(req.body.text[0]);
+    if (req.cookies.user != undefined) {
+        //console.log(req.body);
+        //console.log(req.body.vote);
+        var vote = req.body.vote;
+        var index = vote.substring(0,1);
+        vote = vote.substring(1,2);
+        //console.log(vote + " " + index);
+        console.log(req.body.text[index]);
+        if(vote == '+'){
+            Connection.addPointToPost(req.body.text[index], req.cookies.user, function(err){
+                console.log("testadd");
+                Connection.getSuggestionText(function (sugt) {
+                    console.log("testgetTe");
+                    Connection.getSuggestionImage(function (sugi) {
+                        console.log("testgetIm");
+                        userloggedincheck(req, function (loggedin) {
+                            console.log("testlogcheck");
+                            res.render('pages/suggest', {
+                                loggedin: loggedin,
+                                username: req.cookies.user,
+                                sugi: sugi,
+                                sugt: sugt,
+                                perror: perror
+                            });
+                        })
+                    });
+                });
+            });
+        }else{
+            Connection.subPointToPost(req.body.text[index], req.cookies.user, function(err){
+                Connection.getSuggestionText(function (sugt) {
+                    Connection.getSuggestionImage(function (sugi) {
+                        userloggedincheck(req, function (loggedin) {
+                            res.render('pages/suggest', {
+                                loggedin: loggedin,
+                                username: req.cookies.user,
+                                sugi: sugi,
+                                sugt: sugt,
+                                perror: perror
+                            });
+                        })
+                    });
+                });
+            });
+        }
+    }else{
+        userloggedincheck(req, function (loggedin) {
+            res.render("pages/registration", {
+                loggedin: loggedin,
+                username: req.cookies.user,
+                perror: "Please Register or Log In"
+            });
+        });
+    }
 });
 app.post('/voteISuggest', function (req, res) {
-    console.log(req.body);
+    if (req.cookies.user != undefined) {
+        //console.log(req.body);
+        //console.log(req.body.vote);
+        var vote = req.body.vote;
+        var index = vote.substring(0,1);
+        vote = vote.substring(1,2);
+        //console.log(vote + " " + index);
+        console.log(req.body.text[index]);
+        if(vote == '+'){
+            Connection.addPointToPost(req.body.text[index], req.cookies.user, function(err){
+                Connection.getSuggestionText(function (sugt) {
+                    Connection.getSuggestionImage(function (sugi) {
+                        userloggedincheck(req, function (loggedin) {
+                            res.render('pages/suggest', {
+                                loggedin: loggedin,
+                                username: req.cookies.user,
+                                sugi: sugi,
+                                sugt: sugt,
+                                perror: perror
+                            });
+                        })
+                    });
+                });
+            });
+        }else{
+            Connection.subPointToPost(req.body.text[index], req.cookies.user, function(err){
+                Connection.getSuggestionText(function (sugt) {
+                    Connection.getSuggestionImage(function (sugi) {
+                        userloggedincheck(req, function (loggedin) {
+                            res.render('pages/suggest', {
+                                loggedin: loggedin,
+                                username: req.cookies.user,
+                                sugi: sugi,
+                                sugt: sugt,
+                                perror: perror
+                            });
+                        })
+                    });
+                });
+            });
+        }
+    }else{
+        userloggedincheck(req, function (loggedin) {
+            res.render("pages/registration", {
+                loggedin: loggedin,
+                username: req.cookies.user,
+                perror: "Please Register or Log In"
+            });
+        });
+    }
 });
 app.get('/sub', function (req, res) {
     Connection.subscribeUser(req.cookies.user, function (perror) {

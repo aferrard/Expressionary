@@ -306,8 +306,10 @@ function addPointToPost(definition, username, cb) {
                                                         cb(err);
                                                     }
                                                 });
-                                                if(postinfo[0].wordpage_wp_id != NULL) {
+                                                console.log("testbeforenull");
+                                                if(postinfo[0].wordpage_wp_id != null) {
                                                     con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, totalpoints) {
+                                                        console.log("test where undef was");
                                                         if (err) {
                                                             cb(err);
                                                         } else {
@@ -320,6 +322,8 @@ function addPointToPost(definition, username, cb) {
                                                             });
                                                         }
                                                     });
+                                                }else{
+                                                    cb("votedonsuggestion");
                                                 }
                                             }
                                         });
@@ -375,7 +379,7 @@ function subPointToPost(definition, username, cb) {
                                                     cb(err);
                                                 }
                                             });
-                                            if(postinfo[0].wordpage_wp_id != NULL) {
+                                            if(postinfo[0].wordpage_wp_id != null) {
                                                 con.query("SELECT totalPoints FROM wordpage WHERE wp_id = " + postinfo[0].wordpage_wp_id, function (err, totalpoints) {
                                                     if (err) {
                                                         cb(err);
@@ -389,6 +393,8 @@ function subPointToPost(definition, username, cb) {
                                                         });
                                                     }
                                                 });
+                                            }else{
+                                                cb("votedonsuggestion");
                                             }
                                         }
                                     });
