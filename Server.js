@@ -205,7 +205,7 @@ app.post('/appendix', function (req, res) {
 });
 
 app.post('/word2', function (req, res) {
-    //console.log(req.body);
+    console.log("voter: "+req.cookies.user);
     if (req.cookies.user != undefined) {
         var word = req.body.theWord;
         Connection.getwpFromWord(word, function (wpid) {
@@ -700,7 +700,7 @@ app.post('/word2', function (req, res) {
                         Connection.getVotes(post, req.cookies.user, function (votes) {
                             //console.log(votes);
                             if (votes[0] == undefined) {
-                                Connection.addPointToPost(post, points, req.cookies.user, function (result) {
+                                Connection.addPointToPost(post, req.cookies.user, function (result) {
                                     if (result == "success") {
                                         Connection.getPointsFromPost(post,function(points_from_post){
                                             Connection.getCurrentMilestone(req.cookies.user,function(milestone){
@@ -762,7 +762,7 @@ app.post('/word2', function (req, res) {
                                 })
                             } else {//vote down
                                 Connection.deleteVote(post, req.cookies.user, function () {
-                                    Connection.addPointToPost(post, points, req.cookies.user, function (result) {
+                                    Connection.addPointToPost(post, req.cookies.user, function (result) {
                                         if (result == "success") {
                                             Connection.getPostsFromWordId(wpid, function (post) {
                                                 userloggedincheck(req, function (loggedin) {
@@ -786,7 +786,7 @@ app.post('/word2', function (req, res) {
                     else if (vote == '-') {
                         Connection.getVotes(post, req.cookies.user, function (votes) {
                             if (votes.direction == undefined) {
-                                Connection.subPointToPost(post, points, req.cookies.user, function (result) {
+                                Connection.subPointToPost(post, req.cookies.user, function (result) {
                                     if (result == "success") {
                                         Connection.getPostsFromWordId(wpid, function (post) {
                                             userloggedincheck(req, function (loggedin) {
@@ -819,7 +819,7 @@ app.post('/word2', function (req, res) {
                                 })
                             } else {//vote up
                                 Connection.deleteVote(post, req.cookies.user, function () {
-                                    Connection.subPointToPost(post, points, req.cookies.user, function (result) {
+                                    Connection.subPointToPost(post, req.cookies.user, function (result) {
                                         if (result == "success") {
                                             Connection.getPostsFromWordId(wpid, function (post) {
                                                 userloggedincheck(req, function (loggedin) {
@@ -2225,6 +2225,7 @@ app.get('/validate.php', function (req, res) {
                 var firstname = map.get(username)._firstname;
                 var lastname = map.get(username)._lastname;
                 Connection.registerUser(email, reguname, password, firstname, lastname, function (result) {
+                    console.log(result);
                     res.render('pages/registration', {
                         loggedin: loggedin,
                         username: req.cookies.user,
@@ -3485,18 +3486,50 @@ app.post('/voteISuggest', function (req, res) {
 
 app.get('/sub', function (req, res) {
     Connection.subscribeUser(req.cookies.user, function (perror) {
-        userloggedincheck(req, function (loggedin) {
-            console.log(req.cookies.user + ": subscribed");
-            res.render('pages/suggest', {loggedin: loggedin, username: req.cookies.user, perror: perror});
+        Connection.findUserByUsername(req.cookies.user, function (user) {
+            Connection.getPostsByUsername(req.cookies.user, function (posts) {
+                userloggedincheck(req, function (loggedin) {
+                    console.log(req.cookies.user + ": subscribed");
+                    var pull = "SELECT profile_img FROM users WHERE username = '" + user.username + "'";
+                    con.query(pull, function (err, image) {
+                        res.render('pages/user', {
+                            loggedin: loggedin,
+                            username: req.cookies.user,
+                            username2: user.username,
+                            image: image,
+                            points: user.points,
+                            posts: posts,
+                            editcheck: true,
+                            perror: perror
+                        });
+                    })
+                })
+            })
         })
     })
 });
 
 app.get('/unsub', function (req, res) {
     Connection.unsubscribeUser(req.cookies.user, function (perror) {
-        userloggedincheck(req, function (loggedin) {
-            console.log(req.cookies.user + ": unsubscribed");
-            res.render('pages/suggest', {loggedin: loggedin, username: req.cookies.user, perror: perror});
+        Connection.findUserByUsername(req.cookies.user, function (user) {
+            Connection.getPostsByUsername(req.cookies.user, function (posts) {
+                userloggedincheck(req, function (loggedin) {
+                    console.log(req.cookies.user + ": unsubscribed");
+                    var pull = "SELECT profile_img FROM users WHERE username = '" + user.username + "'";
+                    con.query(pull, function (err, image) {
+                        res.render('pages/user', {
+                            loggedin: loggedin,
+                            username: req.cookies.user,
+                            username2: user.username,
+                            image: image,
+                            points: user.points,
+                            posts: posts,
+                            editcheck: true,
+                            perror: perror
+                        });
+                    })
+                })
+            })
         })
     })
 });

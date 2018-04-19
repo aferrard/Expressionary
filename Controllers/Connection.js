@@ -286,11 +286,13 @@ function addPointToPost(definition, username, cb) {
                             if (postinfo.length == 0) {
                                 cb("this post does not exist");
                             } else {
+                                console.log("username:"+ username);
                                 con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function (err, userinfo) {
                                     if (err) {
                                         cb(err);
                                     } else {
                                         //  console.log("postid:userid " + postinfo[0].post_id+":"+userinfo[0].user_id);
+                                        console.log(userinfo);
                                         con.query("INSERT INTO posts_voted VALUE(" + postinfo[0].post_id + ", " + userinfo[0].user_id + ", 1)", function (err, result) {
                                             if (err) {
                                                 console.log(err);
