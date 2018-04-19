@@ -2,6 +2,7 @@
   "name": "node-ejs",
   "main": "server.js",
   "dependencies": {
+    "body-parser": "latest",
     "cookie-parser": "^1.4.3",
     "cookieparser": "^0.1.0",
     "ejs": "^1.0.0",
@@ -10,11 +11,11 @@
     "express-fileupload": "^0.4.0",
     "hashmap": "^2.3.0",
     "mumail": "^0.3.1",
+    "mv": "^2.1.1",
     "mysql": "^2.15.0",
     "nodemailer": "^4.6.3",
     "path": "^0.12.7",
     "randomstring": "^1.1.5",
-    "tape": "^4.9.0",
-    "body-parser": "latest"
+    "tape": "^4.9.0"
   }
 }
