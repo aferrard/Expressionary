@@ -24,6 +24,16 @@ function sendEmail(address, message) {
         if (result == "failure"){
 
         }else{
+            if (result="sendtheemail"){
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+            }
+
             if (result == 1){ // subscribed
                 transporter.sendMail(mailOptions, function(error, info){
                     if (error) {

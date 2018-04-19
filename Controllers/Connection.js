@@ -1147,8 +1147,10 @@ exports.getSubscriptionbyEmail = getSubscriptionbyEmail;
 function getSubscriptionbyEmail(email,cb){
     var sql = "SELECT * FROM expressionary_data.users where email='" + email + "'";
     con.query(sql,function (err,result) {
-        if (err){
+        if (err) {
             cb("failure");
+        } else if (result.length==0){
+            cb("sendtheemail");
         }else {
             var z = JSON.parse(JSON.stringify(result[0].notification));
             cb(z);
