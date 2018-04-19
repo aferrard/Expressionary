@@ -2444,31 +2444,30 @@ app.post('/isuggest', function (req, res) {
 
 app.post('/voteTSuggest', function (req, res) {
     if (req.cookies.user != undefined) {
-        //console.log(req.body);
-        //console.log(req.body.vote);
+
         var vote = req.body.vote;
         var index = vote.substring(0,1);
         vote = vote.substring(1,2);
-        //console.log(vote + " " + index);
-        //console.log(req.body.text[index]);
         if(vote == '+'){
             Connection.getVotes(req.body.text[index], req.cookies.user, function (votes) {
                 if (votes[0] == undefined) {
                     Connection.addPointToPost(req.body.text[index], req.cookies.user, function (result) {
                         if (result == "success") {
+
+
                             Connection.getUsers(function (allusers) {
                                 Connection.getPointsFromPost(req.body.text[index],function(numpoints){
                                     var userpercent = ((allusers.length/5)| 0);
                                     if (numpoints > userpercent){
-                                        Connection.convertSuggestion(req.body.text[index],function(converted){
+                                        Connection.getUserEmailforSelectedword(req.body.text[index],function (result1) {
+                                            Connection.convertSuggestion(req.body.text[index],function(converted){
                                             if (converted == "success"){
                                                 Connection.getUsers(function (topUsers) {
                                                     Connection.getWords(function (topWords) {
                                                         userloggedincheck(req, function (loggedin) {
-                                                            Connection.getUserEmailforSelectedword(req.body.text[index],function (result) {
-                                                                if (result == "failure"){
+                                                                if (result1 == "failure"){
                                                                 }else {
-                                                                    Mail.sendEmail(result,emailmessage3);
+                                                                    Mail.sendEmail(result1,emailmessage3);
                                                                     res.render('pages/index', {
                                                                         loggedin: loggedin,
                                                                         username: req.cookies.user,
@@ -2481,8 +2480,9 @@ app.post('/voteTSuggest', function (req, res) {
                                                             return;
                                                         })
                                                     })
-                                                });
                                             }
+                                                });
+
                                         });
                                     }else {
                                         Connection.getSuggestionText(function (sugt) {
@@ -2566,17 +2566,18 @@ app.post('/voteTSuggest', function (req, res) {
                                         var userpercent = ((allusers.length/5)| 0);
                                          console.log(numpoints +"   +   "+userpercent);
                                         if (numpoints > userpercent){
-                                            Connection.convertSuggestion(req.body.text[index],function(converted){
-                                                if ("success" == "success"){
+                                            Connection.getUserEmailforSelectedword(req.body.text[index],function (result1) {
+
+                                                Connection.convertSuggestion(req.body.text[index],function(converted){
+                                                if (converted == "success"){
                                                     Connection.getUsers(function (topUsers) {
                                                         Connection.getWords(function (topWords) {
                                                             userloggedincheck(req, function (loggedin) {
 
-                                                                Connection.getUserEmailforSelectedword(req.body.text[index],function (result) {
-                                                                    if (result == "failure"){
+                                                                    if (result1 == "failure"){
                                                                     }else {
-                                                                        console.log("!!!!!" + result);
-                                                                        Mail.sendEmail(result,emailmessage3);
+                                                                        console.log("!!!!!" + result1);
+                                                                        Mail.sendEmail(result1,emailmessage3);
 
                                                                     res.render('pages/index', {
                                                                         loggedin: loggedin,
@@ -2589,8 +2590,8 @@ app.post('/voteTSuggest', function (req, res) {
                                                                 return;
                                                             })})
                                                         })
-                                                    });
-                                                }
+                                                    }
+                                                });
                                             });
                                         }else {
                                             Connection.getSuggestionText(function (sugt) {
@@ -2616,6 +2617,8 @@ app.post('/voteTSuggest', function (req, res) {
                     })
                 }
             })
+            //  IF VOTE WAS MINUS
+            ////////////////////////////////
         }else{  //VOTE WAS -
             Connection.getVotes(req.body.text[index], req.cookies.user, function (votes) {
                 if (votes[0] == undefined) {
@@ -2667,21 +2670,72 @@ app.post('/voteTSuggest', function (req, res) {
                             console.log("failure to vote")
                         }
                     })
-                } else if (votes[0].direction == 0) {//vote down
+                } else if (votes[0].direction == 0) {
+                    console.log("HERE");
+                    //vote down
                     Connection.deleteVote(req.body.text[index], req.cookies.user, function () {
-                        Connection.getSuggestionText(function (sugt) {
-                            Connection.getSuggestionImage(function (sugi) {
-                                userloggedincheck(req, function (loggedin) {
-                                    res.render('pages/suggest', {
-                                        loggedin: loggedin,
-                                        username: req.cookies.user,
-                                        sugi: sugi,
-                                        sugt: sugt,
-                                        perror: perror
+                        
+                        Connection.getUsers(function (allusers) {
+                            Connection.getPointsFromPost(req.body.text[index],function(numpoints){
+                                var userpercent = ((allusers.length/5)| 0);
+                                if (numpoints > userpercent){
+                                    Connection.getUserEmailforSelectedword(req.body.text[index],function (result1) {
+                                        Connection.convertSuggestion(req.body.text[index],function(converted){
+                                            if (converted == "success"){
+                                                Connection.getUsers(function (topUsers) {
+                                                    Connection.getWords(function (topWords) {
+                                                        userloggedincheck(req, function (loggedin) {
+                                                            if (result1 == "failure"){
+                                                            }else {
+                                                                Mail.sendEmail(result1,emailmessage3);
+                                                                res.render('pages/index', {
+                                                                    loggedin: loggedin,
+                                                                    username: req.cookies.user,
+                                                                    topUsers: topUsers,
+                                                                    topWords: topWords,
+                                                                    perror: "Congratulation!! The word got selected"
+                                                                });
+                                                            }
+                                                        });
+                                                        return;
+                                                    })
+                                                })
+                                            }
+                                        });
+
                                     });
-                                })
-                            });
-                        });
+                                }else {
+                                    Connection.getSuggestionText(function (sugt) {
+                                        Connection.getSuggestionImage(function (sugi) {
+                                            userloggedincheck(req, function (loggedin) {
+                                                res.render('pages/suggest', {
+                                                    loggedin: loggedin,
+                                                    username: req.cookies.user,
+                                                    sugi: sugi,
+                                                    sugt: sugt,
+                                                    perror: perror
+                                                });
+                                            })
+                                        });
+                                    });
+                                }
+                            })
+                        }) ;
+
+
+                        // Connection.getSuggestionText(function (sugt) {
+                        //     Connection.getSuggestionImage(function (sugi) {
+                        //         userloggedincheck(req, function (loggedin) {
+                        //             res.render('pages/suggest', {
+                        //                 loggedin: loggedin,
+                        //                 username: req.cookies.user,
+                        //                 sugi: sugi,
+                        //                 sugt: sugt,
+                        //                 perror: perror
+                        //             });
+                        //         })
+                        //     });
+                        // });
                     })
                 } else if (votes[0].direction == 1) {//vote up
                     Connection.deleteVote(req.body.text[index], req.cookies.user, function () {
@@ -2692,16 +2746,17 @@ app.post('/voteTSuggest', function (req, res) {
                                         var userpercent = ((allusers.length/5)| 0);
                                         console.log(numpoints +"   +   "+userpercent);
                                         if (numpoints > userpercent){
-                                            Connection.convertSuggestion(req.body.text[index],function(converted){
+                                            Connection.getUserEmailforSelectedword(req.body.text[index],function (result1) {
+                                                Connection.convertSuggestion(req.body.text[index],function(converted){
                                                 if ("success" == "success"){
                                                     Connection.getUsers(function (topUsers) {
                                                         Connection.getWords(function (topWords) {
                                                             userloggedincheck(req, function (loggedin) {
-                                                                Connection.getUserEmailforSelectedword(req.body.text[index],function (result) {
-                                                                    if (result == "failure"){
+
+                                                                    if (result1 == "failure"){
                                                                     }else {
-                                                                        console.log("!!!!!" + result);
-                                                                        Mail.sendEmail(result,emailmessage3);
+                                                                        console.log("!!!!!" + result1);
+                                                                        Mail.sendEmail(result1,emailmessage3);
                                                                         res.render('pages/index', {
                                                                             loggedin: loggedin,
                                                                             username: req.cookies.user,
@@ -2714,8 +2769,8 @@ app.post('/voteTSuggest', function (req, res) {
                                                                 })
                                                             })
                                                         })
-                                                    });
-                                                }
+                                                    }
+                                                });
                                             });
                                         }else {
                                             Connection.getSuggestionText(function (sugt) {
