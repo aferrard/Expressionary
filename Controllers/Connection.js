@@ -978,10 +978,12 @@ function convertSuggestion(definition, cb) {
     con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function(err, postid) {
         if(err) {
             cb(err);
+            return;
         } else {
             con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid[0].post_id, function(err, result) {
                 if(err) {
                     cb(err);
+                    return;
                 }
             });
             console.log(postid);
@@ -990,24 +992,29 @@ function convertSuggestion(definition, cb) {
                 con.query("DELETE FROM posts WHERE post_id = " + postid[0].post_id, function(err, result) {
                     if(err) {
                         cb(err);
+                        return
                     }
                 });
                 if(contenttype[0].content_type == "suggestion_text") {
                     con.query("INSERT INTO wordpage VALUE(NULL, 'word','" + definition + "', 0)", function(err, result) {
                         if(err) {
                             cb(err);
+                            return;
                         }
                         else {
                             cb("success");
+                            return;
                         }
                     });
                 } else if(contenttype[0].content_type == "suggestion_image") {
                     con.query("INSERT INTO wordpage VALUE(NULL, 'image','" + definition + "', 0)", function(err, result) {
                         if(err) {
                             cb(err);
+                            return
                         }
                         else {
                             cb("success")
+                            return;
                         }
                     });
                 }
@@ -1071,20 +1078,52 @@ function getUserEmailforSelectedword(definition,cb) {
 
     con.query(sql,function (err,result){
         if (err){
+            console.log("failed?")
             cb("failure");
         }else {
-            var sql2 = "select email from users where user_id=" + result;
-            con.query(sql2,function (err,result) {
-                if (err){
+            var z = JSON.parse(JSON.stringify(result[0].users_user_id));
+            console.log(z);
+            var sql2 = "select email from users where user_id=" + z;
+            console.log(sql2);
+            con.query(sql2,function (err1,result1) {
+                if (err1){
                     cb("failure");
                 }else {
-                    cb(result);
+                    var z = JSON.parse(JSON.stringify(result1[0].email));
+                    cb(z);
                 }
             })
 
         }
     });
 }
+
+exports.getUserEmailforSelectedimage = getUserEmailforSelectedimage;
+function getUserEmailforSelectedimage(definition,cb) {
+    var sql = "select users_user_id from posts where content_type='suggestion_image' and definition='"+ definition +"'";
+
+    con.query(sql,function (err,result){
+        if (err){
+            console.log("failed?");
+            cb("failure");
+        }else {
+            var z = JSON.parse(JSON.stringify(result[0].users_user_id));
+            console.log(z);
+            var sql2 = "select email from users where user_id=" + z;
+            console.log(sql2);
+            con.query(sql2,function (err1,result1) {
+                if (err1){
+                    cb("failure");
+                }else {
+                    var z = JSON.parse(JSON.stringify(result1[0].email));
+                    cb(z);
+                }
+            })
+
+        }
+    });
+}
+
 
 /*function getImageData(image) {
     var fs = require('fs');
