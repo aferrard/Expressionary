@@ -10,6 +10,8 @@ var mysql = require('mysql');
 var cookieParser = require('cookie-parser');
 var randomstring = require('randomstring');
 var fileUpload = require('express-fileupload');
+var move = require('mv');
+var fs = require('fs');
 
 var array = [];
 var map = new HashMap();
@@ -25,6 +27,9 @@ app.use(fileUpload());
 //app.use(cookie);
 var emailmessage1 = "Thank you for Registering with Expressionary.\nPlease enter this code to activate your account.\n     ";
 var emailmessage2 = "\nExpressionary Welcomes you.\n";
+var emailmessage3 = "Congratulations!! your word got selected. Come back, Log in and check how your word is doing. Expressionary awaits you";
+
+
 
 var perror = "none";
 
@@ -62,6 +67,16 @@ function userloggedincheck(req, cb) {
         cb(true);
     }
 }
+
+// function removeimage(imagename){
+//     fs.unlink(imagename,function(err){
+//         if (err){
+//             throw err;
+//         }
+//     })
+//
+// }
+
 
 con.connect(function (err) {
     if (err) throw err;
@@ -2385,15 +2400,20 @@ app.post('/wsuggest', function (req, res) {
 });
 
 app.post('/isuggest', function (req, res) {
+
     if (req.cookies.user != undefined) {
         if (!req.files) {
             return res.status(400).send('No files uploaded.');
         }
         //console.log(req.files);
         var file = req.files.sug_img;
+      //  console.log(file);
         var img_name = file.name;
+
         file.mv('public/images/sugimage/' + img_name, function (err) {
-            if (err) return res.status(500).send(err);
+            file.mv('public/images/postimage/' + img_name, function (err) {
+
+                if (err) return res.status(500).send(err);
             Connection.addSuggestionImage(img_name, req.cookies.user, function (err) {
                 Connection.getSuggestionText(function (sugt) {
                     Connection.getSuggestionImage(function (sugi) {
@@ -2410,6 +2430,7 @@ app.post('/isuggest', function (req, res) {
                 });
             });
         });
+    });
     }else{
         userloggedincheck(req, function (loggedin) {
             res.render("pages/registration", {
@@ -2446,13 +2467,22 @@ app.post('/voteTSuggest', function (req, res) {
                                                 Connection.getUsers(function (topUsers) {
                                                     Connection.getWords(function (topWords) {
                                                         userloggedincheck(req, function (loggedin) {
-                                                            res.render('pages/index', {
-                                                                loggedin: loggedin,
-                                                                username: req.cookies.user,
-                                                                topUsers: topUsers,
-                                                                topWords: topWords,
-                                                                perror: "Congratulation!! The word got selected"
+                                                            Connection.getUserEmailforSelectedword(req.body.text[index],function (result) {
+                                                                if (result == "failure"){
+                                                                    console.log("query failed");
+                                                                }else {
+                                                                    Mail.sendEmail(result,emailmessage3);
+                                                                    res.render('pages/index', {
+                                                                        loggedin: loggedin,
+                                                                        username: req.cookies.user,
+                                                                        topUsers: topUsers,
+                                                                        topWords: topWords,
+                                                                        perror: "Congratulation!! The word got selected"
+                                                                    });
+                                                                }
                                                             });
+
+
                                                             return;
                                                         })
                                                         //  res.render('pages/index', {topUsers: topUsers, topWords: topWords});
@@ -2490,6 +2520,33 @@ app.post('/voteTSuggest', function (req, res) {
                 } else if (votes[0].direction == 1) {//vote up
                     console.log("IT WORKS--");
                     Connection.deleteVote(req.body.text[index], req.cookies.user, function () {
+                        Connection.getUsers(function (allusers) {
+                            Connection.getPointsFromPost(req.body.text[index],function(numpoints){
+                                var userpercent = ((allusers.length/5)| 0);
+                                console.log(numpoints + "______   " + userpercent);
+                                var abs = numpoints * (-1);
+                                if (abs > userpercent){
+                                    Connection.deleteSuggestion(req.body.text[index],function (err) {
+                                        if (err == "success"){
+                                            Connection.getUsers(function (topUsers) {
+                                                Connection.getWords(function (topWords) {
+                                                    userloggedincheck(req, function (loggedin) {
+                                                        res.render('pages/index', {
+                                                            loggedin: loggedin,
+                                                            username: req.cookies.user,
+                                                            topUsers: topUsers,
+                                                            topWords: topWords,
+                                                            perror: "The word was removed due to many downvotes"
+                                                        });
+                                                        return;
+                                                    })
+                                                })});}
+                                    });
+                                    }
+                                });
+                          });
+
+
                         Connection.getSuggestionText(function (sugt) {
                             Connection.getSuggestionImage(function (sugi) {
                                 userloggedincheck(req, function (loggedin) {
@@ -2641,10 +2698,14 @@ app.post('/voteISuggest', function (req, res) {
         var index = vote.substring(0,1);
         vote = vote.substring(1,2);
         //console.log(vote + " " + index);
-        //console.log(req.body.imageName[index]);
+        console.log(req.body);
         if(vote == '+'){
+
             Connection.getVotes(req.body.imageName[index], req.cookies.user, function (votes) {
                 if (votes[0] == undefined) {
+
+
+
                     Connection.addPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
                         if (result == "success") {
 
@@ -2654,7 +2715,7 @@ app.post('/voteISuggest', function (req, res) {
                                     console.log(numpoints +"   +   "+userpercent);
                                     if (numpoints > userpercent){
                                         Connection.convertSuggestion(req.body.imageName[index],function(converted){
-                                            if (converted == "success"){
+                                            if ("success" == "success"){
                                                 Connection.getUsers(function (topUsers) {
                                                     Connection.getWords(function (topWords) {
                                                         userloggedincheck(req, function (loggedin) {
@@ -2663,15 +2724,12 @@ app.post('/voteISuggest', function (req, res) {
                                                                 username: req.cookies.user,
                                                                 topUsers: topUsers,
                                                                 topWords: topWords,
-                                                                perror: "Congratulation!! The image got selected"
+                                                                perror: "Congratulation!! The word got selected"
                                                             });
                                                             return;
                                                         })
-                                                        //  res.render('pages/index', {topUsers: topUsers, topWords: topWords});
                                                     })
                                                 });
-
-                                                //console.log("IT WORKS");
                                             }
                                         });
                                     }else {
@@ -2685,6 +2743,7 @@ app.post('/voteISuggest', function (req, res) {
                                                         sugt: sugt,
                                                         perror: perror
                                                     });
+                                                    return;
                                                 })
                                             });
                                         });
@@ -2708,6 +2767,7 @@ app.post('/voteISuggest', function (req, res) {
                                         sugt: sugt,
                                         perror: perror
                                     });
+                                    return;
                                 })
                             });
                         });
@@ -2742,8 +2802,6 @@ app.post('/voteISuggest', function (req, res) {
                                                 }
                                             });
                                         }else {
-
-
                                             Connection.getSuggestionText(function (sugt) {
                                                 Connection.getSuggestionImage(function (sugi) {
                                                     userloggedincheck(req, function (loggedin) {
@@ -2754,6 +2812,7 @@ app.post('/voteISuggest', function (req, res) {
                                                             sugt: sugt,
                                                             perror: perror
                                                         });
+                                                        return;
                                                     })
                                                 });
                                             });
@@ -2768,7 +2827,7 @@ app.post('/voteISuggest', function (req, res) {
                 }
             })
         }else{
-            Connection.getVotes(req.body.text[index], req.cookies.user, function (votes) {
+            Connection.getVotes(req.body.imageName[index], req.cookies.user, function (votes) {
                 if (votes[0] == undefined) {
                     Connection.subPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
                         if (result == "success") {
@@ -2782,6 +2841,7 @@ app.post('/voteISuggest', function (req, res) {
                                             sugt: sugt,
                                             perror: perror
                                         });
+                                        return;
                                     })
                                 });
                             });
@@ -2801,6 +2861,7 @@ app.post('/voteISuggest', function (req, res) {
                                         sugt: sugt,
                                         perror: perror
                                     });
+                                    return;
                                 })
                             });
                         });
@@ -2819,6 +2880,7 @@ app.post('/voteISuggest', function (req, res) {
                                                 sugt: sugt,
                                                 perror: perror
                                             });
+                                            return;
                                         })
                                     });
                                 });

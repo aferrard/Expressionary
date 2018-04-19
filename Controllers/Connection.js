@@ -1065,6 +1065,27 @@ function deleteSuggestion(definition, cb) {
     cb("success");
 }
 
+exports.getUserEmailforSelectedword = getUserEmailforSelectedword;
+function getUserEmailforSelectedword(definition,cb) {
+    var sql = "select users_user_id from posts where content_type='suggestion_text' and definition='"+ definition +"'";
+
+    con.query(sql,function (err,result){
+        if (err){
+            cb("failure");
+        }else {
+            var sql2 = "select email from users where user_id=" + result;
+            con.query(sql2,function (err,result) {
+                if (err){
+                    cb("failure");
+                }else {
+                    cb(result);
+                }
+            })
+
+        }
+    });
+}
+
 /*function getImageData(image) {
     var fs = require('fs');
     fs.readFile(image, function(err, result) {
