@@ -2674,7 +2674,7 @@ app.post('/voteTSuggest', function (req, res) {
                     console.log("HERE");
                     //vote down
                     Connection.deleteVote(req.body.text[index], req.cookies.user, function () {
-                        
+
                         Connection.getUsers(function (allusers) {
                             Connection.getPointsFromPost(req.body.text[index],function(numpoints){
                                 var userpercent = ((allusers.length/5)| 0);
@@ -2814,7 +2814,7 @@ app.post('/voteISuggest', function (req, res) {
         var index = vote.substring(0,1);
         vote = vote.substring(1,2);
         //console.log(vote + " " + index);
-        console.log(req.body);
+       // console.log(req.body);
         if(vote == '+'){
 
             Connection.getVotes(req.body.imageName[index], req.cookies.user, function (votes) {
@@ -2829,16 +2829,16 @@ app.post('/voteISuggest', function (req, res) {
                                     console.log(numpoints +"   +   "+userpercent);
                                     if (numpoints > userpercent){
                                         Connection.convertSuggestion(req.body.imageName[index],function(converted){
+                                            Connection.getUserEmailforSelectedimage(req.body.imageName[index], function (result1) {
 
                                             if (converted == "success") {
                                                 Connection.getUsers(function (topUsers) {
                                                     Connection.getWords(function (topWords) {
                                                         userloggedincheck(req, function (loggedin) {
-                                                            Connection.getUserEmailforSelectedimage(req.body.imageName[index], function (result) {
-                                                                if (result == "failure") {
+                                                                if (result1 == "failure") {
                                                                 } else {
                                                                     console.log("!!!!!" + result);
-                                                                    Mail.sendEmail(result, emailmessage3);
+                                                                    Mail.sendEmail(result1, emailmessage3);
 
                                                                     res.render('pages/index', {
                                                                         loggedin: loggedin,
@@ -2852,8 +2852,9 @@ app.post('/voteISuggest', function (req, res) {
                                                             })
                                                         })
                                                     });
-                                                })
                                             }
+                                                })
+
                                         });
                                     }else {
                                         Connection.getSuggestionText(function (sugt) {
@@ -2880,19 +2881,46 @@ app.post('/voteISuggest', function (req, res) {
                     })
                 } else if (votes[0].direction == 1) {//vote up
                     Connection.deleteVote(req.body.imageName[index], req.cookies.user, function () {
-                        Connection.getSuggestionText(function (sugt) {
-                            Connection.getSuggestionImage(function (sugi) {
-                                userloggedincheck(req, function (loggedin) {
-                                    res.render('pages/suggest', {
-                                        loggedin: loggedin,
-                                        username: req.cookies.user,
-                                        sugi: sugi,
-                                        sugt: sugt,
-                                        perror: perror
+                        Connection.getUsers(function (allusers) {
+                            Connection.getPointsFromPost(req.body.imageName[index],function(numpoints){
+                                var userpercent = ((allusers.length/5)| 0);
+                                console.log(numpoints + "______   " + userpercent);
+                                var abs = numpoints * (-1);
+                                if (abs > userpercent) {
+                                    Connection.deleteSuggestion(req.body.imageName[index], function (err) {
+                                        if (err == "success") {
+                                            Connection.getUsers(function (topUsers) {
+                                                Connection.getWords(function (topWords) {
+                                                    userloggedincheck(req, function (loggedin) {
+                                                        res.render('pages/index', {
+                                                            loggedin: loggedin,
+                                                            username: req.cookies.user,
+                                                            topUsers: topUsers,
+                                                            topWords: topWords,
+                                                            perror: "The image was removed due to many downvotes"
+                                                        });
+                                                        return;
+                                                    })
+                                                })
+                                            });
+                                        }
                                     });
-                                    return;
-                                })
-                            });
+                                }else {
+                                    Connection.getSuggestionText(function (sugt) {
+                                        Connection.getSuggestionImage(function (sugi) {
+                                            userloggedincheck(req, function (loggedin) {
+                                                res.render('pages/suggest', {
+                                                    loggedin: loggedin,
+                                                    username: req.cookies.user,
+                                                    sugi: sugi,
+                                                    sugt: sugt,
+                                                    perror: perror
+                                                });
+                                            })
+                                        });
+                                    });
+                                }
+                            })
                         });
                     })
                 } else if (votes[0].direction == 0) {//vote down
@@ -2955,107 +2983,163 @@ app.post('/voteISuggest', function (req, res) {
                     })
                 }
             })
+            //////////////////////////////////
+               // IF THE VOTE IS MINUS //
+            /////////////////////////////////
+
         }else{
             Connection.getVotes(req.body.imageName[index], req.cookies.user, function (votes) {
                 if (votes[0] == undefined) {
+                   // console.log("double minus")
                     Connection.subPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
                         if (result == "success") {
-                            Connection.getSuggestionText(function (sugt) {
-                                Connection.getSuggestionImage(function (sugi) {
-                                    Connection.getUsers(function (allusers) {
-                                        Connection.getPointsFromPost(req.body.imageName[index],function(numpoints){
-                                            var userpercent = ((allusers.length/5)| 0);
-                                            if (numpoints > userpercent){
-                                                Connection.getUserEmailforSelectedimage(req.body.imageName[index], function (email) {
-                                                    Connection.convertSuggestion(req.body.imageName[index],function(converted){
-                                                        if (converted == "success") {
-                                                            Connection.getUsers(function (topUsers) {
-                                                                Connection.getWords(function (topWords) {
-                                                                    userloggedincheck(req, function (loggedin) {
-
-                                                                        if (email == "failure") {
-                                                                        } else {
-                                                                            console.log("!!!!!" + email);
-                                                                            Mail.sendEmail(email, emailmessage3);
-                                                                            res.render('pages/index', {
-                                                                                loggedin: loggedin,
-                                                                                username: req.cookies.user,
-                                                                                topUsers: topUsers,
-                                                                                topWords: topWords,
-                                                                                perror: "Congratulation!! The image got selected"
-                                                                            });
-                                                                        }
-                                                                        return;
-                                                                    })
-                                                                });
-                                                            });
-                                                        }
-                                                    })
-                                                }) ;
-                                            }else {
-                                                Connection.getSuggestionText(function (sugt) {
-                                                    Connection.getSuggestionImage(function (sugi) {
+                            Connection.getUsers(function (allusers) {
+                                Connection.getPointsFromPost(req.body.imageName[index],function(numpoints){
+                                    var userpercent = ((allusers.length/5)| 0);
+                                    console.log(numpoints + "______   " + userpercent);
+                                    var abs = numpoints * (-1);
+                                    if (abs > userpercent) {
+                                        Connection.deleteSuggestion(req.body.imageName[index], function (err) {
+                                            if (err == "success") {
+                                                Connection.getUsers(function (topUsers) {
+                                                    Connection.getWords(function (topWords) {
                                                         userloggedincheck(req, function (loggedin) {
-                                                            res.render('pages/suggest', {
+                                                            res.render('pages/index', {
                                                                 loggedin: loggedin,
                                                                 username: req.cookies.user,
-                                                                sugi: sugi,
-                                                                sugt: sugt,
-                                                                perror: perror
+                                                                topUsers: topUsers,
+                                                                topWords: topWords,
+                                                                perror: "The image was removed due to many downvotes"
                                                             });
                                                             return;
                                                         })
-                                                    });
+                                                    })
                                                 });
                                             }
-                                        })
-                                    })
+                                        });
+                                    }else {
+                                        Connection.getSuggestionText(function (sugt) {
+                                            Connection.getSuggestionImage(function (sugi) {
+                                                userloggedincheck(req, function (loggedin) {
+                                                    res.render('pages/suggest', {
+                                                        loggedin: loggedin,
+                                                        username: req.cookies.user,
+                                                        sugi: sugi,
+                                                        sugt: sugt,
+                                                        perror: perror
+                                                    });
+                                                })
+                                            });
+                                        });
+                                    }
                                 })
-                            })
+                            });
+
                         } else {
                             console.log("failure to vote")
                         }
                     })
                 } else if (votes[0].direction == 0) {//vote down
                     Connection.deleteVote(req.body.imageName[index], req.cookies.user, function () {
-                        Connection.getSuggestionText(function (sugt) {
-                            Connection.getSuggestionImage(function (sugi) {
+                        Connection.getUsers(function (allusers) {
+                            Connection.getPointsFromPost(req.body.imageName[index],function(numpoints){
+                                var userpercent = ((allusers.length/5)| 0);
+                                console.log(numpoints +"   +   "+userpercent);
+                                if (numpoints > userpercent){
+                                    Connection.convertSuggestion(req.body.imageName[index],function(converted){
+                                        Connection.getUserEmailforSelectedimage(req.body.imageName[index], function (result1) {
 
+                                            if (converted == "success") {
+                                                Connection.getUsers(function (topUsers) {
+                                                    Connection.getWords(function (topWords) {
+                                                        userloggedincheck(req, function (loggedin) {
+                                                            if (result1 == "failure") {
+                                                            } else {
+                                                                console.log("!!!!!" + result);
+                                                                Mail.sendEmail(result1, emailmessage3);
 
+                                                                res.render('pages/index', {
+                                                                    loggedin: loggedin,
+                                                                    username: req.cookies.user,
+                                                                    topUsers: topUsers,
+                                                                    topWords: topWords,
+                                                                    perror: "Congratulation!! The image got selected"
+                                                                });
+                                                            }
+                                                            return;
+                                                        })
+                                                    })
+                                                });
+                                            }
+                                        })
 
-
-
-                                userloggedincheck(req, function (loggedin) {
-                                    res.render('pages/suggest', {
-                                        loggedin: loggedin,
-                                        username: req.cookies.user,
-                                        sugi: sugi,
-                                        sugt: sugt,
-                                        perror: perror
                                     });
-                                    return;
-                                })
-                            });
-                        });
+                                }else {
+                                    Connection.getSuggestionText(function (sugt) {
+                                        Connection.getSuggestionImage(function (sugi) {
+                                            userloggedincheck(req, function (loggedin) {
+                                                res.render('pages/suggest', {
+                                                    loggedin: loggedin,
+                                                    username: req.cookies.user,
+                                                    sugi: sugi,
+                                                    sugt: sugt,
+                                                    perror: perror
+                                                });
+                                                return;
+                                            })
+                                        });
+                                    });
+                                }
+                            })
+                        }) ;
                     })
                 } else if (votes[0].direction == 1) {//vote up
+                    console.log("check!?!?!")
                     Connection.deleteVote(req.body.imageName[index], req.cookies.user, function () {
                         Connection.subPointToPost(req.body.imageName[index], req.cookies.user, function (result) {
                             if (result == "success") {
-                                Connection.getSuggestionText(function (sugt) {
-                                    Connection.getSuggestionImage(function (sugi) {
-                                        userloggedincheck(req, function (loggedin) {
-                                            res.render('pages/suggest', {
-                                                loggedin: loggedin,
-                                                username: req.cookies.user,
-                                                sugi: sugi,
-                                                sugt: sugt,
-                                                perror: perror
+                                Connection.getUsers(function (allusers) {
+                                    Connection.getPointsFromPost(req.body.imageName[index],function(numpoints){
+                                        var userpercent = ((allusers.length/5)| 0);
+                                        console.log(numpoints + "______   " + userpercent);
+                                        var abs = numpoints * (-1);
+                                        if (abs > userpercent) {
+                                            Connection.deleteSuggestion(req.body.imageName[index], function (err) {
+                                                if (err == "success") {
+                                                    Connection.getUsers(function (topUsers) {
+                                                        Connection.getWords(function (topWords) {
+                                                            userloggedincheck(req, function (loggedin) {
+                                                                res.render('pages/index', {
+                                                                    loggedin: loggedin,
+                                                                    username: req.cookies.user,
+                                                                    topUsers: topUsers,
+                                                                    topWords: topWords,
+                                                                    perror: "The image was removed due to many downvotes"
+                                                                });
+                                                                return;
+                                                            })
+                                                        })
+                                                    });
+                                                }
                                             });
-                                            return;
-                                        })
-                                    });
+                                        }else {
+                                            Connection.getSuggestionText(function (sugt) {
+                                                Connection.getSuggestionImage(function (sugi) {
+                                                    userloggedincheck(req, function (loggedin) {
+                                                        res.render('pages/suggest', {
+                                                            loggedin: loggedin,
+                                                            username: req.cookies.user,
+                                                            sugi: sugi,
+                                                            sugt: sugt,
+                                                            perror: perror
+                                                        });
+                                                    })
+                                                });
+                                            });
+                                        }
+                                    })
                                 });
+
                             } else {
                                 console.log("failure to vote")
                             }

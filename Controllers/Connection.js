@@ -986,9 +986,9 @@ function convertSuggestion(definition, cb) {
                     return;
                 }
             });
-            console.log(postid);
+            //console.log(postid);
             con.query("SELECT content_type FROM posts WHERE post_id = " + postid[0].post_id, function(err,contenttype) {
-                console.log(contenttype);
+              //  console.log(contenttype);
                 con.query("DELETE FROM posts WHERE post_id = " + postid[0].post_id, function(err, result) {
                     if(err) {
                         cb(err);
