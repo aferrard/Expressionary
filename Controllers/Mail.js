@@ -1,4 +1,6 @@
 var nodemailer = require('nodemailer');
+var Connection = require(__dirname + "/Connection.js");
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -18,12 +20,21 @@ exports.sendEmail = sendEmail;
 function sendEmail(address, message) {
     mailOptions.to = address;
     mailOptions.text = message;
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
+    Connection.getSubscriptionbyEmail(address,function (result) {
+        if (result == "failure"){
+
+        }else{
+            if (result == 1){ // subscribed
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+            }
         }
-    });
+    })
+
 
 }

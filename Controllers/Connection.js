@@ -1036,7 +1036,7 @@ function getPointsFromPost(definition, cb) {
     definition = newDef;
     con.query("SELECT points FROM posts WHERE definition = '" + definition + "'", function(err, result) {
         if(err) {
-            cb(err);
+            cb("failure");
         } else {
             var z = JSON.parse(JSON.stringify(result[0].points));
             cb(z);
@@ -1124,6 +1124,33 @@ function getUserEmailforSelectedimage(definition,cb) {
     });
 }
 
+exports.getUserObjectByUsername = getUserObjectByUsername;
+function getUserObjectByUsername(username,cb) {
+    var query = "SELECT * from expressionary_data.users where username='"+ username+ "'";
+    con.query(query,function (err,result) {
+        if (err){
+           // console.log("error??")
+            cb("failure")
+        }else {
+           // console.log("query result:" + result);
+            var z = JSON.parse(JSON.stringify(result[0]));
+            cb(z);
+        }
+    })
+}
+
+exports.getSubscriptionbyEmail = getSubscriptionbyEmail;
+function getSubscriptionbyEmail(email,cb){
+    var sql = "SELECT * FROM expressionary_data.users where email='" + email + "'";
+    con.query(sql,function (err,result) {
+        if (err){
+            cb("failure");
+        }else {
+            var z = JSON.parse(JSON.stringify(result[0].notification));
+            cb(z);
+        }
+    })
+}
 
 /*function getImageData(image) {
     var fs = require('fs');
