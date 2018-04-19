@@ -29,6 +29,7 @@ var emailmessage1 = "Thank you for Registering with Expressionary.\nPlease enter
 var emailmessage2 = "\nExpressionary Welcomes you.\n";
 var emailmessage3 = "Congratulations!! your content got selected. Come back, Log in and check how your word is doing. Expressionary awaits you";
 var emailmessage4 = "Congratulations for reaching a new milestone\n Your point total have increased\n Keep up the good work!";
+var emailmessage5 = "Congratulations!! your content got selected. Come back, Log in and check how your image is doing. Expressionary awaits you";
 
 
 
@@ -237,7 +238,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -392,7 +393,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -561,7 +562,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -714,7 +715,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -863,7 +864,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -1016,7 +1017,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -1169,7 +1170,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -1323,7 +1324,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -1476,7 +1477,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -1629,7 +1630,7 @@ app.post('/word2', function (req, res) {
                                                                         username: req.cookies.user,
                                                                         word: req.body.theWord,
                                                                         posts: post,
-                                                                        perror: perror
+                                                                        perror: "You reached a new milestone level. Check your email!"
                                                                     });
                                                                 });
                                                             });
@@ -3152,10 +3153,9 @@ app.post('/voteISuggest', function (req, res) {
                             Connection.getUsers(function (allusers) {
                                 Connection.getPointsFromPost(req.body.imageName[index],function(numpoints){
                                     var userpercent = ((allusers.length/5)| 0);
-                                    console.log(numpoints +"   +   "+userpercent);
                                     if (numpoints > userpercent){
-                                        Connection.convertSuggestion(req.body.imageName[index],function(converted){
-                                            Connection.getUserEmailforSelectedimage(req.body.imageName[index], function (result1) {
+                                        Connection.getUserEmailforSelectedimage(req.body.imageName[index], function (result1) {
+                                            Connection.convertSuggestion(req.body.imageName[index],function(converted){
 
                                             if (converted == "success") {
                                                 Connection.getUsers(function (topUsers) {
@@ -3163,8 +3163,7 @@ app.post('/voteISuggest', function (req, res) {
                                                         userloggedincheck(req, function (loggedin) {
                                                                 if (result1 == "failure") {
                                                                 } else {
-                                                                    console.log("!!!!!" + result);
-                                                                    Mail.sendEmail(result1, emailmessage3);
+                                                                    Mail.sendEmail(result1, emailmessage5);
 
                                                                     res.render('pages/index', {
                                                                         loggedin: loggedin,
@@ -3210,7 +3209,6 @@ app.post('/voteISuggest', function (req, res) {
                         Connection.getUsers(function (allusers) {
                             Connection.getPointsFromPost(req.body.imageName[index],function(numpoints){
                                 var userpercent = ((allusers.length/5)| 0);
-                                console.log(numpoints + "______   " + userpercent);
                                 var abs = numpoints * (-1);
                                 if (abs > userpercent) {
                                     Connection.deleteSuggestion(req.body.imageName[index], function (err) {
@@ -3267,8 +3265,8 @@ app.post('/voteISuggest', function (req, res) {
 
                                                                 if (email == "failure") {
                                                                 } else {
-                                                                    console.log("!!!!!" + email);
-                                                                    Mail.sendEmail(email, emailmessage3);
+                                                                    //console.log("!!!!!" + email);
+                                                                    Mail.sendEmail(email, emailmessage5);
                                                                     res.render('pages/index', {
                                                                         loggedin: loggedin,
                                                                         username: req.cookies.user,
@@ -3372,8 +3370,8 @@ app.post('/voteISuggest', function (req, res) {
                                 var userpercent = ((allusers.length/5)| 0);
                                 console.log(numpoints +"   +   "+userpercent);
                                 if (numpoints > userpercent){
-                                    Connection.convertSuggestion(req.body.imageName[index],function(converted){
-                                        Connection.getUserEmailforSelectedimage(req.body.imageName[index], function (result1) {
+                                    Connection.getUserEmailforSelectedimage(req.body.imageName[index], function (result1) {
+                                        Connection.convertSuggestion(req.body.imageName[index],function(converted){
 
                                             if (converted == "success") {
                                                 Connection.getUsers(function (topUsers) {
@@ -3382,7 +3380,7 @@ app.post('/voteISuggest', function (req, res) {
                                                             if (result1 == "failure") {
                                                             } else {
                                                                 console.log("!!!!!" + result);
-                                                                Mail.sendEmail(result1, emailmessage3);
+                                                                Mail.sendEmail(result1, emailmessage5);
 
                                                                 res.render('pages/index', {
                                                                     loggedin: loggedin,

@@ -1,6 +1,8 @@
 const test = require('tape');
 //const page = require('./Communicator')
 const connection = require('./Controllers/Connection');
+var Mail = require(__dirname + "/Controllers/Mail.js");
+
 var tvar = 0;
 
 if (process.argv[2] == "reg_test") {
@@ -11,6 +13,8 @@ if (process.argv[2] == "reg_test") {
     tvar = 3;
 }else if (process.argv[2]== "edit_test"){
     tvar = 4;
+}else if (process.argv[2]== "email_test"){
+    tvar =5;
 }
 
 if (tvar == 0) {
@@ -260,4 +264,18 @@ if (tvar == 4){
         });
 
     });
+}
+
+if (tvar == 5){
+    test('USER STORY #8, Email Subscription Check\n2 TESTS ',function (t) {
+        var valid_user = "johnuser";
+
+        connection.subscribeUser(valid_user,function(result){
+            t.equals(result,"user subscribed","Subscription check")
+        });
+        connection.unsubscribeUser(valid_user,function (result) {
+            t.equals(result,"user unsubscribed","Unsubscription check")
+        });
+    })
+    
 }
