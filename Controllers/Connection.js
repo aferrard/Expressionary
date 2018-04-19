@@ -978,7 +978,7 @@ function convertSuggestion(definition, cb) {
     con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function(err, postid) {
         if(err) {
             cb(err);
-            return;
+            //return;
         } else {
             con.query("DELETE FROM posts_voted WHERE posts_post_id = " + postid[0].post_id, function(err, result) {
                 if(err) {
@@ -992,34 +992,34 @@ function convertSuggestion(definition, cb) {
                 con.query("DELETE FROM posts WHERE post_id = " + postid[0].post_id, function(err, result) {
                     if(err) {
                         cb(err);
-                        return
+                        return;
                     }
                 });
                 if(contenttype[0].content_type == "suggestion_text") {
                     con.query("INSERT INTO wordpage VALUE(NULL, 'word','" + definition + "', 0)", function(err, result) {
                         if(err) {
                             cb(err);
-                            return;
+                            //return;
                         }
                         else {
                             cb("success");
-                            return;
+                            //return;
                         }
                     });
                 } else if(contenttype[0].content_type == "suggestion_image") {
                     con.query("INSERT INTO wordpage VALUE(NULL, 'image','" + definition + "', 0)", function(err, result) {
                         if(err) {
                             cb(err);
-                            return
+                            //return
                         }
                         else {
                             cb("success")
-                            return;
+                            //return;
                         }
                     });
                 }
             });
-            cb("success");
+            //cb("success");
         }
     });
 }
@@ -1062,11 +1062,15 @@ function deleteSuggestion(definition, cb) {
             con.query("DELETE FROM posts WHERE post_id = " + post[0].post_id, function(err, result) {
                 if(err) {
                     cb(err);
+                    return;
                 }
             });
             con.query("DELETE FROM posts_voted WHERE posts_post_id = " + post[0].post_id, function(err, result) {
-                cb(err);
-            })
+                if (err) {
+                    cb(err);
+                    return;
+                }
+            });
         }
     });
     cb("success");
