@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+
 </head>
 <body class="container">
 
@@ -27,11 +28,12 @@
             <% }); %>
             <% while (i <= 10) { %>
             <% if(topUsers[index] == undefined) break; %>
+
             <%= i %>: <input id="user" name="user" type="submit" value="<%= topUsers[index].username %>"
-                             class="btn btn-info"><img width="35" height="35" allign="left"
+                             class="btn btn-info"><img width="35" height="35" style="float: right;margin-right: 80%"
                                                        src="http://localhost:8080/images/profImage/<%= topUsers[index].profile_img %>"
-                                                       class="img-responsive">
-            Total Points: <%= topUsers[index].points %><br>
+                                                       class="img-responsive zoom1"><br>
+            <strong>Total Points: </strong> <%= topUsers[index].points %><br><br>
             <% index++; %>
             <% i++; } %>
         </form>
@@ -48,7 +50,7 @@
             <%= i %>:<input id="word" name="word" type="submit" value="<%= topWords[index].word %>"
                             class="btn btn-info">
             <br>
-            Total Points: <%= topWords[index].totalPoints %><br>
+            <strong> Total Points:</strong> <%= topWords[index].totalPoints %><br><br>
             <% }else{ %>
             <% i--; %>
             <% index++;} %>
@@ -66,10 +68,10 @@
             <% if(topWords[jndex].content_type == 'image'){ %>
             <%= j %>:<input id="word" name="word" type="submit" value="<%= topWords[jndex].word %>"
                             class="btn btn-info">
-            <img width="50" height="50" allign="left"
-                 src="http://localhost:8080/images/postimage/<%= topWords[jndex].word %>" class="img-responsive">
+            <img  width="50" height="50" style="float: right;margin-right: 50%"
+                 src="http://localhost:8080/images/postimage/<%= topWords[jndex].word %>" class="img-responsive zoom">
             <br>
-            Total Points: <%= topWords[jndex].totalPoints %><br>
+           <strong> Total Points: </strong> <%= topWords[jndex].totalPoints %><br><br>
             <% j++;jndex++;}else{ %>
             <% jndex++;} %>
             <% } %>

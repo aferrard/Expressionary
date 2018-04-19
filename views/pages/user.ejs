@@ -36,16 +36,23 @@
 <a href="/useredit">Edit Profile</a><br>
 <a onclick="document.getElementById('delUser').style.display='block'">Delete User</a>
 <br>
+
+
 <form action="imageUp.php" method="POST" enctype="multipart/form-data">
-    Select an image for your profile (PNG. JPG, JPEG only):
+    <!--Select an image for your profile (PNG. JPG, JPEG only):-->
     <label class="custom-file-upload">
         <input type="file" accept=".png, .jpg, .jpeg" name="img">
-        Choose a file
+        Choose a new profile picture
     </label>
     <!--<input type="file" id="profImage" accept=".png, .jpg, .jpeg"-->
                                                                    <!--name="usr_img" required>-->
-    <input type="submit" value="Upload">
+    <label>
+        <input class="custom-file-upload" type="submit" value="Upload">
+    </label>
 </form>
+
+
+
 <br>
 <a href="/unsub">Unsubscribe</a> from Expressionary Updates<br>
 <a href="/sub">Subscribe</a> to Expressionary Updates

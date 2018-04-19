@@ -21,8 +21,8 @@
         <%});%>
         <% var i = 0;%>
         <% while (i < users.length){%>
-        <input id="user" name="user" type="submit" value="<%=users[i].username%>" class="btn btn-sm"><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=users[i].profile_img%>" class="img-responsive">
-        <br>
+        <input id="user" name="user" type="submit" value="<%=users[i].username%>" class="btn btn-sm"><img width="35" height="35" style="float: right;margin-right: 80%" src="http://localhost:8080/images/profImage/<%=users[i].profile_img%>" class="img-responsive zoom1">
+        <br><br>
         <%i++ }%>
     </form>
     <form role="form" id="word" class="tabcontent" action="appendix" method="post">
@@ -49,8 +49,8 @@
         <%while (i < wordPages.length) { %>
         <%if(wordPages[i].content_type == "image"){%>
         <input id="word" name="word" type="submit" value="<%= wordPages[i].word%>" class="btn btn-sm" >
-        <img width="50" height="50" allign="left" src="http://localhost:8080/images/postimage/<%=wordPages[i].word%>" class="img-responsive">
-        <br>
+        <img width="50" height="50" style="float: right;margin-right: 60%; max-height: 50px" src="http://localhost:8080/images/postimage/<%=wordPages[i].word%>" class="img-responsive zoom">
+        <br><hr>
         <%}%>
         <% i++ }%>
     </form>

@@ -58,7 +58,7 @@
         <% if(sugi[index] == undefined) break; %>
         <%= sugi[index].definition %>
         <img width="50" height="50" allign="left"
-             src="http://localhost:8080/images/sugimage/<%= sugi[index].definition %>" class="img-responsive">
+             src="http://localhost:8080/images/sugimage/<%= sugi[index].definition %>" class="img-responsive zoom">
         <br>
         Points: <%= sugi[index].points %><br>
         <input hidden id="thePost" name="imageName" value="<%= sugi[index].definition %>">
