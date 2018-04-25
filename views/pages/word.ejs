@@ -8,12 +8,18 @@
 <header>
     <% include ../partials/header %>
 </header>
+<div class="jumbotron" style="background: rgb(232,232,232)">
+
 <%if(word.includes(".png") || word.includes(".jpg") || word.includes(".jpeg")){%>
 <h1>IMAGE:</h1>
-<img src="http://localhost:8080/images/postimage/<%=word%>" class="img-responsive">
+    <hr style="border-style: inset;border-width: 0.8px">
+
+    <img src="http://localhost:8080/images/postimage/<%=word%>" style="max-height: 400px;max-width: 100%" class="img-responsive">
 <%}else{%>
 <h1>WORD:</h1>
-<%}%>
+    <hr style="border-style: inset;border-width: 0.8px">
+
+    <%}%>
 <h2 id="theWord" name="theWord"><%= word %></h2>
 <div>Post your own definition:</div>
 <form class="form-horizontal" role="form" style="width: 50%;" action="http://localhost:8080/word" method="post">
@@ -41,7 +47,7 @@
         <%});%>
         <%while (i < posts.length) { %>
         <li>
-            User: <%= posts[i].username %><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=posts[i].profile_img%>" class="img-responsive"><br>
+            User: <%= posts[i].username %><img width="35" height="35" allign="left" src="http://localhost:8080/images/profImage/<%=posts[i].profile_img%>" class="img-responsive zoom1"><br>
             --<%=posts[i].username%>'s total points: <%=posts[i].userpoints%><br>
             Definition: <%= posts[i].definition %><br>
 
@@ -61,6 +67,7 @@
 
 
 </ol>
+</div>
 </body>
 <footer>
     <% include ../partials/footer %>

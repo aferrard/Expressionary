@@ -1,25 +1,25 @@
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" style="background:rgb(23, 39, 91)">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="/">Expressionary</a>
+			<a style="color: white;" class="navbar-brand" href="/">Expressionary</a>
 		</div>
-		<ul class="nav navbar-nav">
-			<li><a href="/">Home</a></li>
-			<li><a href="/contact">Contact</a></li>
-			<li><a href="/developer">Updates</a></li>
-			<li><a href="/appendix">Appendix</a></li>
-            <li><a href="/search">Search</a></li>
-            <li><a href="/random">Random</a></li>
-			<li><a href="/suggest">Suggest New Content</a></li>
+		<ul class="nav navbar-nav" style="color: white;">
+			<li><a style="color: white;" href="/">Home</a></li>
+			<li><a style="color: white;" href="/contact">Contact</a></li>
+			<li><a style="color: white;" href="/developer">Updates</a></li>
+			<li><a style="color: white;" href="/appendix">Glossary</a></li>
+            <li><a style="color: white;" href="/search">Search</a></li>
+            <li><a style="color: white;" href="/random">Random</a></li>
+			<li><a style="color: white;" href="/suggest">Suggest New Content</a></li>
 			<%if(!loggedin){%>
-			<li><a href="/register">Register</a></li>
-			<li><button onclick="document.getElementById('id1').style.display='block'"
-						style="width:auto; color: white;">Login
+			<li><a style="color: white;" href="/register">Register</a></li>
+			<li><button  onclick="document.getElementById('id1').style.display='inline-block'"
+						style="width:auto; background: rgb(211,211,211); color: black">Login
 				</button>
 			</li>
 			<%}else{%>
-            <li><a href="/user"><%=username%></a></li>
-			<li><a href="/logout" style="width:auto;">Logout</a></li>
+            <li><a style="color: white" href="/user"><%=username%></a></li>
+			<li><a style="color: white" href="/logout" style="width:auto;">Logout</a></li>
 			<%}%>
 		</ul>
 

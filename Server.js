@@ -204,6 +204,7 @@ app.post('/appendix', function (req, res) {
 
 });
 
+
 app.post('/word2', function (req, res) {
     console.log("voter: "+req.cookies.user);
     if (req.cookies.user != undefined) {
@@ -1927,6 +1928,9 @@ app.post('/word2', function (req, res) {
         });
     }
 });
+
+
+
 
 app.post('/word', function (req, res) {
     var definition = req.body.newDef;

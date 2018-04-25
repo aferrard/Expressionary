@@ -8,10 +8,12 @@
 <header>
     <% include ../partials/header %>
 </header>
+<div class="jumbotron" style="background: rgb(232,232,232)">
+
 <div class="tab">
-    <button class="tablinks" style="width:auto;" onclick="openTab(event, 'sug')">Suggest a Word</button>
-    <button class="tablinks" style="width:auto;" onclick="openTab(event, 'sugi')">Suggest an Image</button>
-    <button class="tablinks" style="width:auto;" onclick="openTab(event, 'sugged')">Vote on Suggestions</button>
+    <button class="tablinks" style="width:auto;color: rgb(80,80,80);" onclick="openTab(event, 'sug')">Suggest a Word</button>
+    <button class="tablinks" style="width:auto;color: rgb(80,80,80);" onclick="openTab(event, 'sugi')">Suggest an Image</button>
+    <button class="tablinks" style="width:auto;color: rgb(80,80,80);" onclick="openTab(event, 'sugged')">Vote on Suggestions</button>
 </div>
 <form id="sug" role="form" class="tabcontent" action="http://localhost:8080/wsuggest" method="post">
     <textarea class="form-control" rows="1" id="suggested" name="suggested"
@@ -99,6 +101,7 @@
         evt.currentTarget.className += " active";
     }
 </script>
+</div>
 </body>
 <footer>
     <% include ../partials/footer %>

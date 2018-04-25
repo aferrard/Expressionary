@@ -11,7 +11,7 @@
 </header>
 
 <main>
-    <div class="jumbotron">
+    <div class="jumbotron" style="background: rgb(232,232,232)">
         <h1>Expressionary</h1>
         Expressionary, a team project built by Purdue students to show people from around the world what the best definition is.<br><br>
         When you see the word dog, what do you think of?<br>
@@ -22,9 +22,9 @@
         Get started today, and show off what you think the best definition is.
         <hr>
         <div class="tab">
-            <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'user')">Top Users</button>
-            <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'word')">Top Words</button>
-            <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'img')">Top Images</button>
+            <button class="tablinks" style="width:auto;color: rgb(80,80,80);" onclick="openBoard(event, 'user')">Top Users</button>
+            <button class="tablinks" style="width:auto;color: rgb(80,80,80);" onclick="openBoard(event, 'word')">Top Words</button>
+            <button class="tablinks" style="width:auto;color: rgb(80,80,80);" onclick="openBoard(event, 'img')">Top Images</button>
         </div>
         <form role="form" id="user" class="tabcontent" action="user" method="post">
             <!--input hidden id="users" name="users" value = "</%= users %/>"-->
@@ -75,10 +75,10 @@
             <% if(topWords[jndex].content_type == 'image'){ %>
             <%= j %>:<input id="word" name="word" type="submit" value="<%= topWords[jndex].word %>"
                             class="btn btn-info">
-            <img  width="50" height="50" style="float: right;margin-right: 50%"
+            <img  width="45px" height="45px" style="float: right;margin-right: 50%"
                  src="http://localhost:8080/images/postimage/<%= topWords[jndex].word %>" class="img-responsive zoom">
             <br>
-           <strong> Total Points: </strong> <%= topWords[jndex].totalPoints %><br><br>
+           <strong> Total Points: </strong> <%= topWords[jndex].totalPoints %><br><hr style="border-style: inset;border-width: 0.8px">
             <% j++;jndex++;}else{ %>
             <% jndex++;} %>
             <% } %>

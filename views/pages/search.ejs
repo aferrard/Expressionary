@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+    <style>
+        div.inline { float:left; }
+        .clearBoth { clear:both; }
+    </style>
 </head>
 <body class="container">
 
@@ -10,23 +14,27 @@
 </header>
 
 <main>
+    <div class="jumbotron" style="background: rgb(232,232,232)">
+
     <div class ="container-fluid">
         <div class="col-md-3">
             <form class="navbar-form" role="search" action="http://localhost:8080/search" method="post" >
-                <div class="input-group add-on">
-                    <input class="form-control" placeholder="Search" name="search" id="search" type="text">
-                    <button class="btn btn-default" type="submit">Search <i class="glyphicon glyphicon-search"></i></button>
+                <div class="input-group add-on inline" style="">
+                    <input class="form-control" style="width: 200%;" placeholder="Search" name="search" id="search" type="text">
+                    <button class="btn btn-default" style="width: 200%;" type="submit">Search <i class="glyphicon glyphicon-search"></i></button>
 
                 </div>
 
+                <input type="radio" id="searchType" name="searchType" value="User" checked="checked">
+                <label for="searchUser">User</label>
+                <input type="radio" id="searchType" name="searchType" value="Word">
+                <label for="searchWord">Word</label>
         </div>
 
-        <input type="radio" id="searchType" name="searchType" value="User" checked="checked">
-        <label for="searchUser">User</label>
-        <input type="radio" id="searchType" name="searchType" value="Word">
-        <label for="searchWord">Word</label>
+
         </form>
     </div>
+        </div>
 </main>
 
 <footer>

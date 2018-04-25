@@ -8,6 +8,8 @@
     <% include ../partials/header %>
 </header>
 <main>
+    <div class="jumbotron" style="background: rgb(232,232,232)">
+
     <div class="tab">
         <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'user')">Users</button>
         <button class="tablinks" style="width:auto;" onclick="openBoard(event, 'word')">Words</button>
@@ -22,7 +24,7 @@
         <% var i = 0;%>
         <% while (i < users.length){%>
         <input id="user" name="user" type="submit" value="<%=users[i].username%>" class="btn btn-sm"><img width="35" height="35" style="float: right;margin-right: 80%" src="http://localhost:8080/images/profImage/<%=users[i].profile_img%>" class="img-responsive zoom1">
-        <br><br>
+        <br><hr style="border-style: inset;border-width: 0.8px">
         <%i++ }%>
     </form>
     <form role="form" id="word" class="tabcontent" action="appendix" method="post">
@@ -35,7 +37,7 @@
         <%while (i < wordPages.length) { %>
         <%if(wordPages[i].content_type == "word"){%>
         <input id="word" name="word" type="submit" value="<%= wordPages[i].word %>" class="btn btn-sm" >
-        <br>
+        <br><hr style="border-style: inset;border-width: 0.8px;margin-bottom: 0.8em;margin-top: 0.8em;">
         <%}%>
         <% i++ }%>
     </form>
@@ -50,7 +52,7 @@
         <%if(wordPages[i].content_type == "image"){%>
         <input id="word" name="word" type="submit" value="<%= wordPages[i].word%>" class="btn btn-sm" >
         <img width="50" height="50" style="float: right;margin-right: 60%; max-height: 50px" src="http://localhost:8080/images/postimage/<%=wordPages[i].word%>" class="img-responsive zoom">
-        <br><hr>
+        <br><hr style="border-style: inset;border-width: 0.8px">
         <%}%>
         <% i++ }%>
     </form>
@@ -69,7 +71,9 @@
             evt.currentTarget.className += " active";
         }
     </script>
+    </div>
 </main>
+
 <footer>
     <% include ../partials/footer %>
 </footer>
