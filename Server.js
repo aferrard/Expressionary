@@ -215,14 +215,20 @@ app.post('/word2', function (req, res) {
                 if (!(req.body.vote0 === undefined)) {
                     var i = 0;
                     var vote = req.body.vote0;
-                    var post = req.body.thePost[i];
+
+                    if (posts.length == 1){
+                        var post = req.body.thePost;
+                    }else {
+                        var post = req.body.thePost[i];
+                    }
+
                     var points = req.body.points[i];
 
-                  //  console.log(points);
-                    console.log(post+"  !!!");
+                 //   console.log("--------" +(req.body.thePost));
                     if (vote == '+') {
                         Connection.getVotes(post, req.cookies.user, function (votes) {
-                            console.log(votes);
+                   //         console.log("Got this" + votes);
+
                             if (votes[0] == undefined) {
                                 Connection.addPointToPost(post, req.cookies.user, function (result) {
                                     if (result == "success") {
@@ -271,15 +277,15 @@ app.post('/word2', function (req, res) {
 
                                 })
                             } else if (votes[0].direction == 1) {//vote up
-                                //console.log("Deletetest++");
+                                console.log("===="+post);
                                 Connection.deleteVote(post, req.cookies.user, function () {
-                                    Connection.getPostsFromWordId(wpid, function (post) {
+                                    Connection.getPostsFromWordId(wpid, function (post1) {
                                         userloggedincheck(req, function (loggedin) {
                                             res.render('pages/word', {
                                                 loggedin: loggedin,
                                                 username: req.cookies.user,
                                                 word: req.body.theWord,
-                                                posts: post,
+                                                posts: post1,
                                                 perror: perror
                                             });
                                         });
@@ -2077,7 +2083,7 @@ app.post('/search', function (req, res) {
                                     image: image[0].profile_img,
                                     points: user.points,
                                     posts: posts,
-                                    editcheck: true,
+                                    editcheck: false,
                                     perror: perror
                                 });
                             })
@@ -2613,7 +2619,7 @@ app.post('/user', function (req, res) {
                             image: image[0].profile_img,
                             points: result.points,
                             posts: posts,
-                            editcheck: true,
+                            editcheck: loggedin,
                             perror: perror
                         });
                     })

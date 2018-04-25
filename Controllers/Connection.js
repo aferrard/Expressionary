@@ -568,7 +568,7 @@ exports.getVotes = getVotes;
 function getVotes(definition, username, cb) {
     var postid;
     var userid;
-    //console.log("voted definition: "+definition);
+    console.log("voted definition: "+definition);
     var newDef = "";
     for (var i = 0; i < definition.length; i++) {
         if (definition[i] == '\'') {
@@ -577,11 +577,18 @@ function getVotes(definition, username, cb) {
         newDef = newDef.concat(definition[i]);
     }
     definition = newDef;
-    //console.log("new Definition: " + definition);
+    console.log("new Definition: " + definition);
     con.query("SELECT post_id FROM posts WHERE definition = '" + definition + "'", function (err, result) {
+        console.log(result);
         if (err) {
             cb(err);
         } else {
+            if (result[0] == undefined){
+                //res.send("Try Again");
+                console.log("QUERY FAILED");
+                cb("Try Again");
+                return;
+            }
             postid = result[0].post_id;
             con.query("SELECT user_id FROM users WHERE username = '" + username + "'", function (err, result) {
                 if (err) {
